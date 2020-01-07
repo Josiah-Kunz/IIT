@@ -1,0 +1,118 @@
+# Stage 8 of post-merge
+# Created by: D. Stratakis, adapted for g4bl by Ben Loseth
+
+trace format=ascii
+
+param maxStep=0.1
+
+# QGSP is the "default" physics use-case for HEP
+
+
+physics QGSP_BIC doStochastics=0 disable=Decay # If 1: Turn ON Straggling & Scattering
+                                  # If 0: Turn OFF Straggling & Scattering
+
+                                  
+#param -unset sigmaP=0 sigmaX=80 sigmaY=80 sigmaZ=40 sigmaXp=0 sigmaYp=0
+#param -unset deltaT=0.100 nGrid=65 nApprox=7 maxBeta=0.1 percentile=99 verbose=1
+#param -unset nMP=4955 totalCharge=1e12
+#
+#spacecharge deltaT=0.100 charge=$totalCharge/$nMP dx=3*$sigmaX dy=3*$sigmaY \
+#	dz=5*$sigmaZ verbose=0 deltaT=$deltaT nx=$nGrid ny=$nGrid nz=$nGrid \
+#	nxApprox=$nApprox nyApprox=$nApprox nzApprox=$nApprox maxBeta=$maxBeta \
+#	percentile=$percentile verbose=$verbose
+
+particlecolor mu+=1,0,0
+particlecolor pi+=0,1,0
+particlecolor reference=1,1,1
+
+material LithH Li,0.873203 H,0.126797 density=0.78
+
+# RF PROPERTIES
+
+param frfcool=0.650
+param Vrfcool=28
+param ficool=47
+param RF_length=105
+param wind=0.025
+param d_length=109.9
+param rfRad=45
+param DriftRad=45
+param mass=105.658
+param clight=299792458
+param degrad=pi/180
+
+# number of events
+
+param -unset first=0
+param -unset nEvents=100             #Number of particles to simulate 
+param -unset beamin=BLTracks8.dat
+param refP=198.0
+
+reference particle=mu+ beamX=0 beamY=0 referenceMomentum=$refP beamT=0 noEloss=1 noEfield=0 noBfield=1
+
+beam ascii filename=$beamin nEvents=$nEvents
+
+
+# Lattice Properties 
+
+param coolCellLen7=806
+param coolStartZ7=0
+param coolCells7=61
+param TotLen=$coolCells7*$coolCellLen7
+
+# ABS PROPERTIES
+
+param absLenLH2=83
+param absRad=45
+param abshalfangle=60
+param absoff=11
+
+
+
+extrusion LHextrDS color=1,0,0,.5 material=LithH length=$absRad \
+  vertices='$absoff,0; \
+            $absoff-$absRad,$absRad*tan($abshalfangle*$degrad); \
+            $absoff-$absRad,0'
+
+extrusion LHextrUS color=0,1,0,.5 material=LithH length=$absRad \
+  vertices='$absoff,0; \
+            $absoff-$absRad,0; \
+            $absoff-$absRad,-$absRad*tan($abshalfangle*$degrad)'
+
+# BUILD
+
+ do i 1 $coolCells7
+
+#  place LHextrDS x=0 y=0 z=($i-1)*$coolCellLen7 rotation=X90
+
+  pillbox RFcooler innerLength=$RF_length innerRadius=$rfRad frequency=$frfcool maxGradient=$Vrfcool \
+  irisRadius=$rfRad win1Thick=0.0  win2Thick=0.0 wallThick=0.0 collarThick=0.0 phaseAcc=$ficool kill=1
+  
+  place RFcooler    z=$coolStartZ7+($i-1)*$coolCellLen7+$absLenLH2+$d_length+$wind     color=1,0,0     front=1   
+
+  place RFcooler    z=$coolStartZ7+($i-1)*$coolCellLen7+$absLenLH2+$d_length+1*$RF_length+3*$wind    color=0,1,0     front=1
+   
+  place RFcooler    z=$coolStartZ7+($i-1)*$coolCellLen7+$absLenLH2+$d_length+2*$RF_length+5*$wind    color=0,0,1     front=1
+
+  place RFcooler    z=$coolStartZ7+($i-1)*$coolCellLen7+$absLenLH2+$d_length+3*$RF_length+7*$wind   color=1,0,0     front=1
+
+#  place LHextrUS x=0 y=0 z=$i*$coolCellLen7 rotation=X90
+
+ enddo
+
+############################# IMPORT Solenoidal Bmaps ######################################
+
+#fieldmap BMapCool7 filename=for081.dat  
+#
+#do i 1 $coolCells7 
+#   place BMapCool7 z=$coolStartZ7+($i-1)*$coolCellLen7
+#enddo
+
+#printfield type=grid exit=1 file='G4rfmap.dat'\
+#X0=0 Y0=0 Z0=-$RF_length/2 \
+#nX=50 nY=1 nZ=105 \
+#dX=1 dY=1 dZ=1
+
+zntuple cooling_monitor zloop=0:$TotLen:$coolCellLen7 format=for009 file=for009G4BL coordinates=c
+#printf zloop=0:$TotLen:10 file='tracks.txt' '%g %.3f %.3f %.3f %.3f %.3f' EventID z Px Py Pz sqrt(Px*Px+Py*Py+Pz*Pz)
+profile zloop=0:$TotLen:10 file='g4profile.txt'

@@ -1,0 +1,10 @@
+- Page 2, MUON: I did not add muon-antimuon for clarity. If the reader is not
+	an expert, muon-antimuon will only confuse them (I have not introduced 
+	antimatter). On the other hand, if they are an expert, they know that muons
+	and antimuons act the same---there is not much distinction in how they 
+	interact. Since it was only a suggestion, I assume I had a choice to leave
+	not take that advice, but I can change it if I'm wrong.
+- Page 4: using the non-relativistic Lorentz force: The relativistic Lorentz 
+	force starts off by using an electromagnetic force tensor. While the end
+	result is nice and compact, it's a bit too complicated as an example.
+- Page 16: not necessarily: change to “This, and the fact that particles start with 	lower energies mean that…”

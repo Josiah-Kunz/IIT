@@ -1,0 +1,128 @@
+\documentclass[letterpaper]{iitthesis}
+
+\iffalse
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{bigints}
+\usepackage{url}
+\usepackage{caption}
+\usepackage{cite}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{anyfontsize}
+
+\usepackage{float} % \begin{figure}[H] makes figures not float (really really here)
+
+\usepackage{svg}
+%\usepackage{setspace}
+\newcommand{\abbrlabel}[1]{\makebox[3cm][l]{\textbf{#1}\ \dotfill}}
+\newenvironment{abbreviations}{\begin{list}{}{\renewcommand{\makelabel}{\abbrlabel}}}{\end{list}}
+\fi
+
+% Document Options:
+%
+% Note if you want to save paper when printing drafts,
+% replace the above line by
+%
+%   \documentclass[draft]{iitthesis}
+%
+% See Help file for more about options.
+
+\usepackage{caption}
+\usepackage{graphicx}    % This package is used for Figures
+\usepackage{rotating}           % This package is used for landscape mode.
+\usepackage{epsfig}
+\usepackage{comment}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{cite}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{subfig}
+\usepackage{amsmath}
+\usepackage{multirow}
+\usepackage[T1]{fontenc}
+\usepackage[all]{nowidow}
+\usepackage[table]{xcolor}
+\usepackage{siunitx}
+\usepackage{listings}
+\usepackage{notoccite}
+\usepackage{grffile} % can use example.0.1.png
+
+% For plotting in LaTeX
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+\usetikzlibrary{plotmarks}
+%\usetikzlibrary{external}
+%\tikzexternalize % activate!
+%
+% Note: I had to increase LaTeX's memory size in order to plot all my validation figures:
+%	1. open up cmd
+%	2. >initexmf --edit-config-file pdflatex
+%	3. now you have the .ini file open
+%	4. play with parameters
+%		i.   pool_size=x
+%		ii.  main_memory=x
+%		iii. extra_mem_bot=x
+%		iv. font_mem_size=x
+%	5. recompile with >initexmf --dump=pdflatex
+%
+
+\definecolor{light-gray}{gray}{0.95}
+
+\newcommand{\onehalf}{\frac{1}{2}}
+\newcommand{\del}{\nabla}
+\newcommand{\cross}{\times}
+\newcommand{\curl}{\del \cross}
+% \newcommand{\div}{\del \dot}
+
+%\usepackage[nocitation]{apacite}
+%\usepackage[longnamesfirst,sort,numbers]{natbib}
+%\usepackage[natbibapa]{apacite}
+%\bibpunct{[}{]}{,}{n}{}{;}
+%RequirePackage[longnamesfirst,sort,numbers]{natbib}
+
+\begin{document}
+
+% For large letter that I can use in GIMP
+\iffalse
+\fontsize{150}{12}\selectfont{
+%\fontsize{60}{12}\selectfont{
+\begin{equation}\nonumber \noindent
+\verb|SIZE| 2^n
+\end{equation}
+}
+\newpage
+\fi
+
+\input{title.tex}
+\input{definitionOfTerms.tex}
+\input{abstract.tex}
+
+%\pagenumbering{gobble} % No page numbers --could also use arabic or roman
+\textpages
+\dsp{
+\Chapter{Introduction}
+\input{Introduction}
+}
+\Chapter{Stochastic Processes in ICOOL}
+\input{ICOOL}
+
+\Chapter{Stochastic Processes in G4Beamline}
+\input{G4Beamline}
+
+\Chapter{Stochastic Processes in COSY Infinity}
+\input{COSY}
+
+\Chapter{Results}
+\input{Results}
+
+\Chapter{Supplemental Information}
+\input{Supplemental}
+
+\bibliography{thesisBib}{}
+\bibliographystyle{unsrt}
+
+\end{document}

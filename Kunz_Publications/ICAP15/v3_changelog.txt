@@ -1,0 +1,28 @@
+- Abstract: 'involves passing' -> 'involves the passing'
+- Intro: a couple of the neutrino symbols needed to be antineutrinos
+- Intro: 'Ionization cooling technique is' -> 'Ionization cooling techniques are' (since 
+	'beam cooling techniques are')
+- Intro: [4] before [3] -> switched Neuffer and Kyoko
+- Intro: '; and \beta\perp has to be small': does this really add anything? It seems
+	tacked on at the end.
+- Fig. 2 caption: 'producing solenoidal (focusing)' -> 'producing solenoidal focusing' (since
+	the solenoidal field is the only field present, otherwise it seems like there
+	are two fields --I think you meant to highlight that there are two effects)
+- Fig. 2 caption: 'field, purple:' -> 'fields; purple:' (although maybe this look awkward...)
+- Just before Stochastic Processes: 'valiation' -> 'validation'
+- Stochastic Processes: added 'The simulations shown here were conducted with 
+	5,000,000 particles through liquid hydrogen.'
+- Eqn. 2: \bigintsss -> \int (the integral looked too large, not sure why I did that the first
+	time)
+- Straggling: 'are charge, atomic mass' -> 'are the atomic charge, atomic mass'
+- Eqn. 3: added a vertical space between the piecewise functions since they were
+	smushed together
+- Angular Scattering: 'fitted parameter' -> 'fitted parameter based off \cite{highland}'
+- Transverse pos. corr.: 'PT and PZ are the particle transverse' ->  'PT and PZ are the 
+	particle's transverse'
+- Trans. pos. corr.: 'and \mu_w and \sigma_w are' -> 'and \mu_w, \sigma_w are'
+- Summary: added some comment on the scattering models used in other codes
+- Summary: '(e.g. 109 mm' -> '(i.e. 159 mm' (these three, 109, 159, 3.73 Be, were all that 
+	were checked)
+- Summary: 'order of 0.005 ns (roughly 1%' -> 'order of 0.002 ns (rougly 0.5%' (looking
+	at this again, 0.005 was too generous! My mistake)

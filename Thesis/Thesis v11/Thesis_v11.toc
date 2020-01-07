@@ -1,0 +1,80 @@
+\contentsline {chapter}{\noindent ACKNOWLEDGEMENT}{iii}{Doc-Start}
+\contentsline {chapter}{\noindent LIST OF TABLES}{vi}{Doc-Start}
+\contentsline {chapter}{\noindent LIST OF FIGURES}{ix}{Doc-Start}
+\contentsline {chapter}{\noindent LIST OF SYMBOLS}{x}{Doc-Start}
+\contentsline {chapter}{\noindent ABSTRACT}{xiv}{Doc-Start}
+\noindent CHAPTER \vspace {-10pt}
+\vspace *{3pt}
+\contentsline {chapter}{\makebox [0.75in][r]{1.}\hspace *{3pt} \uppercase {Introduction}}{1}{chapter.1}
+\vspace *{10pt}
+\vspace {-10pt}
+\contentsline {section}{\makebox [0.3in][r]{1.1.} \hspace *{3pt}Muon-based Accelerators}{1}{section.1.1}
+\vspace {-10pt}
+\contentsline {section}{\makebox [0.3in][r]{1.2.} \hspace *{3pt}COSY Infinity}{3}{section.1.2}
+\vspace {-10pt}
+\contentsline {section}{\makebox [0.3in][r]{1.3.} \hspace *{3pt}Introduction to Matter-Dominated Lattices}{8}{section.1.3}
+\vspace {-10pt}
+\contentsline {section}{\makebox [0.3in][r]{1.4.} \hspace *{3pt}Emittance}{13}{section.1.4}
+\vspace {-10pt}
+\contentsline {section}{\makebox [0.3in][r]{1.5.} \hspace *{3pt}Looking Forward}{19}{section.1.5}
+\vspace *{3pt}
+\contentsline {chapter}{\makebox [0.75in][r]{2.}\hspace *{3pt} \uppercase {Stochastic Processes in Other Codes}}{20}{chapter.2}
+\vspace *{10pt}
+\vspace {-10pt}
+\contentsline {section}{\makebox [0.3in][r]{2.1.} \hspace *{3pt}Energy Straggling in ICOOL}{20}{section.2.1}
+\vspace {-10pt}
+\contentsline {section}{\makebox [0.3in][r]{2.2.} \hspace *{3pt}Multiple Scattering in ICOOL}{35}{section.2.2}
+\vspace {-10pt}
+\contentsline {section}{\makebox [0.3in][r]{2.3.} \hspace *{3pt}Energy Straggling in G4Beamline}{43}{section.2.3}
+\vspace {-10pt}
+\contentsline {section}{\makebox [0.3in][r]{2.4.} \hspace *{3pt}Multiple Scattering in G4Beamline}{47}{section.2.4}
+\vspace *{3pt}
+\contentsline {chapter}{\makebox [0.75in][r]{3.}\hspace *{3pt} \uppercase {Stochastic Processes in COSY Infinity}}{53}{chapter.3}
+\vspace *{10pt}
+\vspace {-10pt}
+\contentsline {section}{\makebox [0.3in][r]{3.1.} \hspace *{3pt}Energy Straggling in COSY}{53}{section.3.1}
+\vspace {-10pt}
+\contentsline {section}{\makebox [0.3in][r]{3.2.} \hspace *{3pt}Multiple Scattering in COSY Infinity}{56}{section.3.2}
+\vspace {-10pt}
+\contentsline {section}{\makebox [0.3in][r]{3.3.} \hspace *{3pt}Transverse Displacement in COSY Infinity}{64}{section.3.3}
+\vspace {-10pt}
+\contentsline {section}{\makebox [0.3in][r]{3.4.} \hspace *{3pt}Temporal Displacement in COSY Infinity}{69}{section.3.4}
+\vspace *{3pt}
+\contentsline {chapter}{\makebox [0.75in][r]{4.}\hspace *{3pt} \uppercase {Results}}{72}{chapter.4}
+\vspace *{10pt}
+\vspace {-10pt}
+\contentsline {section}{\makebox [0.3in][r]{4.1.} \hspace *{3pt}Benchmark Against Other Codes}{72}{section.4.1}
+\vspace {-10pt}
+\contentsline {section}{\makebox [0.3in][r]{4.2.} \hspace *{3pt}Validation}{73}{section.4.2}
+\vspace {-10pt}
+\contentsline {section}{\makebox [0.3in][r]{4.3.} \hspace *{3pt}The Muon Ionization Cooling Experiment}{76}{section.4.3}
+\vspace {-10pt}
+\contentsline {section}{\makebox [0.3in][r]{4.4.} \hspace *{3pt}Code Implementation}{88}{section.4.4}
+\vspace {-10pt}
+\contentsline {section}{\makebox [0.3in][r]{4.5.} \hspace *{3pt}Summary}{92}{section.4.5}
+\contentsline {chapter}{\vspace {20pt}\noindent APPENDIX\vspace *{-20pt}}{92}{section.4.5}
+\contentsline {chapter}{\makebox [0.75in][r]{A.} \hspace *{3pt}\uppercase {Derivation of Transverse Emittance}}{93}{appendix.A}
+\contentsline {chapter}{\makebox [0.75in][r]{B.} \hspace *{3pt}\uppercase {Derivation of Implemented Scattering Cross Section}}{98}{appendix.B}
+\contentsline {chapter}{\makebox [0.75in][r]{C.} \hspace *{3pt}\uppercase {A Brief Review of Relevant Particle Physics}}{110}{appendix.C}
+\contentsline {chapter}{\makebox [0.75in][r]{D.} \hspace *{3pt}\uppercase {Explicit Forms of the Dirac Gamma Matrices and Pauli Matrices}}{114}{appendix.D}
+\contentsline {chapter}{\makebox [0.75in][r]{E.} \hspace *{3pt}\uppercase {Proofs of Useful Dirac Gamma Matrix Trace Identities}}{116}{appendix.E}
+\vspace {-10pt}
+\contentsline {section}{\makebox [0.3in][r]{E.1.} \hspace *{3pt}Proof of $(\gamma ^5)^2=I_4$}{117}{section.E.1}
+\vspace {-10pt}
+\contentsline {section}{\makebox [0.3in][r]{E.2.} \hspace *{3pt}Proof of $\gamma ^5\gamma ^\alpha =-\gamma ^\alpha \gamma ^5$}{117}{section.E.2}
+\vspace {-10pt}
+\contentsline {section}{\makebox [0.3in][r]{E.3.} \hspace *{3pt}Proof of Tr(\textit {odd number of $\gamma $ matrices}) = 0}{118}{section.E.3}
+\vspace {-10pt}
+\contentsline {section}{\makebox [0.3in][r]{E.4.} \hspace *{3pt}Proof of \text {Tr}($\gamma ^\alpha \gamma ^\beta $) = $4\eta ^{\alpha \beta }$}{119}{section.E.4}
+\vspace {-10pt}
+\contentsline {section}{\makebox [0.3in][r]{E.5.} \hspace *{3pt}Proof of Tr($\gamma ^\alpha \gamma ^\beta \gamma ^\delta \gamma ^\epsilon $) = 4($\eta ^{\alpha \beta }\eta ^{\delta \epsilon }-\eta ^{\alpha \delta }\eta ^{\beta \epsilon }+\eta ^{\alpha \epsilon }\eta ^{\beta \delta }$)}{120}{section.E.5}
+\contentsline {chapter}{\makebox [0.75in][r]{F.} \hspace *{3pt}\uppercase {Benchmark Figures}}{122}{appendix.F}
+\contentsline {chapter}{\makebox [0.75in][r]{G.} \hspace *{3pt}\uppercase {Reproduction of Implemented Code}}{135}{appendix.G}
+\vspace {-10pt}
+\contentsline {section}{\makebox [0.3in][r]{G.1.} \hspace *{3pt}Example COSY Deck using \texttt {ABSPOLY}}{136}{section.G.1}
+\vspace {-10pt}
+\contentsline {section}{\makebox [0.3in][r]{G.2.} \hspace *{3pt}COSYScript}{141}{section.G.2}
+\vspace {-10pt}
+\contentsline {section}{\makebox [0.3in][r]{G.3.} \hspace *{3pt}FORTRAN}{152}{section.G.3}
+\vspace *{0pt}
+\contentsline {chapter}{\noindent BIBLIOGRAPHY}{190}{lstnumber.-3.1015}

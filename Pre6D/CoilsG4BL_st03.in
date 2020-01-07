@@ -1,0 +1,119 @@
+g4ui when=4 "/vis/scene/add/axes 0 0 0 500 mm"
+
+trace nTrace=0 format=ascii
+
+# PREMERGE STAGE 03 ALT
+
+# QGSP is the "default" physics use-case for HEP
+  
+  physics QGSP_BIC doStochastics=1 
+# disable=Decay
+
+# QGSP is the "default" physics use-case for High Energy Physics
+# but LHEP_BIC is better for low-energy simulations
+# physics LHEP_BIC
+
+# positives only
+  trackcuts keep=pi+,mu+,kaon+ kineticEnergyCut=1 killSecondaries=0
+# negatives only
+# trackcuts keep=pi-,mu-,kaon- kineticEnergyCut=1 killSecondaries=0
+
+# red
+  particlecolor mu+=1,0,0
+# white  
+  particlecolor reference=1,1,1
+    
+# COILS
+
+  param coiltilt=1.60 # degrees
+   
+  param J1=165.0
+  param J2=165.0
+  param J3=-165.0
+  param J4=-165.0
+  
+
+  param nc=50
+  
+  param cellLEN=1000
+  param channelLEN=$nc/2*$cellLEN
+
+
+######################## PARTICLES AND DISTRIBUTION #######################
+
+  param -unset nEvents=2 
+  param -unset beamin=beam.dat
+
+  param refP=212.0
+
+  reference particle=mu+ referenceMomentum=$refP beamZ=0 noEfield=1 noEloss=1
+
+  beam ascii filename=$beamin nEvents=$nEvents \
+	beamZ=0
+
+coil CoolCoil1 material=Cu innerRadius=270.0 outerRadius=380.0 length=110.00 
+solenoid CoolSol1 coilName=CoolCoil1 current=$J1 color=1,1,0 kill=1
+
+coil CoolCoil2 material=Cu innerRadius=270.0 outerRadius=380.0 length=110.00 
+solenoid CoolSol2 coilName=CoolCoil2 current=$J2 color=1,1,0 kill=1
+
+coil CoolCoil3 material=Cu innerRadius=270.0 outerRadius=380.0 length=110.00 
+solenoid CoolSol3 coilName=CoolCoil3 current=$J3 color=1,1,0 kill=1
+
+coil CoolCoil4 material=Cu innerRadius=270.0 outerRadius=380.0 length=110.00 
+solenoid CoolSol4 coilName=CoolCoil4 current=$J4 color=1,1,0 kill=1
+
+pillbox RF maxGradient=28.0 frequency=0.650 innerLength=134.9 innerRadius=190.0 \
+           pipeThick=50.0 wallThick=0.0 irisRadius=190.0 collarThick=0.0 \
+           win1Thick=0.04 win1OuterRadius=190.0 win2Thick=0.0 winMat=Vacuum \
+           phaseAcc=20 kill=1
+
+param -unset abstilt=0
+param -unset absangle=100.0
+param -unset abswidth=130.0
+param -unset absheight=130.0
+param -unset absoffset=40.0
+
+extrusion abs color=1,0,1 material=LH2 length=$abswidth \
+  vertices='$absoffset,0; \
+            $absoffset-$absheight,$absheight*tan(pi/180*$absangle/2); \
+            $absoffset-$absheight,0'
+
+#  extrusion LHextrUS color=1,0,1 material=LH2 length=$abswidth \
+#  vertices='0,-$absoffset; \
+#                  0,2*$absoffset; \
+#                  3/2*$abslen,2*$absoffset'
+
+do i -1 $nc # add one extra cell on each side
+   
+place CoolSol1 x=0 z=175.0+$cellLEN*($i) \ 
+      y=0 rotation=x-$coiltilt    
+ 
+place CoolSol2 x=0 z=325.0+$cellLEN*($i) \ 
+      y=0 rotation=x-$coiltilt    
+
+place CoolSol3 x=0 z=675.0+$cellLEN*($i) \
+      y=0 rotation=x$coiltilt     
+
+place CoolSol4 x=0 z=825.0+$cellLEN*($i) \
+      y=0 rotation=x$coiltilt     
+
+
+if ($i>-1)*($i<$nc)
+  place abs z=$cellLEN*($i) rotation=X90
+  place RF rename=RF# z=230.04+$cellLEN*($i)
+  place RF rename=RF# z=365.02+$cellLEN*($i)
+  place RF rename=RF# z=500.00+$cellLEN*($i)
+  place RF rename=RF# z=634.98+$cellLEN*($i)
+  place RF rename=RF# z=769.96+$cellLEN*($i)
+  place abs z=$cellLEN*($i+1) rotation=X-90
+endif
+
+enddo
+
+zntuple det zloop=0:1000*$nc:100 file=for009 format=for009
+
+#printfield type=grid file="for086.dat" \
+#X0=-200 dX=5 nX=81 \
+#Z0=0 dZ=10 nZ=101 \
+#Y0=-200 dY=5 nY=81

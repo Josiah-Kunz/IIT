@@ -1,0 +1,12 @@
+page 1: chapter 1 vertically too far down
+page 1: page number too far? (should be ~1/2 - 3/4 inch)
+	- ex: page 10 ok
+	
+captions single spaced
+	- ex: page 7
+
+page 17, table 1.1: margins!
+
+page 26: spacing under derivation of tmax
+page 25: (me) blank???
+page 77: watch bottom margin on figure caption

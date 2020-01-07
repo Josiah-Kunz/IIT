@@ -1,0 +1,63 @@
+# Unity caches and generated files
+# ================================
+**/Library
+**/Temp
+**/obj
+*\.suo
+*\.user
+*\.pidb
+*\.userprefs
+
+# Visual Studio / MonoDevelop generated
+# =====================================
+ExportedObj/
+*\.svd
+*\.userprefs
+*\.csproj
+*\.pidb
+*\.suo
+*\.sln
+*\.user
+*\.unityproj
+*\.booproj
+*\.orig
+*\.*_data
+
+# G4BL generated files
+# ====================
+g4bl.out
+*\.g4bl
+
+# COSY generated files
+# ====================
+*\.fox
+*\.lis
+
+# Documentation sources
+# =====================
+**/PDF_source
+**/Video_source
+
+# LaTeX
+# =====
+*\.aux
+*\.blg
+*\.log
+*\.out
+*\.synctex.gz
+
+# PyCharm
+# =======
+**/venv*
+*\.iml
+*\.xml
+
+# Other annoying files
+# ====================
+*\.DS_Store
+*\.swp
+*/Labs.zip
+
+# NOT these files
+# ==========
+!**/yEd_Settings/*

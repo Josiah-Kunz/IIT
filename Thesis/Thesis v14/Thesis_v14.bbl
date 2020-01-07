@@ -1,0 +1,185 @@
+\begin{thebibliography}{10}
+
+\bibitem{griffithspp}
+D.~Griffiths.
+\newblock {\em Introduction to Elementary Particles}.
+\newblock 2nd edition, 2008.
+
+\bibitem{quantumdiaries}
+Pauline Gagnon.
+\newblock The standard model: A beautiful but flawed theory.
+\newblock \url{http://www.quantumdiaries.org}, 2014.
+
+\bibitem{griffithsem}
+D.~Griffiths.
+\newblock {\em Introduction to Electrodynamics}.
+\newblock 3rd edition, 1999.
+
+\bibitem{cosy}
+M.~Berz and K.~Makino.
+\newblock {\em COSY Infinity Beam Physics Manual}, 2013.
+\newblock Version 9.1.
+
+\bibitem{modernMapMethods}
+M.~Berz.
+\newblock {\em Modern Map Methods in Particle Beam Physics}.
+\newblock 1999.
+
+\bibitem{berzFullnotes}
+M.~Berz.
+\newblock {\em Introductory Beam Physics}.
+
+\bibitem{nielsen}
+J.~Nielsen and D.~McMorrow.
+\newblock {\em Elements of Modern X-ray Physics}.
+\newblock 2nd edition, 2011.
+
+\bibitem{griffithsqm}
+D.~Griffiths.
+\newblock {\em Introduction to Quantum Mechanics}.
+\newblock 2nd edition, 2005.
+
+\bibitem{jose}
+J.~V. Jos\'{e} and E.~J. Saletan.
+\newblock {\em Classical Dynamics: A Contemporary Approach}.
+\newblock 1998.
+
+\bibitem{map}
+{Fermi National Accelerator Laboratory}.
+\newblock {Muon Accelerator Program}.
+
+\bibitem{oneill}
+G.~K. O'Neill.
+\newblock Storage-ring synchrotron: Device for high-energy physics research.
+\newblock {\em Phys. Rev.}, 102, 1956.
+
+\bibitem{lichtenberg}
+D.B. Lichtenberg{,}~P. Stehle{,} and K.~R. Symon.
+\newblock Modifications of {Liouville's} theorem required by the presence of
+  dissipative forces.
+\newblock {\em MURA}, 126, 1956.
+
+\bibitem{YuM}
+Yu.M. Ado and V.I. Balbekov.
+\newblock Use of ionization friction in the storage of heavy particles.
+\newblock {\em Sov. Atomic Energy}, 31, 1971.
+
+\bibitem{johnson}
+R.~P. Johnson.
+\newblock Ionization cooling.
+\newblock {\em Proceedings of COOL 2007}, 2007.
+
+\bibitem{PDG}
+J.~Beringer \emph{et al.}
+\newblock (PDG) PR D86, 010001 chpt. 31, 2013.
+
+\bibitem{PDGTables}
+Particle Data Group Atomic~Nuclear Properties.
+\newblock \url{http://pdg.lbl.gov/2014/AtomicNuclearProperties/}, 2014.
+
+\bibitem{icool}
+R.C.~Fernow \emph{et. al.}
+\newblock {ICOOL}.
+\newblock \url{http://www.cap.bnl.gov/ICOOL/fernow/readme.html}, 2012.
+\newblock Version 3.30.
+
+\bibitem{g4bl}
+Tom Roberts.
+\newblock G4beamline.
+\newblock \url{http://www.muonsinternal.com/muons3/G4beamline}, 2014.
+\newblock Version 2.15w.
+
+\bibitem{geant4}
+CERN.
+\newblock {\em GEANT4 Physics Reference Manual}, 2011.
+\newblock Version 9.5.0.
+
+\bibitem{bethebloch}
+H.~A. Bethe.
+\newblock Scattering of electrons.
+\newblock {\em Z. f{\"u}r Physik}, 76, 1932.
+
+\bibitem{landau}
+L.~Landau.
+\newblock On the energy loss of fast particles by ionisation.
+\newblock {\em J. Phys. U.S.S.R.}, 8, 1944.
+
+\bibitem{Borrelli}
+Robert~L. Borrelli and Courtney~S. Coleman.
+\newblock {\em Differential Equations: A Modeling Perspective}.
+\newblock 2nd edition, 2004.
+
+\bibitem{livingston}
+M.~S. Livingston and H.~A. Bethe.
+\newblock Chapter {XVI}: Auxiliary data for the evaluation of experiments.
+\newblock {\em Reviews of Modern Physics}, 9, 1937.
+\newblock Section C: Nuclear Dynamics, Experimental.
+
+\bibitem{vavilov}
+P.~V. Vavilov.
+\newblock Ionization losses of high energy heavy particles.
+\newblock {\em Soviet Physics JETP}, 5, 1957.
+
+\bibitem{ashcroft}
+N.W. Ashcroft and N.D. Mermin.
+\newblock {\em Solid State Physics, HRW International Editions}.
+\newblock 1976.
+
+\bibitem{bichsel1988}
+H.~Bichsel.
+\newblock Straggling in thin silicon detectors.
+\newblock {\em Rev. Mod. Phys.}, 60, 1988.
+
+\bibitem{lewis}
+H.W. Lewis.
+\newblock Multiple scattering in an infinite medium.
+\newblock {\em Phys. Rev.}, 78, 1950.
+
+\bibitem{gs}
+S.~Goudsmit and J.L. Saunderson.
+\newblock Multiple scattering of electrons.
+\newblock {\em Phys. Rev.}, 57, 1939.
+
+\bibitem{highland}
+V.~Highland.
+\newblock Some practical remarks on multiple scattering.
+\newblock {\em NIM}, 129, 1975.
+
+\bibitem{lynchdahl}
+G.~R. Lynch and O.~I. Dahl.
+\newblock Approximations to multiple {Coulomb} scattering.
+\newblock {\em NIM}, 1991.
+
+\bibitem{geant3.21}
+CERN.
+\newblock {\em GEANT - Detector Description and Simulation Tool}, 1993.
+\newblock Version 3.21.
+
+\bibitem{muscat}
+D.~Attwood \emph{et al.}
+\newblock The scattering of muons in low z materials.
+\newblock {\em NIM}, 251, 2006.
+
+\bibitem{fernowAndGallardo}
+R.~Fernow and J.~C. Gallardo.
+\newblock Muon transverse ionization cooling: Stochastic approach.
+\newblock {\em Phys. Rev. E}, 52, 1995.
+
+\bibitem{mice}
+U.~Bravar \emph{et at.}
+\newblock Mice: The muon ionization cooling experiment.
+\newblock In {\em Proceedings of the DPF-2011 Conference}, 2011.
+
+\bibitem{Do}
+Chuong~B. Do.
+\newblock The multivariate gaussian distribution.
+\newblock \url{http://cs229.stanford.edu/section/gaussians.pdf}, 2008.
+\newblock {Stanford University CS 229 Lecture Notes}.
+
+\bibitem{mahalanobis}
+P.~C. Mahalanobis.
+\newblock On the generalized distance in statistics.
+\newblock {\em Proceedings of the National Institute of Sciences of India}, 2,
+  1936.
+
+\end{thebibliography}

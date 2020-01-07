@@ -1,0 +1,284 @@
+\pgfdeclareplotmark{cross} {
+\pgfpathmoveto{\pgfpoint{-0.3\pgfplotmarksize}{\pgfplotmarksize}}
+\pgfpathlineto{\pgfpoint{+0.3\pgfplotmarksize}{\pgfplotmarksize}}
+\pgfpathlineto{\pgfpoint{+0.3\pgfplotmarksize}{0.3\pgfplotmarksize}}
+\pgfpathlineto{\pgfpoint{+1\pgfplotmarksize}{0.3\pgfplotmarksize}}
+\pgfpathlineto{\pgfpoint{+1\pgfplotmarksize}{-0.3\pgfplotmarksize}}
+\pgfpathlineto{\pgfpoint{+0.3\pgfplotmarksize}{-0.3\pgfplotmarksize}}
+\pgfpathlineto{\pgfpoint{+0.3\pgfplotmarksize}{-1.\pgfplotmarksize}}
+\pgfpathlineto{\pgfpoint{-0.3\pgfplotmarksize}{-1.\pgfplotmarksize}}
+\pgfpathlineto{\pgfpoint{-0.3\pgfplotmarksize}{-0.3\pgfplotmarksize}}
+\pgfpathlineto{\pgfpoint{-1.\pgfplotmarksize}{-0.3\pgfplotmarksize}}
+\pgfpathlineto{\pgfpoint{-1.\pgfplotmarksize}{0.3\pgfplotmarksize}}
+\pgfpathlineto{\pgfpoint{-0.3\pgfplotmarksize}{0.3\pgfplotmarksize}}
+\pgfpathclose
+\pgfusepathqstroke
+}
+\pgfdeclareplotmark{cross*} {
+\pgfpathmoveto{\pgfpoint{-0.3\pgfplotmarksize}{\pgfplotmarksize}}
+\pgfpathlineto{\pgfpoint{+0.3\pgfplotmarksize}{\pgfplotmarksize}}
+\pgfpathlineto{\pgfpoint{+0.3\pgfplotmarksize}{0.3\pgfplotmarksize}}
+\pgfpathlineto{\pgfpoint{+1\pgfplotmarksize}{0.3\pgfplotmarksize}}
+\pgfpathlineto{\pgfpoint{+1\pgfplotmarksize}{-0.3\pgfplotmarksize}}
+\pgfpathlineto{\pgfpoint{+0.3\pgfplotmarksize}{-0.3\pgfplotmarksize}}
+\pgfpathlineto{\pgfpoint{+0.3\pgfplotmarksize}{-1.\pgfplotmarksize}}
+\pgfpathlineto{\pgfpoint{-0.3\pgfplotmarksize}{-1.\pgfplotmarksize}}
+\pgfpathlineto{\pgfpoint{-0.3\pgfplotmarksize}{-0.3\pgfplotmarksize}}
+\pgfpathlineto{\pgfpoint{-1.\pgfplotmarksize}{-0.3\pgfplotmarksize}}
+\pgfpathlineto{\pgfpoint{-1.\pgfplotmarksize}{0.3\pgfplotmarksize}}
+\pgfpathlineto{\pgfpoint{-0.3\pgfplotmarksize}{0.3\pgfplotmarksize}}
+\pgfpathclose
+\pgfusepathqfillstroke
+}
+\pgfdeclareplotmark{newstar} {
+\pgfpathmoveto{\pgfqpoint{0pt}{\pgfplotmarksize}}
+\pgfpathlineto{\pgfqpointpolar{44}{0.5\pgfplotmarksize}}
+\pgfpathlineto{\pgfqpointpolar{18}{\pgfplotmarksize}}
+\pgfpathlineto{\pgfqpointpolar{-20}{0.5\pgfplotmarksize}}
+\pgfpathlineto{\pgfqpointpolar{-54}{\pgfplotmarksize}}
+\pgfpathlineto{\pgfqpointpolar{-90}{0.5\pgfplotmarksize}}
+\pgfpathlineto{\pgfqpointpolar{234}{\pgfplotmarksize}}
+\pgfpathlineto{\pgfqpointpolar{198}{0.5\pgfplotmarksize}}
+\pgfpathlineto{\pgfqpointpolar{162}{\pgfplotmarksize}}
+\pgfpathlineto{\pgfqpointpolar{134}{0.5\pgfplotmarksize}}
+\pgfpathclose
+\pgfusepathqstroke
+}
+\pgfdeclareplotmark{newstar*} {
+\pgfpathmoveto{\pgfqpoint{0pt}{\pgfplotmarksize}}
+\pgfpathlineto{\pgfqpointpolar{44}{0.5\pgfplotmarksize}}
+\pgfpathlineto{\pgfqpointpolar{18}{\pgfplotmarksize}}
+\pgfpathlineto{\pgfqpointpolar{-20}{0.5\pgfplotmarksize}}
+\pgfpathlineto{\pgfqpointpolar{-54}{\pgfplotmarksize}}
+\pgfpathlineto{\pgfqpointpolar{-90}{0.5\pgfplotmarksize}}
+\pgfpathlineto{\pgfqpointpolar{234}{\pgfplotmarksize}}
+\pgfpathlineto{\pgfqpointpolar{198}{0.5\pgfplotmarksize}}
+\pgfpathlineto{\pgfqpointpolar{162}{\pgfplotmarksize}}
+\pgfpathlineto{\pgfqpointpolar{134}{0.5\pgfplotmarksize}}
+\pgfpathclose
+\pgfusepathqfillstroke
+}
+\begin{tikzpicture}
+\definecolor{c}{rgb}{1,1,1};
+\draw [color=c, fill=c] (0,0) rectangle (20,13.5632);
+\draw [color=c, fill=c] (2,1.35632) rectangle (18,12.2069);
+\definecolor{c}{rgb}{0,0,0};
+\draw [c] (2,1.35632) -- (2,12.2069) -- (18,12.2069) -- (18,1.35632) -- (2,1.35632);
+\definecolor{c}{rgb}{1,1,1};
+\draw [color=c, fill=c] (2,1.35632) rectangle (18,12.2069);
+\definecolor{c}{rgb}{0,0,0};
+\draw [c] (2,1.35632) -- (2,12.2069) -- (18,12.2069) -- (18,1.35632) -- (2,1.35632);
+\definecolor{c}{rgb}{0,0,1};
+\foreach \P in
+ {(2.10667,11.4655),(2.32,11.4562),(2.53333,11.4095),(2.74667,11.3462),(2.96,11.2846),(3.17333,11.2164),(3.38667,11.1056),(3.6,10.9953),(3.81333,10.8773),(4.02667,10.7323),(4.24,10.5499),(4.45333,10.3768),(4.66667,10.2075),(4.88,10.0551),(5.09333,9.8
+2604),(5.30667,9.60467),(5.52,9.35618),(5.73333,9.15774),(5.94667,8.90211),(6.16,8.7044),(6.37333,8.49261),(6.58667,8.1698),(6.8,7.87107),(7.01333,7.68518),(7.22667,7.57427),(7.44,7.27751),(7.65333,7.08924),(7.86667,6.81648),(8.08,6.55935),(8.29333,6
+.37029),(8.50667,6.169),(8.72,6.11909),(8.93333,5.91012),(9.14667,5.67392),(9.36,5.69249),(9.57333,5.7639),(9.78667,5.46987),(10,5.2221),(10.2133,5.27606),(10.4267,5.01058),(10.64,4.79242),(10.8533,5.01058),(11.0667,4.86979),(11.28,4.5235),(11.4933,4
+.5235),(11.7067,4.41796),(11.92,4.02761),(12.1333,4.47193),(12.3467,4.17281),(12.56,4.10248)}{\draw[mark options={color=c,fill=c},mark size=2.402402pt,mark=o] plot coordinates {\P};}
+\foreach \P in
+ {(12.56,4.10248),(12.7733,3.86159),(12.9867,3.94757),(13.2,3.43499),(13.4133,4.17281),(13.6267,3.66779),(13.84,3.43499),(14.0533,2.16046),(14.2667,3.66779),(14.48,3.76873),(14.6933,3.86159),(14.9067,2.75308),(15.12,3.43499),(15.3333,4.10248),(15.546
+7,3.43499),(15.76,2.75308),(15.9733,2.9646),(16.1867,3.14343),(16.4,2.49421),(16.6133,3.14343),(16.8267,2.49421),(17.04,2.16046),(17.4667,3.43499),(17.68,2.49421),(17.8933,2.75308)}{\draw[mark options={color=c,fill=c},mark size=2.402402pt,mark=o]
+ plot coordinates {\P};}
+\definecolor{c}{rgb}{1,1,1};
+\draw [color=c, fill=c] (7,10.5115) rectangle (11,12.6816);
+\definecolor{c}{rgb}{0,0,0};
+\draw [c] (7,10.5115) -- (11,10.5115);
+\draw [c] (11,10.5115) -- (11,12.6816);
+\draw [c] (11,12.6816) -- (7,12.6816);
+\draw [c] (7,12.6816) -- (7,10.5115);
+\draw[color=blue](9,12.4103) node[scale=0.7, rotate=0]{ICOOL $\circ$};
+\draw [c] (7,12.1391) -- (11,12.1391);
+\draw [anchor= west] (7.2,11.8678) node[scale=0.6, rotate=0]{Entries };
+\draw [anchor= east] (10.8,11.8678) node[scale=0.6, rotate=0]{ 100000};
+\draw [anchor= west] (7.2,11.3253) node[scale=0.6, rotate=0]{Mean  };
+\draw [anchor= east] (10.8,11.3253) node[scale=0.6, rotate=0]{ 3.99e-004};
+\draw [anchor= west] (7.2,10.7828) node[scale=0.6, rotate=0]{RMS   };
+\draw [anchor= east] (10.8,10.7828) node[scale=0.6, rotate=0]{ 3.55e-004};
+\draw [c] (2,1.35632) -- (18,1.35632);
+\draw [anchor= east] (18,0.596782) node[scale=0.7, rotate=0]{Px (GeV/c)};
+\draw [c] (2,1.68184) -- (2,1.35632);
+\draw [c] (2.4,1.51908) -- (2.4,1.35632);
+\draw [c] (2.8,1.51908) -- (2.8,1.35632);
+\draw [c] (3.2,1.51908) -- (3.2,1.35632);
+\draw [c] (3.6,1.51908) -- (3.6,1.35632);
+\draw [c] (4,1.68184) -- (4,1.35632);
+\draw [c] (4.4,1.51908) -- (4.4,1.35632);
+\draw [c] (4.8,1.51908) -- (4.8,1.35632);
+\draw [c] (5.2,1.51908) -- (5.2,1.35632);
+\draw [c] (5.6,1.51908) -- (5.6,1.35632);
+\draw [c] (6,1.68184) -- (6,1.35632);
+\draw [c] (6.4,1.51908) -- (6.4,1.35632);
+\draw [c] (6.8,1.51908) -- (6.8,1.35632);
+\draw [c] (7.2,1.51908) -- (7.2,1.35632);
+\draw [c] (7.6,1.51908) -- (7.6,1.35632);
+\draw [c] (8,1.68184) -- (8,1.35632);
+\draw [c] (8.4,1.51908) -- (8.4,1.35632);
+\draw [c] (8.8,1.51908) -- (8.8,1.35632);
+\draw [c] (9.2,1.51908) -- (9.2,1.35632);
+\draw [c] (9.6,1.51908) -- (9.6,1.35632);
+\draw [c] (10,1.68184) -- (10,1.35632);
+\draw [c] (10.4,1.51908) -- (10.4,1.35632);
+\draw [c] (10.8,1.51908) -- (10.8,1.35632);
+\draw [c] (11.2,1.51908) -- (11.2,1.35632);
+\draw [c] (11.6,1.51908) -- (11.6,1.35632);
+\draw [c] (12,1.68184) -- (12,1.35632);
+\draw [c] (12.4,1.51908) -- (12.4,1.35632);
+\draw [c] (12.8,1.51908) -- (12.8,1.35632);
+\draw [c] (13.2,1.51908) -- (13.2,1.35632);
+\draw [c] (13.6,1.51908) -- (13.6,1.35632);
+\draw [c] (14,1.68184) -- (14,1.35632);
+\draw [c] (14.4,1.51908) -- (14.4,1.35632);
+\draw [c] (14.8,1.51908) -- (14.8,1.35632);
+\draw [c] (15.2,1.51908) -- (15.2,1.35632);
+\draw [c] (15.6,1.51908) -- (15.6,1.35632);
+\draw [c] (16,1.68184) -- (16,1.35632);
+\draw [c] (16.4,1.51908) -- (16.4,1.35632);
+\draw [c] (16.8,1.51908) -- (16.8,1.35632);
+\draw [c] (17.2,1.51908) -- (17.2,1.35632);
+\draw [c] (17.6,1.51908) -- (17.6,1.35632);
+\draw [c] (18,1.68184) -- (18,1.35632);
+\draw [anchor=base] (2,0.908736) node[scale=0.7, rotate=0]{0};
+\draw [anchor=base] (4,0.908736) node[scale=0.7, rotate=0]{0.0005};
+\draw [anchor=base] (6,0.908736) node[scale=0.7, rotate=0]{0.001};
+\draw [anchor=base] (8,0.908736) node[scale=0.7, rotate=0]{0.0015};
+\draw [anchor=base] (10,0.908736) node[scale=0.7, rotate=0]{0.002};
+\draw [anchor=base] (12,0.908736) node[scale=0.7, rotate=0]{0.0025};
+\draw [anchor=base] (14,0.908736) node[scale=0.7, rotate=0]{0.003};
+\draw [anchor=base] (16,0.908736) node[scale=0.7, rotate=0]{0.0035};
+\draw [anchor=base] (18,0.908736) node[scale=0.7, rotate=0]{0.004};
+\draw [c] (2,1.35632) -- (2,12.2069);
+\draw [c] (2.24,1.69007) -- (2,1.69007);
+\draw [c] (2.24,2.16046) -- (2,2.16046);
+\draw [c] (2.24,2.4942) -- (2,2.4942);
+\draw [c] (2.24,2.75308) -- (2,2.75308);
+\draw [c] (2.24,2.96459) -- (2,2.96459);
+\draw [c] (2.24,3.14343) -- (2,3.14343);
+\draw [c] (2.24,3.29834) -- (2,3.29834);
+\draw [c] (2.24,3.43498) -- (2,3.43498);
+\draw [c] (2.48,3.55722) -- (2,3.55722);
+\draw [anchor= east] (1.844,3.55722) node[scale=0.7, rotate=0]{10};
+\draw [c] (2.24,4.36135) -- (2,4.36135);
+\draw [c] (2.24,4.83174) -- (2,4.83174);
+\draw [c] (2.24,5.16549) -- (2,5.16549);
+\draw [c] (2.24,5.42437) -- (2,5.42437);
+\draw [c] (2.24,5.63588) -- (2,5.63588);
+\draw [c] (2.24,5.81472) -- (2,5.81472);
+\draw [c] (2.24,5.96963) -- (2,5.96963);
+\draw [c] (2.24,6.10627) -- (2,6.10627);
+\draw [c] (2.48,6.2285) -- (2,6.2285);
+\draw [anchor= east] (1.844,6.2285) node[scale=0.7, rotate=0]{$10^{2}$};
+\draw [c] (2.24,7.03264) -- (2,7.03264);
+\draw [c] (2.24,7.50303) -- (2,7.50303);
+\draw [c] (2.24,7.83678) -- (2,7.83678);
+\draw [c] (2.24,8.09565) -- (2,8.09565);
+\draw [c] (2.24,8.30717) -- (2,8.30717);
+\draw [c] (2.24,8.486) -- (2,8.486);
+\draw [c] (2.24,8.64092) -- (2,8.64092);
+\draw [c] (2.24,8.77756) -- (2,8.77756);
+\draw [c] (2.48,8.89979) -- (2,8.89979);
+\draw [anchor= east] (1.844,8.89979) node[scale=0.7, rotate=0]{$10^{3}$};
+\draw [c] (2.24,9.70393) -- (2,9.70393);
+\draw [c] (2.24,10.1743) -- (2,10.1743);
+\draw [c] (2.24,10.5081) -- (2,10.5081);
+\draw [c] (2.24,10.7669) -- (2,10.7669);
+\draw [c] (2.24,10.9785) -- (2,10.9785);
+\draw [c] (2.24,11.1573) -- (2,11.1573);
+\draw [c] (2.24,11.3122) -- (2,11.3122);
+\draw [c] (2.24,11.4488) -- (2,11.4488);
+\draw [c] (2.48,11.5711) -- (2,11.5711);
+\draw [anchor= east] (1.844,11.5711) node[scale=0.7, rotate=0]{$10^{4}$};
+\definecolor{c}{rgb}{1,1,1};
+\draw [color=c, fill=c] (7,10.5115) rectangle (11,12.6816);
+\definecolor{c}{rgb}{0,0,0};
+\draw [c] (7,10.5115) -- (11,10.5115);
+\draw [c] (11,10.5115) -- (11,12.6816);
+\draw [c] (11,12.6816) -- (7,12.6816);
+\draw [c] (7,12.6816) -- (7,10.5115);
+\draw[color=blue](9,12.4103) node[scale=0.7, rotate=0]{ICOOL $\circ$};
+\draw [c] (7,12.1391) -- (11,12.1391);
+\draw [anchor= west] (7.2,11.8678) node[scale=0.6, rotate=0]{Entries };
+\draw [anchor= east] (10.8,11.8678) node[scale=0.6, rotate=0]{ 100000};
+\draw [anchor= west] (7.2,11.3253) node[scale=0.6, rotate=0]{Mean  };
+\draw [anchor= east] (10.8,11.3253) node[scale=0.6, rotate=0]{ 3.99e-004};
+\draw [anchor= west] (7.2,10.7828) node[scale=0.6, rotate=0]{RMS   };
+\draw [anchor= east] (10.8,10.7828) node[scale=0.6, rotate=0]{ 3.55e-004};
+\draw (10,13.0816) node[scale=1, rotate=0]{PX Histogram (PZ = 100 MeV/c, L = 10 mm)};
+\definecolor{c}{rgb}{1,0,0};
+\foreach \P in
+ {(2.10667,11.483),(2.32,11.4764),(2.53333,11.4454),(2.74667,11.3683),(2.96,11.2902),(3.17333,11.226),(3.38667,11.1369),(3.6,11.0253),(3.81333,10.8995),(4.02667,10.7167),(4.24,10.586),(4.45333,10.3897),(4.66667,10.1786),(4.88,9.95908),(5.09333,9.7813
+4),(5.30667,9.52693),(5.52,9.28099),(5.73333,8.9955),(5.94667,8.78783),(6.16,8.56913),(6.37333,8.3033),(6.58667,7.94998),(6.8,7.79545),(7.01333,7.47168),(7.22667,7.3765),(7.44,7.21973),(7.65333,7.02683),(7.86667,6.83726),(8.08,6.61885),(8.29333,6.478
+06),(8.50667,6.2628),(8.72,6.10627),(8.93333,6.02623),(9.14667,5.65506),(9.36,5.57638),(9.57333,5.79802),(9.78667,5.42437),(10,5.42437),(10.2133,5.32763),(10.4267,4.90662),(10.64,5.2221),(10.8533,4.86979),(11.0667,4.97695),(11.28,4.47193),(11.4933,4.
+75171),(11.7067,4.36136),(11.92,4.62023),(12.1333,4.41796),(12.3467,4.23912),(12.56,4.30185)}{\draw[mark options={color=c,fill=c},mark size=2.402402pt,mark=asterisk] plot coordinates {\P};}
+\foreach \P in
+ {(12.56,4.30185),(12.7733,3.55722),(12.9867,3.76873),(13.2,3.94757),(13.4133,4.10248),(13.6267,2.75308),(13.84,3.55722),(14.0533,3.55722),(14.2667,3.29834),(14.48,3.14343),(14.6933,2.9646),(14.9067,3.29834),(15.12,2.9646),(15.3333,3.29834),(15.5467,
+2.49421),(15.76,2.16046),(15.9733,2.9646),(16.1867,2.49421),(16.4,2.16046),(16.6133,3.14343),(16.8267,3.14343),(17.04,2.9646),(17.2533,2.16046),(17.4667,1.69007),(17.68,2.9646),(17.8933,2.49421)}{\draw[mark options={color=c,fill=c},mark
+ size=2.402402pt,mark=asterisk] plot coordinates {\P};}
+\definecolor{c}{rgb}{1,1,1};
+\draw [color=c, fill=c] (11,10.5115) rectangle (15,12.6816);
+\definecolor{c}{rgb}{0,0,0};
+\draw [c] (11,10.5115) -- (15,10.5115);
+\draw [c] (15,10.5115) -- (15,12.6816);
+\draw [c] (15,12.6816) -- (11,12.6816);
+\draw [c] (11,12.6816) -- (11,10.5115);
+\draw [color=red](13,12.4103) node[scale=0.7, rotate=0]{COSY $*$};
+\draw [c] (11,12.1391) -- (15,12.1391);
+\draw [anchor= west] (11.2,11.8678) node[scale=0.6, rotate=0]{Entries };
+\draw [anchor= east] (14.8,11.8678) node[scale=0.6, rotate=0]{ 100000};
+\draw [anchor= west] (11.2,11.3253) node[scale=0.6, rotate=0]{Mean  };
+\draw [anchor= east] (14.8,11.3253) node[scale=0.6, rotate=0]{ 3.90e-004};
+\draw [anchor= west] (11.2,10.7828) node[scale=0.6, rotate=0]{RMS   };
+\draw [anchor= east] (14.8,10.7828) node[scale=0.6, rotate=0]{ 3.48e-004};
+\definecolor{c}{rgb}{1,1,1};
+\draw [color=c, fill=c] (11,10.5115) rectangle (15,12.6816);
+\definecolor{c}{rgb}{0,0,0};
+\draw [c] (11,10.5115) -- (15,10.5115);
+\draw [c] (15,10.5115) -- (15,12.6816);
+\draw [c] (15,12.6816) -- (11,12.6816);
+\draw [c] (11,12.6816) -- (11,10.5115);
+\draw [color=red](13,12.4103) node[scale=0.7, rotate=0]{COSY $*$};
+\draw [c] (11,12.1391) -- (15,12.1391);
+\draw [anchor= west] (11.2,11.8678) node[scale=0.6, rotate=0]{Entries };
+\draw [anchor= east] (14.8,11.8678) node[scale=0.6, rotate=0]{ 100000};
+\draw [anchor= west] (11.2,11.3253) node[scale=0.6, rotate=0]{Mean  };
+\draw [anchor= east] (14.8,11.3253) node[scale=0.6, rotate=0]{ 3.90e-004};
+\draw [anchor= west] (11.2,10.7828) node[scale=0.6, rotate=0]{RMS   };
+\draw [anchor= east] (14.8,10.7828) node[scale=0.6, rotate=0]{ 3.48e-004};
+\definecolor{c}{rgb}{0,0.6,0};
+\foreach \P in
+ {(2.10667,11.5213),(2.32,11.4989),(2.53333,11.4789),(2.74667,11.4136),(2.96,11.3569),(3.17333,11.2308),(3.38667,11.1369),(3.6,11.0332),(3.81333,10.8834),(4.02667,10.7539),(4.24,10.5225),(4.45333,10.3771),(4.66667,10.1805),(4.88,9.91882),(5.09333,9.7
+0102),(5.30667,9.52287),(5.52,9.21128),(5.73333,8.99443),(5.94667,8.74885),(6.16,8.44381),(6.37333,8.2209),(6.58667,7.70159),(6.8,7.64139),(7.01333,7.33255),(7.22667,7.03843),(7.44,6.79532),(7.65333,6.62711),(7.86667,6.44965),(8.08,6.05353),(8.29333,
+6.10627),(8.50667,5.71076),(8.72,5.27606),(8.93333,5.42437),(9.14667,5.19414),(9.36,4.57287),(9.57333,4.36136),(9.78667,4.79242),(10,4.70951),(10.2133,4.36136),(10.4267,4.36136),(10.64,3.66779),(10.8533,4.23912),(11.0667,3.55722),(11.28,3.55722),(11.
+4933,2.49421),(11.7067,2.9646),(11.92,3.86159),(12.1333,3.86159),(12.3467,3.66779),(12.56,3.29834)}{\draw[mark options={color=c,fill=c},mark size=2.402402pt,mark=+] plot coordinates {\P};}
+\foreach \P in
+ {(12.56,3.29834),(12.7733,3.86159),(12.9867,3.29834),(13.2,3.86159),(13.4133,3.43499),(13.6267,2.9646),(13.84,2.75308),(14.0533,2.49421),(14.2667,2.16046),(14.48,2.49421),(14.6933,2.16046),(14.9067,2.16046),(15.3333,2.49421),(15.5467,2.16046),(15.76
+,1.69007),(16.4,1.69007),(16.6133,1.69007),(16.8267,2.75308),(17.04,1.69007),(17.2533,1.69007),(17.4667,1.69007),(17.8933,2.16046)}{\draw[mark options={color=c,fill=c},mark size=2.402402pt,mark=+] plot coordinates {\P};}
+\definecolor{c}{rgb}{1,1,1};
+\draw [color=c, fill=c] (15,10.5115) rectangle (19,12.6816);
+\definecolor{c}{rgb}{0,0,0};
+\draw [c] (15,10.5115) -- (19,10.5115);
+\draw [c] (19,10.5115) -- (19,12.6816);
+\draw [c] (19,12.6816) -- (15,12.6816);
+\draw [c] (15,12.6816) -- (15,10.5115);
+\draw [color=green](17,12.4103) node[scale=0.7, rotate=0]{G4BL $+$};
+\draw [c] (15,12.1391) -- (19,12.1391);
+\draw [anchor= west] (15.2,11.8678) node[scale=0.6, rotate=0]{Entries };
+\draw [anchor= east] (18.8,11.8678) node[scale=0.6, rotate=0]{ 100000};
+\draw [anchor= west] (15.2,11.3253) node[scale=0.6, rotate=0]{Mean  };
+\draw [anchor= east] (18.8,11.3253) node[scale=0.6, rotate=0]{ 3.69e-004};
+\draw [anchor= west] (15.2,10.7828) node[scale=0.6, rotate=0]{RMS   };
+\draw [anchor= east] (18.8,10.7828) node[scale=0.6, rotate=0]{ 3.12e-004};
+\definecolor{c}{rgb}{1,1,1};
+\draw [color=c, fill=c] (15,10.5115) rectangle (19,12.6816);
+\definecolor{c}{rgb}{0,0,0};
+\draw [c] (15,10.5115) -- (19,10.5115);
+\draw [c] (19,10.5115) -- (19,12.6816);
+\draw [c] (19,12.6816) -- (15,12.6816);
+\draw [c] (15,12.6816) -- (15,10.5115);
+\draw [color=green](17,12.4103) node[scale=0.7, rotate=0]{G4BL $+$};
+\draw [c] (15,12.1391) -- (19,12.1391);
+\draw [anchor= west] (15.2,11.8678) node[scale=0.6, rotate=0]{Entries };
+\draw [anchor= east] (18.8,11.8678) node[scale=0.6, rotate=0]{ 100000};
+\draw [anchor= west] (15.2,11.3253) node[scale=0.6, rotate=0]{Mean  };
+\draw [anchor= east] (18.8,11.3253) node[scale=0.6, rotate=0]{ 3.69e-004};
+\draw [anchor= west] (15.2,10.7828) node[scale=0.6, rotate=0]{RMS   };
+\draw [anchor= east] (18.8,10.7828) node[scale=0.6, rotate=0]{ 3.12e-004};
+\end{tikzpicture}

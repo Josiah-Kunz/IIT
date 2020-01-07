@@ -1,0 +1,19 @@
+Files added: 
+	-> Bx_250_0 and Bz_250_0
+		-> These indicate that COSY and G4BL treat fringes differently, 
+			but nearly the same.
+	-> Mice_Coil_Final
+		-> The COSY and G4BL simulations now agree.
+		-> Solution was to break CMSTP into 50 mm steps rather than
+			a single CMSTP.
+		-> Unsure why these two approaches produce different maps.
+
+New business:
+do grid -> 1, 10, 100, 1000 sub maps
+	-> if not much disc bt 100 and 1000, stop at 100 and play with order
+		-> 5, 7, 9, 11 (, 13)
+	-> all with g4bl
+
+tilted coil -> make tilted coil element
+	-> take a single coil, drift back (to 0 fringe field, say -2m), tilt axis [ta ax ay], 
+		propagate through (to, say +2m), drift back to center of coil

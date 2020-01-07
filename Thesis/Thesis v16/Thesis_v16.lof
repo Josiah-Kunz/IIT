@@ -1,0 +1,59 @@
+\contentsline {figure}{\numberline {1.1}{\ignorespaces The current model of particle physics.}}{1}{figure.caption.1}
+\contentsline {figure}{\numberline {1.2}{\ignorespaces The reference orbit.}}{5}{figure.caption.2}
+\contentsline {figure}{\numberline {1.3}{\ignorespaces Example of some map $\mathcal {M}$ creating a bijection from $s_0$ to $s_1$.\relax }}{7}{figure.caption.3}
+\contentsline {figure}{\numberline {1.4}{\ignorespaces Example of two maps $\mathcal {M}(s_0,s_1)$ and $\mathcal {M}(s_1,s_2)$. These two maps may be combined together to reduce to a single map, $\mathcal {M}(s_0,s_2)$.\relax }}{7}{figure.caption.4}
+\contentsline {figure}{\numberline {1.5}{\ignorespaces Classical muon--target interaction model.}}{8}{figure.caption.5}
+\contentsline {figure}{\numberline {1.6}{\ignorespaces Quantum muon--target interaction model.}}{9}{figure.caption.6}
+\contentsline {figure}{\numberline {1.7}{\ignorespaces Proposed muon accelerator schematics.}}{11}{figure.caption.7}
+\contentsline {figure}{\numberline {1.8}{\ignorespaces Cartoon of a cooling channel.}}{12}{figure.caption.8}
+\contentsline {figure}{\numberline {1.9}{\ignorespaces Vector diagram illustrating the principle of ionization cooling in Figure\nobreakspace {}\ref {fig:coolingchannel}. Image courtesy of \cite {MICE_repository}.\relax }}{13}{figure.caption.9}
+\contentsline {figure}{\numberline {1.10}{\ignorespaces $x$-$\theta $ phase space examples.}}{14}{figure.caption.10}
+\contentsline {figure}{\numberline {1.11}{\ignorespaces Stopping power curve for antimuons on copper.}}{18}{figure.caption.11}
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Classical model of particle passage through matter.\relax }}{22}{figure.caption.13}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Example of the Landau function.}}{29}{figure.caption.14}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Quantum scattering model (repeated from Figure\nobreakspace {}\ref {fig:scatteringmodel2}).\relax }}{31}{figure.caption.15}
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Two parts of Green's function with their poles at $s=\pm k$, altered to be closed by a semicircle at $|s|=\pm \infty $.\relax }}{35}{figure.caption.16}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces $\lambda _{max}$ vs. $\left <\lambda \right >$ over a variety of liquid hydrogen absorber lengths and initial beam momenta.}}{51}{figure.caption.18}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Example of the COSY cumulative angular distribution function.}}{54}{figure.caption.19}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Example of the first iteration of the COSY CDF algorithm.}}{56}{figure.caption.20}
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Example of a muon entering an absorber with some nonzero initial angle.}}{58}{figure.caption.21}
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Two examples of true paths.}}{61}{figure.caption.22}
+\contentsline {figure}{\numberline {3.6}{\ignorespaces 2D histogram of $(x,p_x)$ phase space.}}{62}{figure.caption.23}
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Cross section of Figure\nobreakspace {}\ref {fig:xpx_phase_space} at $p_x=0.08$ keV/$c$.}}{63}{figure.caption.24}
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Phase space portrait of Figure\nobreakspace {}\ref {fig:xpx_phase_space}.}}{64}{figure.caption.25}
+\contentsline {figure}{\numberline {3.9}{\ignorespaces Sample simulation results for the implementation of the transverse coordinate correction algorithm.\relax }}{64}{figure.caption.26}
+\contentsline {figure}{\numberline {3.10}{\ignorespaces Sample simulation results for the implementation of the temporal displacement algorithm discussed in this section.\relax }}{67}{figure.caption.27}
+\contentsline {figure}{\numberline {4.1}{\ignorespaces A flowchart for the structure of the new COSY routines implemented in this work.\relax }}{69}{figure.caption.28}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Cartoon example of some of the \texttt {ABSPOLY} parameters.\relax }}{70}{figure.caption.29}
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Muons of momentum 100 MeV/$c$ through 1 mm liquid hydrogen.}}{74}{figure.caption.30}
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Muons of momentum 100 MeV/$c$ through 10 mm liquid hydrogen.\relax }}{75}{figure.caption.31}
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Muons of momentum 100 MeV/$c$ through 100 mm liquid hydrogen.\relax }}{76}{figure.caption.32}
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Muons of momentum 200 MeV/$c$ through 1 mm liquid hydrogen.}}{77}{figure.caption.33}
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Muons of momentum 200 MeV/$c$ through 10 mm liquid hydrogen.\relax }}{78}{figure.caption.34}
+\contentsline {figure}{\numberline {5.6}{\ignorespaces Muons of momentum 200 MeV/$c$ through 100 mm liquid hydrogen.\relax }}{79}{figure.caption.35}
+\contentsline {figure}{\numberline {5.7}{\ignorespaces Muons of momentum 300 MeV/$c$ through 1 mm liquid hydrogen.}}{80}{figure.caption.36}
+\contentsline {figure}{\numberline {5.8}{\ignorespaces Muons of momentum 300 MeV/$c$ through 10 mm liquid hydrogen.\relax }}{81}{figure.caption.37}
+\contentsline {figure}{\numberline {5.9}{\ignorespaces Muons of momentum 300 MeV/$c$ through 100 mm liquid hydrogen.\relax }}{82}{figure.caption.38}
+\contentsline {figure}{\numberline {5.10}{\ignorespaces Muons of momentum 400 MeV/$c$ through 1 mm liquid hydrogen.}}{83}{figure.caption.39}
+\contentsline {figure}{\numberline {5.11}{\ignorespaces Muons of momentum 400 MeV/$c$ through 10 mm liquid hydrogen.\relax }}{84}{figure.caption.40}
+\contentsline {figure}{\numberline {5.12}{\ignorespaces Muons of momentum 400 MeV/$c$ through 100 mm liquid hydrogen.\relax }}{85}{figure.caption.41}
+\contentsline {figure}{\numberline {5.13}{\ignorespaces MuScat angular scattering results for 109 mm of liquid hydrogen compared against COSY (red), G4BL (green), and ICOOL (blue).\relax }}{87}{figure.caption.42}
+\contentsline {figure}{\numberline {5.14}{\ignorespaces MuScat angular scattering results for 159 mm of liquid hydrogen compared against COSY (red), G4BL (green), and ICOOL (blue).\relax }}{88}{figure.caption.43}
+\contentsline {figure}{\numberline {5.15}{\ignorespaces MuScat angular scattering results for 3.73 mm of beryllium compared against COSY (red), G4BL (green), and ICOOL (blue).\relax }}{89}{figure.caption.44}
+\contentsline {figure}{\numberline {5.16}{\ignorespaces MICE Step IV cell.}}{90}{figure.caption.45}
+\contentsline {figure}{\numberline {5.17}{\ignorespaces MICE Step IV $x$ position results for 350 mm of liquid hydrogen.\relax }}{93}{figure.caption.48}
+\contentsline {figure}{\numberline {5.18}{\ignorespaces MICE Step IV $x$ angle results for 350 mm of liquid hydrogen.\relax }}{93}{figure.caption.49}
+\contentsline {figure}{\numberline {5.19}{\ignorespaces MICE Step IV final energy results for 350 mm of liquid hydrogen.\relax }}{94}{figure.caption.50}
+\contentsline {figure}{\numberline {5.20}{\ignorespaces MICE Step IV $x$ position results for 65 mm of lithium hydride.\relax }}{95}{figure.caption.52}
+\contentsline {figure}{\numberline {5.21}{\ignorespaces MICE Step IV $x$ angle results for 65 mm of lithium hydride.\relax }}{96}{figure.caption.53}
+\contentsline {figure}{\numberline {5.22}{\ignorespaces MICE Step IV final energy results for 65 mm of lithium hydride.\relax }}{96}{figure.caption.54}
+\contentsline {figure}{\numberline {5.23}{\ignorespaces Absorber-coil simulation results for $x$ with $10^5$ muons and a 5 step propagation.\relax }}{98}{figure.caption.56}
+\contentsline {figure}{\numberline {5.24}{\ignorespaces Absorber-coil simulation results for $\theta _x$ with $10^5$ muons and a 5 step propagation.\relax }}{98}{figure.caption.57}
+\contentsline {figure}{\numberline {5.25}{\ignorespaces Absorber-coil simulation results for the final energy with $10^5$ muons and a 5 step propagation.\relax }}{99}{figure.caption.58}
+\contentsline {figure}{\numberline {5.26}{\ignorespaces MICE simulation results for $x$ with $10^5$ muons at 5th order and 50 steps.\relax }}{100}{figure.caption.60}
+\contentsline {figure}{\numberline {5.27}{\ignorespaces MICE simulation results for $\theta _x$ with $10^5$ muons at 5th order and 50 steps.\relax }}{101}{figure.caption.61}
+\contentsline {figure}{\numberline {A.1}{\ignorespaces Sample scatterplot of a bivariate Gaussian with its projected ellipse.}}{105}{figure.caption.62}
+\contentsline {figure}{\numberline {B.1}{\ignorespaces Plot of $\DOTSI \intop \ilimits@ w(u)(1-e^{-pu})\ du$.}}{112}{figure.caption.63}
+\contentsline {figure}{\numberline {C.1}{\ignorespaces Feynman diagram for electron-muon scattering.}}{117}{figure.caption.64}
+\contentsline {figure}{\numberline {C.2}{\ignorespaces Mathematical interpretation the three branches of the Feynman diagram in Figure\nobreakspace {}\ref {fig:mottFeynman}.}}{118}{figure.caption.65}
+\contentsline {figure}{\numberline {C.3}{\ignorespaces COSY treatment of muon-electron scattering.}}{125}{figure.caption.66}

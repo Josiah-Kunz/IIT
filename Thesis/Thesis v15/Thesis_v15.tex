@@ -1,0 +1,108 @@
+\documentclass[letterpaper]{iitthesis}
+
+\usepackage{array}	% for \newcolumntype macro
+\usepackage{caption}
+\usepackage{graphicx}    % This package is used for Figures
+\usepackage{rotating}           % This package is used for landscape mode.
+\usepackage{epsfig}
+\usepackage{comment}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{cite}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{subfig}
+\usepackage{amsmath}
+\usepackage{multirow}
+\usepackage[T1]{fontenc}
+\usepackage[all]{nowidow}
+\usepackage[table]{xcolor}
+\usepackage{siunitx}
+\usepackage{listings}
+\usepackage{notoccite}
+\usepackage{grffile} % can use example.0.1.png
+\usepackage{tabularx}		% Fill to margin on tables, control table width
+\usepackage[normalem]{ulem}			% for strike through \sout{}
+\usepackage{anyfontsize} % for the GIMP large letters
+\usepackage{listings} % color the code
+\usepackage{color} % to define colors
+\usepackage{caption} % For hanging indent on captions
+\captionsetup{format=plain,indention=12 pt}
+
+% For plotting in LaTeX
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+\usetikzlibrary{plotmarks}
+%\usetikzlibrary{external}
+%\tikzexternalize % activate!
+%
+% Note: I had to increase LaTeX's memory size in order to plot all my validation figures:
+%	1. open up cmd
+%	2. >initexmf --edit-config-file pdflatex
+%	3. now you have the .ini file open
+%	4. play with parameters
+%		i.   pool_size=x
+%		ii.  main_memory=x
+%		iii. extra_mem_bot=x
+%		iv. font_mem_size=x
+%	5. recompile with >initexmf --dump=pdflatex
+%
+
+\definecolor{light-gray}{gray}{0.95}
+\definecolor{dGreen}{RGB}{0,163,34}
+
+\begin{document}
+
+% For large letter that I can use in GIMP
+\iffalse
+\fontsize{60}{12}\selectfont{\noindent
+\begin{equation}\nonumber \noindent
+\textcolor{dGreen}{A}
+\end{equation}
+}
+\newpage
+\fi
+
+\input{title.tex}
+\input{definitionOfTerms.tex}
+
+\input{abstract.tex}
+
+%\pagenumbering{gobble} % No page numbers --could also use arabic or roman
+\textpages
+\dsp{
+\Chapter{Introduction}
+
+\input{Introduction}
+}
+\Chapter{Stochastic Processes in Other Codes} \label{chp:other_codes}
+
+\input{ICOOL}
+
+\input{G4Beamline}
+
+\Chapter{Stochastic Processes in COSY Infinity}\label{chp:cosy}
+
+\input{COSY}
+
+\Chapter{Software Implementation}\label{chp:code_implementation}
+
+\input{Software_Implementation}
+
+\Chapter{Results}\label{chp:results}
+
+\input{Results}
+
+\appendix
+
+\input{Appendix}
+
+\bibliographystyle{IEEEtran}
+\bibliography{thesisBib}
+%\bibliographystyle{unsrt}
+\iffalse
+%\bibliographystyle{IEEEtran}
+%\bibliography{thesisBib}
+\fi
+\end{document}

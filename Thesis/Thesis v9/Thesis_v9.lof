@@ -1,0 +1,34 @@
+\contentsline {figure}{\numberline {1.1}{\ignorespaces The current model of particle physics. Image courtesy of \cite {quantumdiaries}.\relax }}{1}{figure.caption.1}
+\contentsline {figure}{\numberline {1.2}{\ignorespaces The reference orbit. Figure courtesy of \cite {berzFullnotes}.\relax }}{5}{figure.caption.2}
+\contentsline {figure}{\numberline {1.3}{\ignorespaces Example of some map $\mathcal {M}$ creating a bijection from $s_0$ to $s_1$.\relax }}{6}{figure.caption.3}
+\contentsline {figure}{\numberline {1.4}{\ignorespaces Example of two maps $\mathcal {M}(s_0,s_1)$ and $\mathcal {M}(s_1,s_2)$. These two maps may be combined together to reduce to a single map, $\mathcal {M}(s_0,s_2)$.\relax }}{7}{figure.caption.4}
+\contentsline {figure}{\numberline {1.5}{\ignorespaces $x$-$\theta $ phase space examples.}}{8}{figure.caption.5}
+\contentsline {figure}{\numberline {1.6}{\ignorespaces Stopping power curve for antimuons on copper, courtesy of \cite {PDG}. \relax }}{12}{figure.caption.6}
+\contentsline {figure}{\numberline {1.7}{\ignorespaces Classical muon--target interaction model courtesy of \cite {jose}.\relax }}{15}{figure.caption.8}
+\contentsline {figure}{\numberline {1.8}{\ignorespaces Quantum muon--target interaction model.}}{16}{figure.caption.9}
+\contentsline {figure}{\numberline {1.9}{\ignorespaces Proposed muon accelerator shematics. Image courtesy of \cite {map}.\relax }}{18}{figure.caption.10}
+\contentsline {figure}{\numberline {1.10}{\ignorespaces Cartoon of a cooling channel, courtesy of \cite {map}.\relax }}{19}{figure.caption.11}
+\contentsline {figure}{\numberline {1.11}{\ignorespaces Vector diagram illustrating the principle of ionization cooling in Figure \ref {fig:coolingchannel}. \relax }}{20}{figure.caption.12}
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Classical model of particle through matter.\relax }}{24}{figure.caption.13}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Plot of $\DOTSI \intop \ilimits@ w(u)(1-e^{-pu})\ du$.}}{33}{figure.caption.14}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Example of the Landau function.}}{35}{figure.caption.15}
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Quantum scattering model.\relax }}{38}{figure.caption.16}
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Two parts of Green's function with their poles at $s=\pm k$, altered to be closed by a semicircle at $|s|=\pm \infty $.\relax }}{41}{figure.caption.17}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces $\lambda _{max}$ vs. $\left <\lambda \right >$ over a variety of liquid hydrogen absorber lengths and initial beam momenta.}}{56}{figure.caption.19}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Example of the COSY cumulative angular distribution function.}}{59}{figure.caption.20}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Example of the first iteration of the COSY CDF algorithm.}}{61}{figure.caption.21}
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Example of a muon entering an absorber with some nonzero initial angle.}}{63}{figure.caption.22}
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Two examples of true paths.}}{65}{figure.caption.23}
+\contentsline {figure}{\numberline {4.1}{\ignorespaces MuScat results for 109 mm of liquid hydrogen compared against COSY (red), G4BL (green), and ICOOL (blue).\relax }}{82}{figure.caption.24}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces MuScat results for 159 mm of liquid hydrogen compared against COSY (red), G4BL (green), and ICOOL (blue).\relax }}{83}{figure.caption.25}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces MuScat results for 3.73 mm of beryllium compared against COSY (red), G4BL (green), and ICOOL (blue).\relax }}{84}{figure.caption.26}
+\contentsline {figure}{\numberline {4.4}{\ignorespaces MICE Step IV cell.}}{85}{figure.caption.27}
+\contentsline {figure}{\numberline {4.5}{\ignorespaces MICE Step IV $x$ position results.\relax }}{88}{figure.caption.30}
+\contentsline {figure}{\numberline {4.6}{\ignorespaces MICE Step IV $y$ position results.\relax }}{88}{figure.caption.31}
+\contentsline {figure}{\numberline {4.7}{\ignorespaces MICE Step IV $x$ angle results.\relax }}{89}{figure.caption.32}
+\contentsline {figure}{\numberline {4.8}{\ignorespaces MICE Step IV $y$ angle results.\relax }}{89}{figure.caption.33}
+\contentsline {figure}{\numberline {4.9}{\ignorespaces MICE Step IV final energy results.\relax }}{90}{figure.caption.34}
+\contentsline {figure}{\numberline {A.1}{\ignorespaces Sample scatterplot of a bivariate Gaussian with its projected ellipse.}}{94}{figure.caption.36}
+\contentsline {figure}{\numberline {C.1}{\ignorespaces Feynman diagram for electron-muon scattering.}}{102}{figure.caption.37}
+\contentsline {figure}{\numberline {C.2}{\ignorespaces Mathematical interpretation the three branches of the Feynman diagram in Figure \ref {fig:mottFeynman}.}}{103}{figure.caption.38}
+\contentsline {figure}{\numberline {C.3}{\ignorespaces COSY treatment of muon-electron scattering.}}{110}{figure.caption.39}

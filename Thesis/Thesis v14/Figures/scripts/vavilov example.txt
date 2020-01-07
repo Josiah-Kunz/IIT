@@ -1,0 +1,6 @@
+TF1 *f = new TF1("f","TMath::Vavilov(x,3,0.8)",-0.5,1);
+f->SetTitle("Vavilov Function (tail)");
+f->Draw();
+TF1 *f2 = new TF1("f2","TMath::Vavilov(x,3,0.8)",-5,1);
+f2->SetTitle("Vavilov Function");
+f2->Draw();

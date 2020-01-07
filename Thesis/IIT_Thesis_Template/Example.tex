@@ -1,0 +1,56 @@
+\documentclass[letterpaper]{iitthesis}
+
+%-------------------------------------------------------------------------------
+% Packages
+%-------------------------------------------------------------------------------
+% Must use periods on all captions
+\usepackage[labelsep=period]{caption}
+
+% For hanging indent on captions
+\DeclareCaptionFormat{single}{\linespread{1}\selectfont{#1#2#3}\par}
+\captionsetup{format=single,indention=12 pt}  % For hanging indent on captions
+
+% For use of \includegraphics[width=...
+\usepackage{graphicx}
+
+% To use \eqref and other useful mathematical symbols
+\usepackage{amsmath}
+
+%-------------------------------------------------------------------------------
+% Preliminary pages
+%-------------------------------------------------------------------------------
+
+\begin{document}
+% Title pages
+\input{Title.tex}
+
+% Definitions of mathematical symbols (optional)
+\input{DefinitionOfTerms.tex}
+
+% Abstract
+\input{Abstract.tex}
+
+%-------------------------------------------------------------------------------
+% Main text
+%-------------------------------------------------------------------------------
+\textpages
+\Chapter{Introduction} \label{chp:intro}
+
+\input{Introduction}
+
+\Chapter{Main Text} \label{chp:main_text}
+
+\input{Main_Text}
+
+\Chapter{Conclusions}\label{chp:conclusions}
+
+\input{Conclusions}
+
+\appendix
+
+\input{Appendix}
+
+% I like IEEE style, but you can change it
+\bibliographystyle{IEEEtran}
+\bibliography{Bibliography}
+\end{document}

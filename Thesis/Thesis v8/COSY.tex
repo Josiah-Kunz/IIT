@@ -1,0 +1,572 @@
+\Section{Straggling} \label{sec:COSYStraggling}\par
+COSY uses Landau theory \cite{landau} to describe the straggling distribution. This theory is discussed in detail in Section \ref{ssc:ICOOLStragglingLandau}. Other straggling models which were investigated were
+\begin{itemize}
+\item{Functionalization}
+\item{Urb\'{a}n model \cite{geant4}}
+\item{Vavilov theory \cite{vavilov}}
+\item{Edgeworth series \cite{edgeworth}}
+\item{Convolution method (compound Poisson method) \cite{kellerer}}
+\item{Landau/Gaussian convolution \cite{hancock}}
+\item{Blunck-Liesegang theory \cite{blunck}}
+\end{itemize}
+However, Landau theory proved to be the best fit. It was chosen over the Vavilov distribution in particular due to a complication where the Vavilov tail was abruptly cut off under certain circumstances.
+
+The average of the Landau distribution is infinity, which is clearly nonphysical. Given the universal Landau parameter (Eqn. \ref{eqn:landauParameter}), 
+\begin{align*}
+\lambda=\frac{\epsilon-\left<\epsilon\right>}{\xi}-(1-C_{Euler})-\beta ^2 -\ln (\xi/T_{max}),
+\end{align*}
+fluctuations about the mean energy loss $\left<\epsilon-\left<\epsilon\right>\right>$ will also be divergent given enough samples. This results in a sensitivity to stepsize. In order to combat this, an artificial cutoff is given to $\lambda$ such that the average Landau $\epsilon$ is equal to the average Bethe-Bloch energy loss $\left<\epsilon\right>$. That is, it is required that
+\begin{align*}
+\left<\lambda\right>&=\left<\frac{\epsilon-\left<\epsilon\right>}{\xi}\right>-(1-C_{Euler})-\beta^2-\ln(\xi/T_{max})\\
+&=-(1-C_{Euler})-\beta^2-\ln(\xi/T_{max}).
+\end{align*}
+If this cutoff is $\lambda_{max}$, then $\left<\lambda\right>$ can be calculated as
+\begin{align*}
+\left<\lambda\right>=\frac{\int_0 ^{\lambda_{max}} \lambda * f(\lambda) d\lambda}{\int_0 ^{\lambda_{max}}f(\lambda) d\lambda}.
+\end{align*}
+The task then is to numerically find $\lambda_{max}$ such that it satisfies
+\begin{align*}
+\frac{\int_0 ^{\lambda_{max}} \lambda * f(\lambda) d\lambda}{\int_0 ^{\lambda_{max}}f(\lambda) d\lambda}=-(1-C_{Euler})-\beta^2-\ln(\xi/T_{max}).
+\end{align*}
+Geant version 3.21 \cite{geant3.21} suggests the following form for $\lambda_{max}$:
+\begin{equation} \label{eqn:landauCutoffsGeant3}
+\lambda_{max}=0.60715+1.1934\left<\lambda\right>+(0.67794+0.052382\left<\lambda\right>)\exp[0.94753+0.74442\left<\lambda\right>)]
+\end{equation}
+(note that Geant 4 does not have a section on the Landau cutoff since the Urb\'{a}n model is used instead). However, a plot of required cutoffs ($\lambda_{max}$) vs. desired means ($\left<\lambda\right>$) was plotted independently in this work with muon ionization cooling parameters in mind. The results are shown in Figure \ref{fig:landau_cutoffs}, and the determined form of the function is
+\begin{equation}\label{eqn:landauCutoffs}
+\lambda_{max}=0.517891+1.17765\left<\lambda\right>+(0.476074+0.00880733\left<\lambda\right>)\exp[1.15467+0.984008\left<\lambda\right>].
+\end{equation}
+
+\begin{figure}
+  \centering
+    \includegraphics[width=\textwidth]{Figures/landau_cutoffs} 
+  \caption{$\lambda_{max}$ vs. $\left<\lambda\right>$ over a variety of liquid hydrogen absorber lengths and initial beam momenta. The black line is the fitted curve (see Eqn. \ref{eqn:landauCutoffs}) and the pink line is the form given by Geant 3 (see Eqn. \ref{eqn:landauCutoffsGeant3}). }
+  \label{fig:landau_cutoffs}
+\end{figure}
+
+This may be easily interpreted into some $\epsilon_{max}$ using Eqn. \ref{eqn:landauParameter}:
+\begin{align*}
+\epsilon_{max}=\xi[\lambda_{max}+(1-C_{Euler})+\beta^2+\ln(\xi/T_{max})]+\left<\epsilon\right>.
+\end{align*}
+Therefore, during the energy loss sampling, if any energy loss $\epsilon$ is selected which is greater than $\epsilon_{max}$ it is thrown out and the sampling is performed again. However, if the result has been thrown out 100 times, the particle is assumed to have lost too much energy and is considered lost.
+
+%
+%-------------------------------------------------------------------------------
+%
+\Section{Scattering} \label{sec:COSYScattering}\par
+Similar to ICOOL's fifth method of scattering, the Rutherford model (see Sec. \ref{sec:ICOOLScattering}), COSY utilizes a piecewise distribution function which is Gaussian  at small angles (as Goudsmit and Saunderson suggested \cite{gs}) and Rutherford-like at large angles. This Ruthorford-like tail is derived in Sec. \ref{ssc:COSYTheoreticalDerivation} and yields the Mott scattering cross section in Eqn. \ref{eqn:MottCrossSection}. The practical implementation of this probability distribution function is then discussed in Sec. \ref{ssc:COSYScatteringImplementation}.
+
+\Subsection{Theoretical Derivation}\label{ssc:COSYTheoreticalDerivation}
+
+Electron-muon scattering is a textbook scattering problem following Feynman rules \cite{griffithspp}. Similar to both Secs. \ref{sec:ICOOLScattering} and \ref{sec:ICOOLStraggling}, either the collision time of the muon and electron is assumed to be very small compared to the electron orbital time or the electron is initially at rest. The z-axis is aligned with the muon's velocity such that $v_x=v_y=0$. The reference frame is the lab frame. Please refer to the Supplemental Information in Section \ref{sec:particlePhysicsReview} for a review on symbols and methods.
+
+To find the scattering cross section, it is necessary to have both the scattering amplitude $\mathcal{M}$ (sometimes also called the `matrix element', although this is a little ambiguous) and the available phase space over which to integrate. However, \cite{griffithspp} notes that the integration over the available phase space is simply a constant. Since this cross section is the tail of a piecewise function, all multiplicative constants will be thrown out since these functions will have to be renormalized anyway. Then
+\begin{align*}
+\frac{d\sigma}{d\Omega}\propto |\mathcal{M}|^2.
+\end{align*}
+
+\begin{figure}
+  \centering
+    \includegraphics[width=0.5\textwidth]{Figures/MottFeynman} 
+  \caption{Feynman diagram for electron-muon scattering. $P_1$ and $P_2$ are the incoming four-momenta for the electron and muon and $P_3$ and $P_4$ are the outgoing four-momenta. $Q$ represents the four-momentum carried by the virtual photon.}
+  \label{fig:mottFeynman}
+\end{figure}
+
+Section \ref{sec:feynmanWalkthrough} elaborates on the process of determining $\mathcal{M}$ from Figure \ref{fig:mottFeynman}. This results in the scattering amplitude found in Eqn. \ref{eqn:mottFeynmanScatteringAmplitude}, reproduced here by doing away with the constants:
+\begin{align*}
+\mathcal{M} \, \propto \, \bar{U}_4\gamma^\beta U_2 \, * \, \frac{1}{q^2}(-\eta_{\alpha\beta}+\frac{q_\alpha q_\beta}{q^2}) \, *\, \bar{U}_3\gamma^\alpha U_1.
+\end{align*}
+
+Taking the second term in parenthesis, observe that it is proportional to $\bar{U}_4\gamma^\beta U_2 q_\beta$. By conservation of $P_\beta$ at vertex $\beta$, it can be seen that $P_{2\beta}+q_\beta=P_{4\beta}$. Then
+\begin{align*}
+\bar{U}_4\gamma^\beta U_2 q_\beta&= \bar{U}_4(\gamma^\beta(P_{4\beta}-P_{2\beta})) U_2\\
+&= \bar{U}_4(\gamma^\beta P_{4\beta}-\gamma^\beta P_{2\beta}) U_2 .
+\end{align*}
+Eqn. \ref{eqn:diracEquation} states that $\gamma^\alpha P_\alpha-m=0$ for particles, and so
+\begin{align*}
+\bar{U}_4\gamma^\beta U_2 q_\beta &= \bar{U}_4 (m_\mu-m_\mu) U_2=0.
+\end{align*}
+For this reason, the second term in parenthesis vanishes entierly, leaving
+\begin{align*}
+\mathcal{M} \, \propto \, \bar{U}_4\gamma^\beta U_2 \, * \, \frac{\eta_{\alpha\beta}}{q^2}\, *\, \bar{U}_3\gamma^\alpha U_1,
+\end{align*}
+or propagating the $\eta_{\alpha\beta}$ through,
+\begin{align*}
+\mathcal{M} \, \propto \, \bar{U}_4\gamma^\beta U_2 \, * \, \frac{1}{q^2}\, *\, \bar{U}_3\gamma_\beta U_1.
+\end{align*}
+The final cross section is proportional to $|\mathcal{M}|^2$, and so
+\begin{align*}
+|\mathcal{M}|^2 \, \propto \, \frac{1}{q^4}\, *\, \bar{U}_4\gamma^\beta U_2 [\bar{U}_4\gamma^\delta U_2]^* \, * \,  \bar{U}_3\gamma_\beta U_1 [\bar{U}_3\gamma_\delta U_1]^*.
+\end{align*}
+Since $\bar{U}_4\gamma^\beta U_2$ is the same as $\bar{U}_3\gamma_\beta U_1$ except for notation, from here the quantity $\bar{U}_4\gamma^\beta U_2 [\bar{U}_4\gamma^\delta U_2]^* $ will be reduced and the same treatment will be applied to $\bar{U}_3\gamma_\beta U_1 [\bar{U}_3\gamma_\delta U_1]^*$.
+
+Since $\bar{U}_4\gamma^\delta U_2 \in \mathbb{C}$ in Dirac space, 
+\begin{align*}
+[\bar{U}_4\gamma^\delta U_2]^*&=[\bar{U}_4\gamma^\delta U_2]^\dagger\\
+&=U^\dagger _2 {\gamma^\delta}^\dagger \bar{U}_4 ^\dagger.
+\end{align*}
+Observe that since $\gamma^\delta$ has the form
+\begin{align*}
+\gamma^\delta=	\begin{pmatrix}
+			A&B\\
+			-B&-A
+			\end{pmatrix}
+\end{align*}
+then
+\begin{align*}
+\gamma^0\gamma^\delta\gamma^0 &=	
+	\begin{pmatrix}
+	I_2 & 0\\
+	0 & I_2
+	\end{pmatrix}
+	\begin{pmatrix}
+	A&B\\
+	-B&-A
+	\end{pmatrix}
+	\begin{pmatrix}
+	I_2 & 0\\
+	0 & I_2
+	\end{pmatrix}
+\\
+&=	\begin{pmatrix}
+	A&-B\\
+	B&-A
+	\end{pmatrix}
+\\
+&= {\gamma^\delta}^\dagger,
+\end{align*}
+and so
+\begin{align*}
+[\bar{U}_4\gamma^\delta U_2]^*=U^\dagger _2 [\gamma^0 \gamma^\delta \gamma^0] \bar{U}_4 ^\dagger.
+\end{align*}
+Recall the definition of the spinor adjoint in Eqn. \ref{eqn:spinorAdjoint}:
+\begin{align*}
+\bar{U}=U^\dagger \gamma^0.
+\end{align*}
+Then
+\begin{align*}
+\bar{U}_4 ^\dagger&=(U_4 ^\dagger \gamma^0)^\dagger\\
+&={\gamma^0}^\dagger {U_4^\dagger}^\dagger\\
+&=\gamma^0 U_4,
+\end{align*}
+which results in
+\begin{align*}
+[\bar{U}_4\gamma^\delta U_2]^*&=U^\dagger _2 [\gamma^0 \gamma^\delta \gamma^0] [\gamma^0 U_4],
+\end{align*}
+or more suggestively,
+\begin{align*}
+[\bar{U}_4\gamma^\delta U_2]^*&=\,[U^\dagger _2 \gamma^0] \, \gamma^\delta \, [\gamma^0 \gamma^0] \, U_4\\
+&=\bar{U}_2 \gamma^\delta U_4.
+\end{align*}
+This results in
+\begin{align} \label{eqn:mottIntermediate}
+|\mathcal{M}|^2 \propto \frac{1}{q^4} \, * \, \bar{U}_4\gamma^\beta U_2 \bar{U}_2 \gamma^\delta U_4 \, * \, \bar{U}_3\gamma_\beta U_1 \bar{U}_1 \gamma_\delta U_3.
+\end{align}
+In principle, if the spinors of the muons were known (e.g. the muons were part of a polarized beam) this could be evaluated directly. However, in general the spinors are not known. As an approximation, it is necessary to average the spinors over their spins. Again, starting with the muons and extrapolating the treatment to the electrons,
+\begin{align*}
+\left< \bar{U}_4 \gamma^\beta U_2 \bar{U}_2 \gamma^\delta U_4 \right> _\text{spin 2}
+&= \frac{1}{2} \sum _{s_2 = 1} ^2 \bar{U}_4 \gamma^\beta U_2 ^{(s_2)} \bar{U}_2 ^{(s_2)} \gamma^\delta U_4\\
+&= \frac{1}{2} \bar{U}_4 \gamma^\beta \big[ \sum _{s_2 = 1} ^2 U_2 ^{(s_2)} \bar{U}_2 ^{(s_2)} \big] \gamma^\delta U_4.
+\end{align*}
+Recall the completeness property of spinors (Eqn. \ref{eqn:spinorCompleteness}):
+\begin{align*}
+\sum _s U^{(s)}\bar{U}^{(s)} = \gamma^\alpha P_\alpha + m
+\end{align*}
+then
+\begin{align*}
+\left< \bar{U}_4 \gamma^\beta U_2 \bar{U}_2 \gamma^\delta U_4 \right> _\text{spin 2}
+= \frac{1}{2} \bar{U}_4 \gamma^\beta (\gamma^\epsilon P_{2\epsilon}+m_\mu)\gamma^\delta U_4.
+\end{align*}
+Averaging similarly over the spin for particle \#4 yields
+\begin{align*}
+\left< \bar{U}_4 \gamma^\beta U_2 \bar{U}_2 \gamma^\delta U_4 \right> _\text{spin 2, spin 4}
+&= \frac{1}{2} \frac{1}{2} \sum_{s_4=1} ^2 \bar{U}_4 ^{(s_4)} [\gamma^\beta (\gamma^\epsilon P_{2\epsilon}+m_\mu)\gamma^\delta] U_4 ^{(s_4)}.
+\end{align*}
+Now, spinors do not generally commute, but their components (which are scalars) do. Observing that $\bar{U}$ is a 1x4 row vector, the bracketed term is a 4x4 matrix, and $U$ is a 4x1 column vector, it is possible to write out the matrix multiplication as an explicit double sum over the indices $i,j$:
+\begin{align*}
+\left< \bar{U}_4 \gamma^\beta U_2 \bar{U}_2 \gamma^\delta U_4 \right> _\text{s2, s4}
+&=\frac{1}{4}\sum_{s_4=1} ^2 \sum_{i,j=1} ^4 \bar{U}_{4i} ^{(s_4)} [\gamma^\beta(\gamma^\epsilon P_{2\epsilon}+m_\mu)\gamma^\delta]_{ij} U_{4j} ^{(s_4)}\\
+&=\frac{1}{4}\sum_{i,j=1} ^4 \Big([\gamma^\beta(\gamma^\epsilon P_{2\epsilon}+m_\mu)\gamma^\delta]_{ij} \Big[ \sum_{s_4=1} ^2 \bar{U}_4 ^{(s_4)} U_4 ^{(s_4)}\Big]_{ij} \Big)
+\end{align*}
+
+Spinor completeness (Eqn. \ref{eqn:spinorCompleteness}) requires a summation over $U\bar{U}$, not $\bar{U}U$. However, $\bar{U}U$ is still useful. Since $A^T+B^T=[A+B]^T$,
+\begin{align*}
+\sum \bar{U}U 
+&= \Big[\sum (\bar{U}U)^T\Big]^T\\
+&=\Big[\sum U^T \bar{U}^T\Big]^T.
+\end{align*}
+Again explicitly writing the matrix multiplication,
+\begin{align*}
+\sum \bar{U}U 
+&=\Big[\sum\Big(\sum_{k,l} ^4 (U_k)^T(\bar{U}_l)^T\Big)\Big]^T\\
+&=\Big[\sum_{k,l} ^4 \Big(\sum (U_k)^T (\bar{U}_l)^T \Big)\Big]^T\\
+&=\Big[\sum_{k,l}^4\Big(\sum U_l \bar{U}_k\Big)\Big]^T\\
+&=\Big[\sum_{k,l}^4\Big(\sum U\bar{U})_{l,k}\Big]^T.
+\end{align*}
+Now it is possible to use spinor completeness (Eqn. \ref{eqn:spinorCompleteness}):
+\begin{align*}
+\sum \bar{U}U 
+&=\Big[\sum_{k,l}\big(\gamma^\alpha P_alpha + m\big) _{l,k}\\
+&=(\gamma^\alpha P_\alpha + m)^T.
+\end{align*}
+Conclusively, if the $i$-$j^{th}$ component of $\sum \bar{U}U$ is desired, then the indices of Eqn. \ref{eqn:spinorCompleteness} must be exchanged:
+\begin{align*}
+\Big[\sum\bar{U} U\Big]_{i,j}
+&=[(\gamma^\alpha P_\alpha + m)^T]_{i,j}\\
+&=[(\gamma^\alpha P_\alpha + m)_{i,j}]^T\\
+&=[\gamma^\alpha P_\alpha + m]_{j,i}.
+\end{align*}
+This results in
+\begin{align*}
+\left< \bar{U}_4 \gamma^\beta U_2 \bar{U}_2 \gamma^\delta U_4 \right> _\text{s2, s4}
+&=\frac{1}{4}\sum_{i,j=1} ^4 \Big([\gamma^\beta(\gamma^\epsilon P_{2\epsilon}+m_\mu)\gamma^\delta]_{ij} [\gamma^\kappa P_{4\kappa}+m_\mu]_{j,i} \Big).
+\end{align*}
+Upon the concatenation of the subscripts $i,j$ and $j,i$, it can be seen that
+\begin{align*}
+\left< \bar{U}_4 \gamma^\beta U_2 \bar{U}_2 \gamma^\delta U_4 \right> _\text{s2, s4}
+&=\frac{1}{4}\sum_{i=1} ^4 \Big([\gamma^\beta(\gamma^\epsilon P_{2\epsilon}+m_\mu)\gamma^\delta] (\gamma^\kappa P_{4\kappa}+m_\mu) \Big)_{ii}.
+\end{align*}
+This is now the definition of a trace ($\sum_i M_{ii} \equiv \text{Tr} (M)$). Then
+\begin{align*}
+\left< \bar{U}_4 \gamma^\beta U_2 \bar{U}_2 \gamma^\delta U_4 \right> _\text{s2, s4}
+&=\frac{1}{4}\text{Tr}[\gamma^\beta(\gamma^\epsilon P_{2\epsilon}+m_\mu)\gamma^\delta (\gamma^\kappa P_{4\kappa}+m_\mu)].
+\end{align*}
+Using the addition property of traces, it is clear that there are four terms to evaluate:
+\begin{align*}
+i) &\quad \text{Tr}(\gamma^\beta \gamma^\epsilon P_{2\epsilon}\gamma^\delta\gamma^\kappa P_{4\kappa})\\
+ii) &\quad \text{Tr}(\gamma^\beta \gamma^\epsilon P_{2\epsilon}\gamma^\delta m_\mu)\\
+iii) &\quad \text{Tr}(\gamma^\beta m_\mu \gamma^\delta\gamma^\kappa P_{4\kappa})\\
+iv) &\quad \text{Tr}(\gamma^\beta m_\mu \gamma^\delta m_\mu).
+\end{align*}
+The derivations for the solutions to these traces can be found in Sec. \ref{sec:gammaMatrixProofs}. The first term is the trace of four $\gamma$ matrices and can be solved by using Eqn. \ref{eqn:griffithsRule13}:
+\begin{align*}
+\text{Tr}(\gamma^\beta \gamma^\epsilon P_{2\epsilon}\gamma^\delta\gamma^\kappa P_{4\kappa})
+&= P_{2\epsilon}P_{4\kappa}\text{Tr}(\gamma^\beta \gamma^\epsilon\gamma^\delta\gamma^\kappa)\\
+&=4P_{2\epsilon} P_{4\kappa} (\eta^{\beta\epsilon}\eta^{\delta\kappa}-\eta^{\beta\delta}\eta^{\epsilon\kappa}+\eta^{\beta\kappa}\eta^{\epsilon\delta})\\
+&=4(P_2 ^\beta P_4 ^\delta - P_2 \cdot P_4 \eta^{\beta\delta} + P_2 ^\delta P_4 ^\beta).
+\end{align*}
+The second term is the trace of an odd number of $\gamma$ matrices, and is equal to zero via Eqn. \ref{eqn:griffithsRule10}:
+\begin{align*}
+\text{Tr}(\gamma^\beta \gamma^\epsilon P_{2\epsilon}\gamma^\delta m_\mu)
+&= P_{2\epsilon}m_\mu\text{Tr}(\gamma^\beta \gamma^\epsilon\gamma^\delta)\\
+&=0.
+\end{align*}
+The third term is also a trace of an odd number of $\gamma$ matrices:
+\begin{align*}
+\text{Tr}(\gamma^\beta m_\mu \gamma^\delta\gamma^\kappa P_{4\kappa})
+&=m_\mu P_{4\kappa} \text{Tr}(\gamma^\beta  \gamma^\delta\gamma^\kappa)\\
+&=0.
+\end{align*}
+The final term is the trace of two $\gamma$ matrices, and results in the Minkowski metric via Eqn. \ref{eqn:griffithsRule12}:
+\begin{align*}
+\text{Tr}(\gamma^\beta m_\mu \gamma^\delta m_\mu)
+&=m_\mu ^2 \text{Tr}(\gamma^\beta \gamma^\delta)\\
+&=4 m_\mu ^2 \eta^{\beta\delta}.
+\end{align*}
+Putting it all together results in
+\begin{align*}
+\left< \bar{U}_4 \gamma^\beta U_2 \bar{U}_2 \gamma^\delta U_4 \right> _\text{s2, s4}
+&=P_2^\beta P_4^\delta - P_2 \cdot P_4 \eta^{\beta\delta}+P_2 ^\delta P_4 ^\beta + m_\mu ^2 \eta^{\beta\delta}.
+\end{align*}
+
+The electron portion is mathematically the same. Symbolically, contravariant indices become covariant (e.g. $\gamma^\beta$ becomes $\gamma_\beta$), the mass is now the electron mass (i.e. $m_\mu$ becomes $m_e$), and the even subscripts become odd (i.e. $P_2$, $P_4$ become $P_1$, $P_3$). Explicitly, Eqn. \ref{eqn:mottIntermediate} becomes
+\begin{align*}
+\left< |\mathcal{M}|^2\right>
+&\propto\frac{1}{q^4} \, * \, \left< \bar{U}_4 \gamma^\beta U_2 \bar{U}_2 \gamma^\delta U_4 \right> _\text{s2, s4} \, * \, \left< \bar{U}_3 \gamma_\beta U_1 \bar{U}_1 \gamma_\delta U_4 \right> _\text{s1, s3}\\
+&\propto \frac{1}{q^4} \, * \, (P_2^\beta P_4^\delta - P_2 \cdot P_4 \eta^{\beta\delta}+P_2 ^\delta P_4 ^\beta + m_\mu ^2 \eta^{\beta\delta}) \, * \, (P_{1\beta} P_{3\delta} - P_1 \cdot P_3 \eta_{\beta\delta}+P_{1\delta} P_{3\beta} + m_e ^2 \eta_{\beta\delta}).
+\end{align*}
+Explicitly, the algebra is
+\begin{align*}
+\left< |\mathcal{M}|^2\right> \propto
+\frac{1}{q^4} \, * \, [ &(P_1 \cdot P_2)(P_3 \cdot P_4)-(P_1\cdot P_3)(P_2 \cdot P_4) + (P_1 \cdot P_4)(P_2\cdot P_3)+m_e ^2 (P_2 \cdot P_4)\\
+-&(P_1\cdot P_3)(P_2\cdot P_4)+4(P_1\cdot P_3)(P_2\cdot P_4)-(P_1\cdot P_3)(P_2\cdot P_4) - 4m_e ^2 (P_2 \cdot P_4)\\
++&(P_1\cdot P_4)(P_2 \cdot P_3)-(P_1 \cdot P_3)(P_2 \cdot P_4) + (P_1 \cdot P_2) (P_3 \cdot P_4) + m_e ^2 (P_2 \cdot P_4)\\
++&m_\mu ^2 (P_1 \cdot P_3)-4m_\mu ^2 (P_1\cdot P_3) + m_\mu ^2 (P_1 \cdot P_3) + 4m_\mu ^2 m_e ^2],
+\end{align*}
+with $\eta^{\alpha\beta} \eta_{\alpha\beta} = 4$. Gathering the like terms, this reduces to
+\begin{align*}
+\left< |\mathcal{M}|^2\right> \propto \frac{1}{q^4} [2(P_1 \cdot P_4)(P_2\cdot P_3)+2(P_1\cdot P_2)(P_3 \cdot P_4) - 2 m_e ^2 (P_2 \cdot P_4)-2m_\mu ^2 (P_1 \cdot P_3) + 4 m_\mu ^2 m_e ^2 ].
+\end{align*}
+Up until here, this is a quite general experession for two particles interacting via virtual photon exchange. For COSY, straggling and scattering are mutually exclusive processes: first the straggling routine is called and then the scattering routine is called. Therefore, for this model it must be assumed that there is no energy exchange between the muon and electron. Consequently, since the electron is bound it will remain fixed and the muon will scatter. This can be seen diagrammatically in Figure \ref{fig:mottScattering}.
+
+\begin{figure}
+  \centering
+    \includegraphics[width=\textwidth]{Figures/MottScattering} 
+  \caption{COSY treatment of muon-electron scattering. Since the routines are called separately, the model assumes no straggling while scattering.}
+  \label{fig:mottScattering}
+\end{figure}
+
+Now it is clear that $P_1=P_3=(m_e, 0, 0, 0)$. Furthermore, since the total energy of the muon is conserved $E_2 = E_4 = E_\mu$ and $P_2 = (E_\mu, \vec{p}_2)$ and $P_4 = (E_\mu \vec{p}_4)$ and so
+\begin{align*}
+P_1 \cdot P_2 &= E_\mu m_e &\qquad P_1 \cdot P_3 &= m_e ^2 \\
+P_1 \cdot P_4 &= E_\mu m_e &\qquad  P_2 \cdot P_3 &= E_\mu m_e \\
+P_2 \cdot P_4 &= E_\mu ^2 - \vec{p}_2 \cdot \vec{p}_4 &\qquad = E_\mu ^2  & - p_\mu ^2 \cos\theta\\
+P_3 \cdot P_4 &= E_\mu m_e.
+\end{align*}
+Then
+\begin{align*}
+\left< |\mathcal{M}|^2\right> \propto \frac{1}{q^4} [2 (E_\mu m_e)(E_\mu m_e) + 2 (E_\mu m_e) (E_\mu m_e) - 2 m_e ^2 (E_\mu^2 - p_\mu ^2 \cos\theta) - 2 m_\mu ^2 m_e ^2 + 4 m_\mu ^2 m_e ^2 ].
+\end{align*}
+Factoring out the term $2m_e ^2$, 
+\begin{align*}
+\left< |\mathcal{M}|^2\right> 
+&\propto \frac{1}{q^4} (E_\mu ^2 + E_\mu ^2 - E_\mu ^2 + p_\mu ^2 \cos\theta - m_\mu ^2+ 2 m_\mu ^2 ) \\
+&\propto \frac{1}{q^4} (E_\mu ^2 + p_\mu \cos\theta + m_\mu^2)\\
+&\propto \frac{1}{q^4} (p_\mu + m_\mu + p_\mu \cos\theta + m_\mu^2)\\
+&\propto \frac{1}{q^4} (2 m_\mu ^2 + p_\mu (1+\cos\theta)).
+\end{align*}
+Factoring out $2m_\mu ^2$ and observing that $p/m = \beta\gamma$ yields
+\begin{align*}
+\left< |\mathcal{M}|^2\right> 
+&\propto \frac{1+\frac{(\beta\gamma)^2}{2} (1+\cos\theta)  }{q^4}.
+\end{align*}
+Again using conservation of $P_\beta$ at vertex $\beta$, it can be seen that 
+\begin{align*}
+P_{2\beta}+q_\beta=P_{4\beta} \quad \rightarrow \quad & q_\beta = P_{4\beta} - P_{2\beta}
+\end{align*}.
+Then
+\begin{align*}
+q^2 &= ( P_{4\beta} - P_{2\beta}) ^2\\
+&= ( (E_4, \vec{p}_4) - (E_2, \vec{p}_2 ) )^2\\
+& = ((0, \vec{p}_4 - \vec{p}_2))^2\\
+& = - (p_4 ^2 + p_2 ^2 - p_4 p_2 \cos\theta)\\
+&=-2p_\mu (1-\cos\theta).
+\end{align*}
+Squaring $q^2$ and throwing out the constant $p_\mu$,
+\begin{align*}
+\left< |\mathcal{M}|^2\right> \propto \frac{1+\frac{(\beta\gamma)^2}{2} (1+\cos\theta)  }{(1-\cos\theta)^2}.
+\end{align*}
+Finally, the Mott cross section is obtained:
+\begin{equation}\label{eqn:MottCrossSection}
+\frac{d\sigma}{d\Omega} \propto \frac{1+\frac{(\beta\gamma)^2}{2} (1+\cos\theta)  }{(1-\cos\theta)^2}.
+\end{equation}
+Observe that for a non-relativistic beam of muons, $\beta\gamma \rightarrow 0$ and this reduces to the Rutherford cross section (Eqn. \ref{eqn:rutherford}).
+
+\Subsection{Implementation}\label{ssc:COSYScatteringImplementation}
+
+Now that the scattering cross sections have been obtained, implementation of these cross sections will be discussed. In COSY, when a particle passes through matter, the change in angle of this particle will be selected from a probability distribution. For $u=\cos\theta$, this distribution should be Gaussian at small angles \cite{gs} and follow the Mott cross section at large angles. Therefore, the distribution has been chosen as
+\begin{align}\label{eqn:cosyg}
+g(u)=	\begin{cases}
+	e^{-a(1-u)} & \quad u_0 ,\leq u \\
+	\zeta\frac{1+\frac{1}{2}(\beta\gamma)^2(1+u-b_c)}{(1-u+b_c)^2} & \quad u\leq u_0
+	\end{cases}.
+\end{align}
+The parameter $a$ is an emperical parameter, based off Highland theory \cite{highland}, and can be found in Eqn. \ref{eqn:geanta}, which is reproduced here
+\begin{align*}
+a=\frac{0.5}{1-\cos\theta_0}.
+\end{align*}
+ In \cite{highland}, Highland remarks that $\theta_0$ should have the form 
+\begin{align*}
+\theta_0 = \frac{E_s}{p\beta} \sqrt{\frac{L}{X_0}}.
+\end{align*}
+However, this definition has been extended in this work to include emperical corrections
+\begin{equation}\label{eqn:cosytheta0}
+\theta_0 = \frac{13.6 \text{ eV}}{\beta p} \sqrt{\frac{L}{X_0} \Big[ 1+h_1 \ln \frac{L}{X_0} + h_2 \Big(\ln \frac{L}{X_0}\Big)^2 \Big] },
+\end{equation}
+where the Highland correction terms have been chosen novelly in this work as $h_1=0.103$ and $h_2=0.0038$.
+
+$u_0$ is the point at which the Gaussian term meets the Mott tail. This has been chosen emperically as
+\begin{equation}\label{eqn:cosyu0}
+u_0=1-\frac{4.5}{a}.
+\end{equation}
+This parameter was fitted alongside the Highland correction terms to match the experimental results in \cite{muscat}.
+
+$\zeta$ and $b_c$ are the angular scattering distribution's amplitude and offset for the tail. These are found by demanding continuity and smoothness at $u_0$:
+\begin{align*}
+e^{-a(1-u_0)}&=\zeta\frac{1+\frac{1}{2}(\beta\gamma)^2(1+u_0-b_c)}{(1-u_0+b_c)^2}\\
+ae^{-a(1-u_0)}&=\zeta\frac{1+\frac{1}{2}(\beta\gamma)^2(1+u_0-b_c)}{(1-u_0+b_c)^2} \Big(\frac{2}{1-u_0+b_c}+\frac{(\beta\gamma)^2}{2+(\beta\gamma)^2(1+u_0-b_c)}\Big).
+\end{align*}
+Then
+\begin{align*}
+a=\frac{2}{1-u_0+b_c}+\frac{(\beta\gamma)^2}{2+(\beta\gamma)^2(1+u_0-b_c)}.
+\end{align*}
+Solving this for the quantity $(u_0-b_c)$ yields a quadratic with the solution
+\begin{align} \label{eqn:cosybc}
+\begin{split}
+& A_1=-a(\beta\gamma)^2\\
+b_c=u_0+\frac{A_2 + \sqrt{A_2 ^2 - 4A_1 A_3}}{2A_1}, \qquad &A_2=-(\beta\gamma)^2-2a \\
+&A_3=(\beta\gamma)^2(a-3)+2a-4.
+\end{split}
+\end{align}
+Continuity for $g(u_0)$ can now be solved to find $\zeta$:
+\begin{equation}\label{eqn:cosyzeta}
+\zeta=\frac{e^{-a(1-u_0)}(1-u_0+b_c)^2}{1+\frac{1}{2}(\beta\gamma)^2(1+u_0-b)}.
+\end{equation}
+
+Now that the distribution function has a concrete form, it will be implemented by inverting the cumulative distribution function (CDF).  Let $G(u)$ be the integral of $g(u)$. Then the variable $G$ will be uniformly sampled over the region $[0,G_{max}]$. If $G\geq G(u_0) \equiv G_0$ then the Gaussian part of the distribution is used to generate $u$ (i.e. $G(u\geq u_0)$). Otherwise, the tail of the distribution will be used. Figure \ref{fig:scatdist_example} shows $G(u)$ for $L=1$ mm, $p=200$ MeV/$c$, and a radiation length of $X_0 = 8.66$ m (to simulate liquid hydrogen).
+
+\begin{figure}
+  \centering
+    \includegraphics[width=\textwidth]{Figures/scatdist_example} 
+  \caption{Example of the cumulative angular distribution function for muons of 200 MeV/$c$ through 1 mm of liquid hydrogen. Note that the y-axis is log scaled due to the very sharp peak. Furthermore, note that $u_0$ is greatly exaggerated, since its actual value for these parameters is 0.9999992.}
+  \label{fig:scatdist_example}
+\end{figure}
+
+However, since this is a piecewise function the CDF will be inverted in pieces. The CDF begins on the negative limit, and so the tail of the CDF will be found first:
+\begin{align*}
+G(u\leq u_0)=\int _{-1} ^u \zeta \frac{1+\frac{1}{2}(\beta\gamma)^2 (1+u-b_c)}{(1-u+b_c)^2} du.
+\end{align*}
+This integral may be solved by substituting $v=1-u+b_c$ and simply splitting the numerator into separate parts:
+\begin{align}
+\nonumber
+G(u\leq u_0)&=-\zeta(1+\frac{1}{2}(\beta\gamma)^2(1-b_c))\int v^{-2} dv - \zeta \frac{(\beta\gamma)^2}{2}\int (v^{-2} - v^{-1} + b_c v^{-2}) dv\\
+G(u\leq u_0)&=\zeta(1+(\beta\gamma)^2)\Big(\frac{1}{1-u+b_c} - \frac{1}{2+b_c}\Big)+\zeta \frac{(\beta\gamma)^2}{2} \ln\Big(\frac{1-u+b_c}{2+b_c}\Big) \label{eqn:cosyGTail}
+\end{align}
+
+In order to invert the CDF given in Eqn. \ref{eqn:cosyGTail}, one must find $u(G)$. However, for the tail this is extremely difficult and involves special functions. Therefore, it is more prudent to generate  $u$ via bisection method (see Figure \ref{fig:scatdist_algorithm}). In this method, the true $G$ is sampled uniformly on the range $[0,G_{max}]$, where $G_{max} \equiv G(1)$ and can be found via Eqn. \ref{eqn:cosyGPeak}.  If $G < G_0$, then the tail is sampled. A trial $u$ called $\bar{u}$ (as in `average') is selected from some range which is known to contain the actual $u$. The range is described as $[u_{min},u_{max}]$, and $\bar{u}=(u_{min}+u_{max})/2$. 
+
+Initially, the range is chosen as $u_{min}=-1$ and $u_{max}=u_0$ (since that is the largest range on which $G(u \leq u_0)$ is valid). $\bar{G} \equiv G(\bar{u})$ is found using Eqn. \ref{eqn:cosyGTail}, and then the routine is subject to the following conditionals:
+\begin{align*}
+&\text{If } \bar{G}\in [G-\delta G,G+\delta G] &\quad &\text{then } u=\bar{u}\text{, return value.}\\
+&\text{If } \bar{G} < G-\delta G &\quad &\text{then } u_{min}=\bar{u} \text{, rerun with new }u_{min}.\\
+&\text{If } \bar{G} > G+\delta G &\quad &\text{then } u_{max}=\bar{u} \text{, rerun with new }u_{max}.
+\end{align*}
+$\delta G$ is a precision, and has been chosen for this work as $\delta G = 10^{-8}$. However, it is conceded that in the future $\delta G$ should be a percentage of $G_{max}$ rather than an absolute number.
+
+\begin{figure}
+  \centering
+    \includegraphics[width=\textwidth]{Figures/scatdist_algorithm} 
+  \caption{Example of the first iteration of the algorithm to obtain the true $u$ (in green). The true $G$ is chosen uniformly from $G\in[0,G_{max}]$. If $G < G_0$, then the tail is sampled via bisection method. In this case, since $\bar{G} < G$, $\bar{u}$ is the new $u_{min}$ and $\bar{u}$ is calculated again.}
+  \label{fig:scatdist_algorithm}
+\end{figure}
+
+For the peak, $u_0 \leq u$ and so the CDF becomes
+\begin{align*}
+G(u_0 \leq u)&=\int_{-1} ^{u_0} g(u) du + \int_{u_0} ^u e^{-a(1-u)} du.
+\end{align*}
+The first term is simply $G_0$, the cumulative distribution function at $u_0$. The second term is easily integratable and yields
+\begin{equation}\label{eqn:cosyGPeak}
+G(u_0 \leq u)=G_0 + \frac{e^{-a(1-u)}-e^{-a(1-u_0)}}{a}.
+\end{equation}
+Now explicitly,
+\begin{align*}
+G_{max}\equiv G(1) = G_0+\frac{1}{a}-\frac{e^{-a(1-u_0)}}{a}.
+\end{align*}
+The inversion of this function is quite simple, and is
+\begin{equation} \label{eqn:cosyGPeakInverted}
+u(G_0 \leq G)=1+\frac{1}{a} \ln (a[G-G_0]+e^{-a(1-u_0)}).
+\end{equation}
+Therefore, if $G \in [0,G_{max}]$ is greater than or equal to $G_0$, then it is simply inserted into Eqn. \ref{eqn:cosyGPeakInverted} and the true $u$ is obtained.
+
+It is a subtle yet important point to note that the Mott cross section (Eqn. \ref{eqn:MottCrossSection}), upon which the probability distribution function $g(u)$ in Eqn. \ref{eqn:cosyg} is based, assumes an on-axis straight line trajectory (that is, $x=y=p_x = p_y =0$). The treatment of this subtlety will be discussed here.
+
+The routine which uses the scattering distribution $g(u)$ is called SCATDIST and takes two arguments: $\theta_0$ (Eqn. \ref{eqn:cosytheta0}) and $p$, the momentum. $\theta_0$ includes not only the material parameters ($L, X_0$) but also energy terms ($1/\beta p$), and $p$ is the momentum \textit{after} the straggling routine has been called. SCATDIST returns not the scattered angle, but the new z-momentum $p_z=pu=p\cos\theta$. 
+
+This new z-momentum is in the rotated frame, i.e. the frame at which $p_x=p_y=0$ (see Figure \ref{fig:cosyRotatedFrame}), and so is called $p_{z,R}$. The transverse momentum in the rotated frame, $p_{T,R}$, can be found via $p_{T,R}=\sqrt{p^2-p_{z,R}^2}$, but this is the total transverse momentum ($\theta_o + \theta_s$), which includes the original momentum ($\theta_o$), not simply the transverse momentum which was gained via scattering ($\theta_s$). Rotation back into the lab frame is given by
+\begin{align*}
+\begin{pmatrix}
+P_{z} \\ P_T
+\end{pmatrix}
+=
+\begin{pmatrix}
+\cos\theta_o & -\sin\theta_o\\
+\sin\theta_o & \cos\theta_o
+\end{pmatrix}
+\begin{pmatrix}
+P_{z,R} \\ P_{T,R}
+\end{pmatrix}.
+\end{align*}
+
+\begin{figure}
+  \centering
+    \includegraphics[width=\textwidth]{Figures/cosyRotatedFrame} 
+  \caption{Example of a muon entering an absorber (purple) with some nonzero initial angle $\theta_o$. The muon then scatters an angle $\theta_s$ with respect to its inital momentum $\vec{p}$. The scattering distribution $g(u)$ assumes a straight, on-axis particle ($x=y=p_x=p_y=0$), and so is in the rotated frame, represented by $T_R, z_R$.}
+  \label{fig:cosyRotatedFrame}
+\end{figure}
+
+Note that at this point one must not uniformly distribute $P_T$ into $p_x$ and $p_y$. This is because, for example, if $p_x$ was positive before scattering it should have a strong probability of being positive after scattering. If one were to distribute $P_T$ uniformly then $p_x$ would have a 50/50 chance of being negative. While the histogram of $p_x$ may not be affected, the transverse phase space would certainly not be correct. For this reason, only the transverse momentum gained via scattering should be uniformly distributed into $p_x$ and $p_y$.
+
+Let the original momenta (after straggling but before scattering) be denoted with $o$ in the same fashion that $\theta_o$ is the angle before scattering. Then the amount of transverse momentum which was gained via scattering is $P_T-P_{T,o}$. This new amount of transverse momentum must be added to the original $p_{x,o}$ and $p_{y,o}$ uniformly. Consequently, let $\phi$ be an angle chosen from $[0,2\pi]$. Then the final $p_x$ and $p_y$ are
+\begin{align*}
+p_x&=p_{x,o}+(P_T-P_{T,o})\cos\phi\\
+p_y&=p_{y,o}+(P_T-P_{T,o})\sin\phi.
+\end{align*}
+
+In summation, the angular distribution used by COSY Infinity is based on a piecewise function which is Gaussian for small angles \cite{gs} and has a Mott tail for large angles. This distribution is represented by $g(u)$ in Eqn. \ref{eqn:cosyg}, where $u\equiv \cos\theta$. $g(u)$ has four parameters: $a$, an emperical parameter which is based on Highland theory \cite{highland} and is dependent on some critical angle $\theta_0$, defined in Eqn. \ref{eqn:cosytheta0}; $u_0$, the emperical cutoff angle which distinguishes which angles are Gaussian and which are not, found by Eqn. \ref{eqn:cosyu0}; $b_c$, a parameter derivable from smoothness of $g$ at $u_0$, which represents the offset of the Mott tail, found in Eqn. \ref{eqn:cosybc}; and $\zeta$, a parameter derivable from continuity of $g$ at $u_0$ which represents the amplitude of the Mott tail, found in Eqn. \ref{eqn:cosyzeta}. From $g(u)$, its antiderivative $G(u)$ may be found and a particular $G$ may be picked from the range $[0,G_{max}]$. If $G<G_0 \equiv G(u_0)$, then $u$ comes from the Mott tail and a bisection method is used to find $u$. If $G_0 \leq G$ then $u$ comes from the Gaussian peak and $G(u)$ may be inverted to find $u(G)$. This scattered angle must then be rotated into the lab frame and the additional transverse momentum must be uniformly distributed into $p_x$ and $p_y$.
+
+%
+%-------------------------------------------------------------------------------
+%
+\Section{Transverse Displacement}\label{sec:COSYTransverseDisplacement}\par
+When a particle traverses matter, because of the multiple scattering events a direct correlation between the particle's transverse position and scattered angle is not always clear. Two identical particles with identical initial conditions may end up with identical scattered angles but different transverse positions (see Figure \ref{fig:lateral_displacement}). This is because these two particles may take slightly different paths through the absorber. While both of these paths may lead to a similar final angle with respect to the z-axis, the positions will likely be different due to their trajectories.
+
+\begin{figure}
+  \centering
+    \includegraphics[width=0.75\textwidth]{Figures/lateral_displacement} 
+  \caption{Two examples of true paths which a particle might take when traversing a medium. Note that both the red path and green path have the same final scattered angle but different transverse positions.}
+  \label{fig:lateral_displacement}
+\end{figure}
+
+For this reason, emperical corrections have been made to COSY which reflect these transverse corrections. While there is no real data on the transverse position of muons before and after they traverse a medium, it is reasonable that very small step sizes (very short true paths) should be more realistic than large step sizes. Therefore, COSY was match `emperically' with G4Beamline across several initial momenta and absorber lengths. The result was
+\begin{equation}\label{eqn:cosylatdis}
+x = x_o + x_D+\text{Gaus}(\theta_{diff} *L/2,\theta_c /(2\sqrt{3}),
+\end{equation}
+where $x_o$ is the original $x$ position, $x_D = L*P_{x,o}/P_{z,o}$ is the deterministic  gain in $x$, and Gaus($\mu,\sigma$) is a randomly selected number from a Gaussian distribution with mean $\mu$ and standard deviation $\sigma$. The forms of $\mu$ and $\sigma$ were selected based off \cite{fernowAndGallardo}. $\theta_{diff}=\theta_{final}-\theta_o$ is the amount of deflection which occurred due to scattering and $\theta_c=13.6 \text{ eV}/\beta p \cdot \sqrt{1/X_0}$ is the coefficient from Highland theory \cite{highland}.
+
+%
+%-------------------------------------------------------------------------------
+%
+\Section{Temporal Displacement}\label{sec:COSYTemporalDisplacement}\par
+For the time-of-flight offset, both the deterministic and stochastic processes are handled in the same routine. At first order, the particle decelerates at some constant (or average) value through an absorber of length $L$. If $a$ is the constant acceleration then 
+\begin{align*}
+v_f=v_o+a\Delta t,
+\end{align*}
+or 
+\begin{align*}
+a=\frac{v_f-v_o}{\Delta t}.
+\end{align*}
+At the same time,
+\begin{align*}
+v_f ^2 = v_o ^2 + 2 a L,
+\end{align*}
+and so
+\begin{align*}
+a=\frac{v_f ^2 - v_o ^2}{2L}.
+\end{align*}
+Then
+\begin{align*}
+\Delta t = \frac{(v_f-v_o)2L}{v_f^2-v_o^2}.
+\end{align*}
+Given
+\begin{align*}
+\beta&=\frac{p}{E} \qquad \text{ and}\\
+v&=\beta c
+\end{align*}
+then
+\begin{equation}\label{eqn:cosyDeltaT}
+\Delta t=\frac{(\frac{p_f}{E_f}-\frac{p_o}{E_o})2L}{(\frac{p_f ^2}{E_f ^2}-\frac{p_o ^2}{E_o ^2})c}.
+\end{equation}
+
+However, COSY does not have a time variable, but rather a time-like variable $\ell$, which is described as the time-of-flight in units of length. In \cite{cosy}, this is defined as
+\begin{align*}
+\ell=\frac{-(t-t_0)v_0\gamma}{1+\gamma},
+\end{align*}
+where the subscript $0$ signifies the reference particle. Let the time before a step be denoted with $1$ and the time after a step denoted with $2$. Then to find $\ell_2$ given $\ell_1$ and $\Delta t$ from Eqn. \ref{eqn:cosyDeltaT}, observe that
+\begin{align} \label{eqn:cosyell12}
+\begin{split}
+\ell_1=\frac{(t_{01}-t_1)v_{01}\gamma_1}{1+\gamma_1} = (t_{01}-t_1)A_1\\
+\ell_1=\frac{(t_{02}-t_2)v_{02}\gamma_2}{1+\gamma_2} = (t_{02}-t_2)A_2,
+\end{split}
+\end{align}
+where 
+\begin{equation}\label{eqn:cosyAn}
+A_n \equiv v_{0n}\gamma_n / (1+\gamma_n).
+\end{equation}
+Then
+\begin{align*}
+\ell_2 - \ell_1 &=\big([t_{02}]-[t_2]\big)A_2-(t_{01}-t_1)A_1\\
+&=\big([(t_{02}-t_{01})+t_{01}]-[(t_2-t_1)+t_1]\big)A_2-(t_{01}-t_1)A_1\\
+&=(\Delta t_0 - \Delta t )A_2 + (t_{01}-t_1)A_2-(t_{01}-t_1)A_2\\
+&=(\Delta t_0 - \Delta t )A_2 + (t_{01}-t_1)(A_2-A_1).
+\end{align*}
+Eqn. \ref{eqn:cosyell12} says that $t_{01}-t_1=\ell_1/A_1$. Moving $\ell_1$ to the right hand side,
+\begin{align*}
+\ell_2 &= (\Delta t_0 - \Delta t)A_2 + \frac{\ell_1}{A_1}(A_2-A_1)+\ell_1\\
+&=(\Delta t_0 - \Delta t)A_2 + \ell_1\Big(\frac{A_2-A_1}{A_1}+\frac{A_1}{A_1}\Big)\\
+&=(\Delta t_0 - \Delta t)A_2 + \ell_1\frac{A_2}{A_1}.
+\end{align*}
+Resubstituting for $A_n$ via Eqn. \ref{eqn:cosyAn} yields the final result
+\begin{equation}\label{eqn:cosyell2}
+\ell_2=\frac{(\Delta t_0 - \Delta t) v_{02}\gamma_2}{1+\gamma_2}+\ell_1 \frac{v_{02}\gamma_2 (1+\gamma_1)}{v_{01}\gamma_1 (1+\gamma_2)}.
+\end{equation}
+Using Eqn. \ref{eqn:cosyell2}, the $\Delta t$ from Eqn. \ref{eqn:cosyDeltaT} can be directly input into the new COSY variable for time-of-flight in units of length.

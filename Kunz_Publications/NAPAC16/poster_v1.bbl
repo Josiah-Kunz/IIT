@@ -1,0 +1,41 @@
+\begin{thebibliography}{1}
+
+\bibitem{cosy}
+M.~Berz and K.~Makino.
+\newblock {\em COSY Infinity Beam Physics Manual}, 2013.
+\newblock Version 9.1.
+
+\bibitem{muscat}
+D.~Attwood \emph{et al.}
+\newblock The scattering of muons in low z materials.
+\newblock {\em NIM}, 251, 2006.
+
+\bibitem{ipac2015}
+J.~Kunz \emph{et al.}
+\newblock The advancement of cooling absorbers in cosy infinity.
+\newblock In {\em Proceedings of the 6$^{th}$ International Particle
+  Accelerator Conference}, 2015.
+
+\bibitem{icool}
+R.C.~Fernow \emph{et. al.}
+\newblock {ICOOL}.
+\newblock \url{http://www.cap.bnl.gov/ICOOL/fernow/readme.html}, 2012.
+\newblock Version 3.30.
+
+\bibitem{GS}
+S.~Goudsmit and J.L. Saunderson.
+\newblock Multiple scattering of electrons.
+\newblock {\em Phys. Rev.}, 57, 1939.
+
+\bibitem{highland}
+V.~Highland.
+\newblock Some practical remarks on multiple scattering.
+\newblock {\em NIM}, 129, 1975.
+
+\bibitem{g4bl}
+Tom Roberts.
+\newblock G4beamline.
+\newblock \url{http://www.muonsinternal.com/muons3/G4beamline}, 2014.
+\newblock Version 2.15w.
+
+\end{thebibliography}

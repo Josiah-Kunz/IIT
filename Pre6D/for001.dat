@@ -1,0 +1,654 @@
+PreMerge Stage ALL
+
+! Version of March 12, 2014
+! Takes beam from 325 MHz Phase-Rotator
+! Note: This version assumes NO Be cavity windows
+
+! STAGE 1
+
+&SUB  pref1      0.220     ! reference momentum
+&SUB  driftLEN1  0.01230   ! empty space (no rf or absorber)  
+&SUB  labs       0.1050    ! maximum axial length of absorber
+&SUB  abswLEN    200e-6    ! absorber AL window thickness (m)
+&SUB  alpw       35.0      ! full angle at vertex (deg.) 
+&SUB  uw         0.104     ! initial position of vertex along x axis (see ICOOL manual under WEDGE)     
+&SUB  phiw       0.0       ! see ICOOL manual under WEDGE sections
+&SUB  W          0.35      ! total width of wedge in dispersion direction
+&SUB  rap        0.35      ! pipe radius
+
+&SUB  xoff1     -0.07
+&SUB  yoff1      0.00
+
+&SUB  rfLEN1     0.255     ! Length of rf cavity
+&SUB  rfPH1      14.0      ! rf Phase
+&SUB  rfGRAD1    22.0      ! rf Gradient
+&SUB  Ncells1    66        ! number of cells
+
+! STAGE 2
+
+&SUB  pref2      0.215
+&SUB  driftLEN2  0.00390
+&SUB  labs2      0.0760
+&SUB  abswLEN2   100e-6
+&SUB  alpw2      44.0
+&SUB  uw2        0.060    
+
+&SUB  W2         0.25
+&SUB  rap2       0.25
+&SUB  rfLEN2     0.25
+&SUB  rfPH2      15
+&SUB  rfGRAD2    22.0
+&SUB  Ncells2    130
+
+! STAGE 3
+
+&SUB  pref3      0.212
+&SUB  driftLEN3  0.01245
+&SUB  labs3      0.150
+&SUB  alpw3      100.0
+&SUB  uw3        0.040    
+!&SUB  W3         0.130
+!&SUB  rap3       0.130
+&SUB  W3         0.190
+&SUB  rap3       0.190
+&SUB  rfLEN3     0.1349
+&SUB  rfPH3      20.
+&SUB  rfGRAD3    28.0
+&SUB  Ncells3    107
+
+
+! STAGE 4
+
+&SUB  pref4      0.210
+&SUB  driftLEN4  0.01995
+&SUB  labs4      0.110
+&SUB  alpw4      110.0   
+&SUB  uw4        0.028
+!&SUB  W4         0.082
+!&SUB  rap4       0.082
+&SUB  W4         0.132
+&SUB  rap4       0.132
+&SUB  rfLEN4     0.1349
+&SUB  rfPH4      16.
+&SUB  rfGRAD4    30.0
+&SUB  Ncells4    88
+
+&cont npart=1000 bgen=F nsections=1 varstep=.false. nprnt=-3  ! If bgen=F read for003.dat file
+ntuple=.false. rtuple=.false. rtuplen=1 output1=.true. phasemodel=3
+fsav=T fsavset=F izfile=6825 bzfldprd=0 /
+
+&bmt nbeamtyp=1 / 
+1 2 1. 1  
+0.000002 -0.000360 -0.002267 -0.000043 -0.000174 0.210748  ! mean: x y z px py pz
+0.027779 0.026342 0.079917 0.014644 0.013970 0.012781      ! sigmas: x y z px py pz
+0                                                          ! If 0 No correlations
+2  0.250  0.2  0.00 
+
+&ints ldecay=T  ldray=T  ldedx=.true. lstrag=.true. lscatter=.true.
+  delev=2 straglev=4 scatlev=6  /
+ 
+&nhs nhist=0 / 
+&nsc nscat=0 /  
+&nzh nzhist=0 / 
+&nrh nrhist=0  /
+&nem nemit=1  /                                                                
+1  
+&ncv ncovar=1 /                                                                
+1 
+
+SECTION
+
+! #################################### STAGE 1 ###################################
+
+
+REFP
+2  &pref1  0. 0. 3
+
+GRID
+1
+G43D
+0. 50. 0.  0. 1.0   0. 0. 0. 0. 0.    0. 0. 0. 0. 0.
+
+DVAR
+1  -0.07570 2
+
+DVAR
+2  -0.04730 2
+
+BEGS
+
+CELL      
+&Ncells1     
+.FALSE.
+STUS
+2. 0. 1. 0. 0.    0. 0. 0. 0. 0.     0. 0. 0. 0. 0.  
+
+SREGION 	! HALF-WEDGE
+&labs  1  2e-3                                      
+1  0.  &rap                                        
+NONE
+0.0  0.0  0.0  0.0  0.0    0.   0. 0. 0. 0.  0. 0. 0. 0. 0.
+LH
+WEDGE
+&alpw  &uw  0.00  &phiw  &W   &W  0. 0. 0. 0.      
+
+SREGION ! ABS Window                 
+&abswLEN   1   50e-6                  
+1 0. &rap                  
+NONE                    
+0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.      
+AL                    
+CBLOCK                    
+0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 
+
+SREGION         !  DRIFT
+&driftLEN1   1   2e-3
+1 0     &rap
+NONE
+  0  0  0  0  0   0  0  0  0  0    0  0  0  0  0 
+VAC
+CBLOCK
+  0  0  0  0  0    0  0  0  0  0
+
+REPEAT
+3
+
+SREGION         ! RF 
+&rfLEN1  1    2e-3
+1  0.   &rap
+ACCEL      
+2.  325 &rfGRAD1  &rfPH1  0.   &xoff1 &yoff1  0. 0. 0.   0. 0. 0. 0. 0.  
+VAC
+NONE
+   0. 0. 0. 0. 0.   0. 0. 0. 0. 0.
+
+ENDR
+
+
+SREGION         !  DRIFT
+&driftLEN1   1   2e-3
+1 0     &rap
+NONE
+  0  0  0  0  0   0  0  0  0  0    0  0  0  0  0 
+VAC
+CBLOCK
+  0  0  0  0  0    0  0  0  0  0
+
+SREGION ! ABS Window                 
+&abswLEN   1   50e-6                  
+1 0. &rap                   
+NONE                    
+0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.      
+AL                   
+CBLOCK                    
+0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+
+SREGION 	! HALF-WEDGE
+&labs  1  2e-3                                      
+1  0.  &rap                                        
+NONE
+0.0  0.0  0.0  0.0  0.0    0.   0. 0. 0. 0.  0. 0. 0. 0. 0.
+LH
+WEDGE
+&alpw  &uw  &labs  &phiw  &W   &W  0. 0. 0. 0.      
+
+! SECOND HALF
+
+SREGION 	! HALF-WEDGE
+&labs  1  2e-3                                      
+1  0.  &rap                                        
+NONE
+0.0  0.0  0.0  0.0  0.0    0.   0. 0. 0. 0.  0. 0. 0. 0. 0.
+LH
+WEDGE
+&alpw  &uw  0.00  &phiw  &W   &W  0. 0. 0. 0.      
+
+
+SREGION ! ABS Window                 
+&abswLEN   1   50e-6                  
+1 0. &rap                  
+NONE                    
+0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.      
+AL                    
+CBLOCK                    
+0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 
+
+SREGION         !  DRIFT
+&driftLEN1   1   2e-3
+1 0     &rap
+NONE
+  0  0  0  0  0   0  0  0  0  0    0  0  0  0  0 
+VAC
+CBLOCK
+  0  0  0  0  0    0  0  0  0  0
+
+REPEAT
+3
+
+SREGION         ! RF 
+&rfLEN1  1    2e-3
+1  0.   &rap
+ACCEL      
+2.  325 &rfGRAD1  &rfPH1  0.   &xoff1 &yoff1  0. 0. 0.   0. 0. 0. 0. 0.  
+VAC
+NONE
+   0. 0. 0. 0. 0.   0. 0. 0. 0. 0.
+
+ENDR
+
+SREGION         !  DRIFT
+&driftLEN1   1   2e-3
+1 0     &rap
+NONE
+  0  0  0  0  0   0  0  0  0  0    0  0  0  0  0 
+VAC
+CBLOCK
+  0  0  0  0  0    0  0  0  0  0
+
+SREGION ! ABS Window                 
+&abswLEN  1   50e-6                  
+1 0. &rap                   
+NONE                    
+0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.      
+AL                   
+CBLOCK                    
+0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+
+OUTPUT
+
+SREGION 	! HALF-WEDGE
+&labs  1  2e-3                                      
+1  0.  &rap                                        
+NONE
+0.0  0.0  0.0  0.0  0.0    0.   0. 0. 0. 0.  0. 0. 0. 0. 0.
+LH
+WEDGE
+&alpw  &uw  &labs  &phiw  &W   &W  0. 0. 0. 0.   
+
+
+ENDCELL
+
+!################### MATCHER 1 TO 2 ###############################################
+
+GRID
+1
+G43D
+0. 66. 0.  0. 1.0   0. 0. 0. 0. 0.    0. 0. 0. 0. 0.
+
+DVAR
+1  0.06840 2
+
+
+DVAR
+2  0.04070 2
+
+
+CELL      
+1     
+.FALSE.
+STUS
+2. 0. 1. 0. 0.    0. 0. 0. 0. 0.     0. 0. 0. 0. 0.  
+
+!OUTPUT
+      
+SREGION         !  DRIFT
+0.76   1   2e-3
+1 0     0.35
+NONE
+  0  0  0  0  0   0  0  0  0  0    0  0  0  0  0 
+VAC
+CBLOCK
+  0  0  0  0  0    0  0  0  0  0
+
+
+ENDCELL
+
+! #################################### STAGE 2 ###################################
+
+REFP
+2  &pref2  0. 0. 3
+
+GRID
+1
+G43D
+0. 79. 0.  0. 1.0   0. 0. 0. 0. 0.    0. 0. 0. 0. 0.
+
+DVAR
+1  -0.03684 2
+
+DVAR
+2  -0.02781 2
+
+
+CELL      
+&Ncells2     
+.FALSE.
+STUS
+2. 0. 1. 0. 0.    0. 0. 0. 0. 0.     0. 0. 0. 0. 0.  
+
+      
+SREGION 	! HALF-WEDGE
+&labs2  1  2e-3                                      
+1  0.  &rap2                                        
+NONE
+0.0  0.0  0.0  0.0  0.0    0.   0. 0. 0. 0.  0. 0. 0. 0. 0.
+LH
+WEDGE
+&alpw2  &uw2  0.00  &phiw  &W2   &W2  0. 0. 0. 0.      
+
+
+SREGION ! ABS Window                 
+&abswLEN2   1   50e-6                  
+1 0. &rap2                  
+NONE                    
+0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.      
+AL                    
+CBLOCK                    
+0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 
+
+SREGION         !  DRIFT
+&driftLEN2   1   2e-3
+1 0     &rap2
+NONE
+  0  0  0  0  0   0  0  0  0  0    0  0  0  0  0 
+VAC
+CBLOCK
+  0  0  0  0  0    0  0  0  0  0
+
+REPEAT
+2
+
+SREGION         ! RF 
+&rfLEN2  1    2e-3
+1  0.   &rap2
+ACCEL      
+2.  325 &rfGRAD2  &rfPH2  0.   0. 0. 0. 0. 0.   0. 0. 0. 0. 0.  
+VAC
+NONE
+   0. 0. 0. 0. 0.   0. 0. 0. 0. 0.
+
+ENDR
+
+
+SREGION         !  DRIFT
+&driftLEN2   1   2e-3
+1 0     &rap2
+NONE
+  0  0  0  0  0   0  0  0  0  0    0  0  0  0  0 
+VAC
+CBLOCK
+  0  0  0  0  0    0  0  0  0  0
+
+SREGION ! ABS Window                 
+&abswLEN2   1   50e-6                  
+1 0. &rap2                   
+NONE                    
+0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.      
+AL                   
+CBLOCK                    
+0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+
+SREGION 	! HALF-WEDGE
+&labs2  1  2e-3                                      
+1  0.  &rap2                                        
+NONE
+0.0  0.0  0.0  0.0  0.0    0.   0. 0. 0. 0.  0. 0. 0. 0. 0.
+LH
+WEDGE
+&alpw2  &uw2  &labs2  &phiw  &W2   &W2  0. 0. 0. 0.      
+
+! SECOND HALF
+
+SREGION 	! HALF-WEDGE
+&labs2  1  2e-3                                      
+1  0.  &rap2                                        
+NONE
+0.0  0.0  0.0  0.0  0.0    0.   0. 0. 0. 0.  0. 0. 0. 0. 0.
+LH
+WEDGE
+&alpw2  &uw2  0.00  &phiw  &W2   &W2  0. 0. 0. 0.      
+
+
+SREGION ! ABS Window                 
+&abswLEN2   1   50e-6                  
+1 0. &rap2                  
+NONE                    
+0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.      
+AL                    
+CBLOCK                    
+0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 
+
+SREGION         !  DRIFT
+&driftLEN2   1   2e-3
+1 0     &rap2
+NONE
+  0  0  0  0  0   0  0  0  0  0    0  0  0  0  0 
+VAC
+CBLOCK
+  0  0  0  0  0    0  0  0  0  0
+
+REPEAT
+2
+
+SREGION         ! RF 
+&rfLEN2  1    2e-3
+1  0.   &rap2
+ACCEL      
+2.  325 &rfGRAD2  &rfPH2  0.   0. 0. 0. 0. 0.   0. 0. 0. 0. 0.  
+VAC
+NONE
+   0. 0. 0. 0. 0.   0. 0. 0. 0. 0.
+
+ENDR
+
+
+SREGION         !  DRIFT
+&driftLEN2   1   2e-3
+1 0     &rap2
+NONE
+  0  0  0  0  0   0  0  0  0  0    0  0  0  0  0 
+VAC
+CBLOCK
+  0  0  0  0  0    0  0  0  0  0
+
+SREGION ! ABS Window                 
+&abswLEN2   1   50e-6                  
+1 0. &rap2                   
+NONE                    
+0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.      
+AL                   
+CBLOCK                    
+0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+
+OUTPUT
+
+SREGION 	! HALF-WEDGE
+&labs2  1  2e-3                                      
+1  0.  &rap2                                        
+NONE
+0.0  0.0  0.0  0.0  0.0    0.   0. 0. 0. 0.  0. 0. 0. 0. 0.
+LH
+WEDGE
+&alpw2  &uw2  &labs2  &phiw  &W2   &W2  0. 0. 0. 0.   
+
+
+ENDCELL
+
+!################### MATCHER 2 TO 3 ############
+
+
+GRID
+1
+G43D
+0. 80. 0.  0. 1.0   0. 0. 0. 0. 0.    0. 0. 0. 0. 0.
+
+DVAR
+1  0.04160 2
+
+
+DVAR
+2  0.02660 2
+
+
+CELL      
+1     
+.FALSE.
+STUS
+2. 0. 1. 0. 0.    0. 0. 0. 0. 0.     0. 0. 0. 0. 0.  
+      
+SREGION         !  DRIFT
+0.76   1   2e-3
+1 0     0.35
+NONE
+  0  0  0  0  0   0  0  0  0  0    0  0  0  0  0 
+VAC
+CBLOCK
+  0  0  0  0  0    0  0  0  0  0
+
+ENDCELL
+
+
+!#################################### STAGE 3 ###################################
+
+
+REFP
+2  &pref3  0. 0. 3
+
+GRID
+1
+G43D
+0. 86. 0.  0. 1.0   0. 0. 0. 0. 0.    0. 0. 0. 0. 0.
+
+!OUTPUT
+
+DVAR
+1  -0.01500  2
+
+
+DVAR
+2  -0.01860  2
+
+!OUTPUT
+
+BEGS
+
+CELL      
+&Ncells3     
+.FALSE.
+STUS
+2. 0. 1. 0. 0.    0. 0. 0. 0. 0.     0. 0. 0. 0. 0.  
+
+      
+SREGION 	! HALF-WEDGE
+&labs3  1  2e-3                                      
+1  0.  &rap3                                        
+NONE
+0.0  0.0  0.0  0.0  0.0    0.   0. 0. 0. 0.  0. 0. 0. 0. 0.
+LH
+WEDGE
+&alpw3  &uw3  0.00  &phiw  &W3   &W3  0. 0. 0. 0.      
+
+
+SREGION ! ABS Window                 
+100e-6   1   25e-6                  
+1 0. &rap3                  
+NONE                    
+0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.      
+AL                    
+CBLOCK                    
+0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 
+
+SREGION         !  DRIFT
+&driftLEN3   1   2e-3
+1 0     &rap3
+NONE
+  0  0  0  0  0   0  0  0  0  0    0  0  0  0  0 
+VAC
+CBLOCK
+  0  0  0  0  0    0  0  0  0  0
+
+SREGION         !  entrance RF window    
+40e-6   1   20e-6  
+1 0     &rap3
+NONE
+  0  0  0  0  0   0  0  0  0  0    0  0  0  0  0 
+VAC
+CBLOCK
+  0  0  0  0  0    0  0  0  0  0
+
+SREGION         ! RF 
+&rfLEN3  1    2e-3
+1  0.   &rap3
+ACCEL      
+2.  650 &rfGRAD3  &rfPH3  0.   0. 0. 0. 0. 0.   0. 0. 0. 0. 0.  
+VAC
+NONE
+   0. 0. 0. 0. 0.   0. 0. 0. 0. 0.
+
+REPEAT
+4
+
+SREGION         !  interior RF window
+80e-6   1   40e-6
+1 0     &rap3
+NONE
+  0  0  0  0  0   0  0  0  0  0    0  0  0  0  0 
+VAC
+CBLOCK
+  0  0  0  0  0    0  0  0  0  0
+
+SREGION         ! RF 
+&rfLEN3  1    2e-3
+1  0.   &rap3
+ACCEL      
+2.  650 &rfGRAD3  &rfPH3  0.   0. 0. 0. 0. 0.   0. 0. 0. 0. 0.  
+VAC
+NONE
+   0. 0. 0. 0. 0.   0. 0. 0. 0. 0.
+
+ENDR
+
+SREGION         !  exit RF window    
+40e-6   1   20e-6   
+1 0     &rap3
+NONE
+  0  0  0  0  0   0  0  0  0  0    0  0  0  0  0 
+VAC
+CBLOCK
+  0  0  0  0  0    0  0  0  0  0
+
+SREGION         !  DRIFT
+&driftLEN3   1   2e-3
+1 0     &rap3
+NONE
+  0  0  0  0  0   0  0  0  0  0    0  0  0  0  0 
+VAC
+CBLOCK
+  0  0  0  0  0    0  0  0  0  0
+
+SREGION ! ABS Window                 
+100e-6   1   25e-6                  
+1 0. &rap3                   
+NONE                    
+0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.      
+AL                    
+CBLOCK                    
+0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+
+OUTPUT
+
+SREGION 	! HALF-WEDGE
+&labs3  1  2e-3                                      
+1  0.  &rap3                                        
+NONE
+0.0  0.0  0.0  0.0  0.0    0.   0. 0. 0. 0.  0. 0. 0. 0. 0.
+LH
+WEDGE
+&alpw3  &uw3  &labs3  &phiw  &W3   &W3  0. 0. 0. 0.    
+
+ENDCELL
+
+! #################################### STAGE 4 ###################################
+
+
+ENDSECTION

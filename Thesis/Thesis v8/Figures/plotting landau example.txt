@@ -1,0 +1,3 @@
+TF1 *f = new TF1("f","TMath::Landau(x)",-3,20);
+f->SetTitle("Landau Function");
+f->Draw();

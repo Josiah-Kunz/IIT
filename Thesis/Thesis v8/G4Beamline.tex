@@ -1,0 +1,187 @@
+\Section{Straggling} \label{sec:g4blstraggling}
+
+G4Beamline uses the in-house straggling model in \cite{geant4}.  GEANT4 has determined that a ``thick absorber" occurs when the following conditions are met:
+\begin{align}\label{eqn:G4StragglingThickTest}
+\begin{split}
+\epsilon &= \kappa T_c  \\
+T_{max} &\le 2T_c,
+\end{split}
+\end{align}
+where $T_c$ is the cut kinetic energy of $\delta$-electrons and the other symbols can be found in the Definition of Terms at the beginning of this document.
+
+For thick absorbers, the energy loss is sampled according to a simple Gaussian distribution with average equal to the Bethe Bloch energy loss (Eqn. \ref{eqn:bethebloch}) and a standard deviation according to Bohr's variance (Eqn. \ref{eqn:bohrvariance}).
+
+If these conditions are not met, a ``thin absorber" algorithm is called. Here, atoms are assumed to only have two energy levels with binding energies $E_1$ and $E_2$. The interacting muon can then lose energy via excitation, yielding an energy loss of $E_1$ or $E_2$, or lose energy via $\delta$ ray production, yielding an energy loss according to $ g(E) \propto 1/E^2 $, or (more likely) some combination or weighted average of the two. $g(E)$ may then be normalized:
+\begin{equation}
+\int_{E_0}^{T_{up}} g(E) dE = 1 \rightarrow g(E)=\frac{E_0 T_{up}}{T_{up}-E_0}\frac{1}{E^2},
+\label{eqn:G4StragglingIonization}
+\end{equation}
+where $E_0$ is the ionization energy of the atom in question and $T_up$ is some kinetic energy cutoff (either the production threshold for delta rays or the maximum transferrable energy, whichever is smaller).
+
+The probability for obtaining any one of these energy losses is given by the macroscopic cross section, $\Sigma_i$, where $i=1,2,3$. For excitation ($i=1,2$), the cross section has a form similar to the deterministic Bethe-Bloch equation (Eqn. \ref{eqn:bethebloch}):
+\begin{equation}\label{eqn:G4StragglingCrossSectionExcitation}
+\Sigma_i=C\frac{f_i}{E_i}\frac{\ln(2m_e c^2(\beta\gamma)^2/E_i)}{\ln(2m_e c^2(\beta\gamma)^2/I)}(1-r).
+\end{equation}
+Here, $C$ and $r=0.55$ are model parameters with $r$ describing the relative contribution of excitation to ionization, $f_i$ are the relative oscillator strengths of the energy levels of $E_i$, $I$ is the average ionization energy, and the other symbols have their usual meaning. For continuous energy loss, the cross section is given by
+\begin{equation}\label{eqn:G4StragglingCrossSectionIonization}
+\Sigma_3=C\frac{T_{up}-E_0}{T_{up}E_0\ln(T_{up}/E_0)}r.
+\end{equation}
+
+The oscillator strengths are relative to one another and hence should satisfy
+\begin{equation}\label{eqn:G4StragglingOscillatorConstraint1}
+f_1+f_2=1.
+\end{equation}
+The next constraint comes from \cite{bichsel1988} and simply states that all the energy levels should be weighted and add logarithmically to the total ionization energy:
+\begin{equation}\label{eqn:G4StragglingOscillatorConstraint2}
+f_1 \ln E_1 + f_2 \ln E_2 = \ln I.
+\end{equation}
+Moreover, $f_1$ and $f_2$ can be though of as representing the relative number of loosely and tightly bound electrons. Then using the first constraint, it is easy to see that the absolute number of loosely bound electrons are $Z\cdot f_1$ and the absolute number of tightly bound electrons are $Z\cdot f_2$ (since $Z\cdot f_1+Z\cdot f_2=Z$). For modelling purposes, GEANT4 has placed emperical initial conditions on these parameters:
+\begin{align} \label{eqn:G4StragglingOscillatorConstraint3}
+f_2 & = 0 & \text{   for   } Z=1,\\
+f_2 & = 2/Z & \text{     for     } Z\ge 2,\\
+E_2 & = 10 \text{ eV } Z^2,\\
+E_0 &= 10 \text{ eV }.
+\end{align}
+From these, $f_1$ and $E_1$ can be found from Eqns. \ref{G4StragglingOscillatorContraint1} and \ref{G4StragglingOscillatorContraint2} given a particular muon through a particular material (from which $Z$, $I$, $\beta$, and the like are taken).
+
+Finally, an energy loss for a thin absorber can be sampled. For the contribution due to excitation, two numbers $n_1$ and $n_2$ are sampled randomly from a Poisson distribution. These numbers represent the relative contributions of the energy levels of $E_1$ and $E_2$, respectively.:
+\begin{equation}\nonumber
+\epsilon_{exc}=n_1 E_1 + n_2 E_2.
+\end{equation}
+
+The contribution due to ionization can be found by inverting the cumulative distribution function of $g(E)$:
+\begin{equation}\nonumber
+G(E)=\int_{E_0}^E g(E) dE \rightarrow E=\frac{E_0}{1-u\frac{T_{up}-E_0}{T_up}}.
+\end{equation}
+However, this is only for a single ionization. For an absorber of length $L$, the number of ionizations $n_3$ is again sampled from a Poisson distribution. Then the total energy loss for thin absorbers is
+\begin{equation}\label{G4StragglingThin}
+\epsilon = n_1 E_1 + n_2 E_2 + \sum_{j=1}^{n_3} \frac{E_0}{1-u_j \frac{T_{up}-E_0}{T_{up}}}.
+\end{equation}
+
+It should be noted that \cite{geant4} does make a brief mention of a width correction algorithm. This algorithm allegedly decreases the dependence of the results on kinetic energy cuts and stepsizes and works for any thickness of material. However, the section in the manual is less than a page long and purely conceptual without any mathematics or data on which to elaborate.
+
+Finally, the GEANT4 straggling routine can be summarized as such:
+\begin{enumerate}
+\item{Determine if absorber is ``thick" via Eqn. \ref{eqn:G4StragglingThickTest}.}
+\item{If absorber is ``thick", use Gaussian distribution with mean $\mu = \left<dE/dx\right>$ (from Eqn. \ref{eqn:bethebloch}) and standard deviation from Eqn. \ref{eqn:G4StragglingSigma}.}
+\item{If absorber is ``thin", use Eqn. \ref{G4StragglingThin}.
+	\begin{itemize}
+	\item{Select $n_1$, $n_2$, and $n_3$ from a Poisson distribution.}
+	\item{Select $u_j$ from a uniform distribution on $[0,1]$ (where $j=1...n_3$).}
+	\item{Find $E_2$, $f_2$, and $E_0$ from Eqn. \ref{eqn:G4StragglingOscillatorConstraint3}.} 
+	\item{Find $E_1$ from Eqns. \ref{eqn:G4StragglingOscillatorConstraint1} and \ref{eqn:G4StragglingOscillatorConstraint2}.}
+	\end{itemize}
+	}
+\item{Apply width correction algorithm.}
+\end{enumerate}
+%---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+\Section{Scattering} \label{sec:g4blscattering}\par
+The G4Beamline scattering model in \cite{g4bl} uses the GEANT4 Urb\'{a}n model \cite{geant4}, and again parameterizes according to experimental data and Lewis theory \cite{lewis}. Based on the models available, it can be inferred that the function responsible for the sampling of the angular distribution, $g(u)$, is based off \cite{gs} and Rutherford scattering, which was derived in Section \ref{ssc:icoolscattering} and resulted in Eqn. \ref{eqn:rutherford}. It should be noted that the shape of $g(u)$ was chosen empirically, and is
+%
+\begin{equation}\label{eqn:g4blgu}
+g(u)=q_g[p_g g_1(u)+(1-p_g)g_2(u)]+(1-q_g)g_3(u),
+\end{equation}
+%
+where $0\leq p_g,q_g\leq 1$ and
+%
+\begin{align*}\nonumber
+g_1(u)&=C_1e^{-a(1-u)} & -1\le u_0\le u\le 1\\
+g_2(u)&=C_2\frac{1}{(b_r-u)^{d_r}} & -1\le u\le u_0\le 1\\
+g_3(u)&=C_3 & -1\le u \le 1
+\end{align*}
+%
+are normalized over $[-1,1]$, where $C_i$ are normalization constants and $a$, $b_r$, $d_r$, and $u_0$ are empirical parameters. Here \cite{geant4} points out that for small angles, $g(u)$ is nearly Gaussian since $\exp{(1-u)}=\exp{(1-\cos\theta)}\approx\exp{(\theta^2/2)}$ and for large angles $g(u)$ resembles the Rutherford dependence of Eqn. \ref{eqn:rutherford} for $b_r\approx 1$ and $d_r$ close to 2.
+
+While Eqn. \ref{eqn:g4blgu} is the main point of this section, it would be incomplete without shedding some light on the six parameters mentioned. $a$, $u_0$, and $d_r$ are chosen based off theoretical and experimental data and $p_g$, $q_g$, and $b_r$ satisfy constraints. The form of $a$ is chosen by comparing the modified Highland-Lynch-Dahl formula for the width of the angular distrubution to that of $g_1(u)$. If $\theta_0$ is the Highland-Lynch-Dahl width of the (approximate) Gaussian distribution then it follows that on one hand
+%
+\begin{equation}\nonumber
+\exp{\Big(-\frac{\theta^2}{2\theta_0^2}\Big)} \approx \exp\Big(\frac{1}{2}\cdot\frac{1-\cos\theta}{1-\cos\theta_0}\Big),
+\end{equation}
+%
+and on the other
+%
+\begin{equation}\nonumber
+g_1(u)\propto \exp{(-a(1-u))}.
+\end{equation}
+%
+Therefore, it is reasonable to choose $a$ as
+%
+\begin{equation}
+a=\frac{0.5}{1-\cos\theta_0}
+\label{eqn:geanta}
+\end{equation}
+%
+so that
+%
+\begin{equation}\nonumber
+g_1(u) \underset{\sim}{\propto}\exp{\Big(-\frac{\theta^2}{2\theta_0^2}\Big)}.
+\end{equation}
+%
+
+ For heavy charged particles (such as muons), the model for $\theta_0$ has been chosen as
+%
+\begin{equation}\nonumber
+\theta_0=\frac{13.6 \text{MeV}}{\beta c p}z_{ch}\sqrt{\frac{t}{X_0}\Big[ 1+0.105\ln\Big(\frac{t}{X_0}\Big)+0.0035\Big(\ln\Big(\frac{t}{X_0}\Big)\Big)^2 \Big]}\Big(1-\frac{0.24}{Z(Z+1)}\Big).
+\end{equation}
+
+It is reasonable to demand that $g(u)$ be continuous and smooth on $[-1,1]$. Taking these conditions at $u=u_0$ yields the following constraints:
+%
+\begin{align*}\nonumber
+p_g g_1(u_0)&=(1-p_g)g_2(u_0)\\
+a\cdot p_g g_1(u_0)&=(1-p_g)g_2(u_0)\cdot\frac{d_r}{b_r-u_0}.
+\end{align*}
+%
+From the first equation, it is simple to see that
+%
+\begin{equation}
+p_g=\frac{g_2(u_0)}{g_1(u_0)+g_2(u_0)}
+\label{eqn:geantp}
+\end{equation}
+%
+and that
+%
+\begin{equation}\nonumber
+a=\frac{d_r}{b_r-u_0}.
+\end{equation}
+%
+Here, apparently
+\begin{equation}
+u_0=1-\frac{3}{a}
+\label{eqn:geantu0}
+\end{equation}
+%
+and (for heavy particles like muons)
+%
+\begin{equation}
+d_r=2.40-0.027Z^{\frac{2}{3}}.
+\label{eqn:geantd}
+\end{equation}
+%
+\cite{geant4} does not elaborate on this parameterization, but validation in Section \ref{sec:results} will show that these are reasonable. Moving forward, this yields
+%
+\begin{equation}
+b_r=\frac{a}{d_r}+u_0.
+\label{eqn:geantb}
+\end{equation}
+%
+Lastly, $q_g$ is found by knowing that $g(u)$ must give the same mean value as Lewis theory. While complicated, $q_g$ is shown here for completion's sake. \cite{geant4} shows that
+%
+\begin{equation}
+q_g=\frac{(1-\frac{\lambda_{10}-\lambda_{11}}{\lambda_{10}})^{\frac{t}{\lambda_{10}-\lambda_{11}}}}{p_g\left<u\right>_1+(1-p_g)\left<u\right>_2},
+\label{eqn:geantq}
+\end{equation}
+where $\lambda_{10}$ is the value of the first transport free mean path at the beginning of the step and $\lambda_{11}$ is this value at the end of the step.
+
+In summary, the scattering model used by G4Beamline is based on the Geant4 model, which includes Lewis theory. The full form of the scattering equation is given by Eqn. \ref{eqn:g4blgu}. This model has 9 parameters: 
+
+\begin{center}
+	\begin{tabular}{ | l |  p{4.5cm} | l | }
+	\hline
+	Parameter & Found Via & Equation Number \\ \hline
+	$C_1$, $C_2$, and $C_3$ & Normalization & $N/A$ \\ \hline
+	$a$ &  Relating the Gaussian-like behavior of $g$ to Highland-like theory \cite{highland} & \ref{eqn:geanta} \\ \hline
+	$p_g$ and $b_r$ & Demanding continuity and smoothness & \ref{eqn:geantp} and \ref{eqn:geantb} \\ \hline
+	$u_0$ and $d_r$ & Emperical parameterization & \ref{eqn:geantu0} and \ref{eqn:geantd} \\ \hline
+	$q_g$ & Demanding that $g$ gives the same mean value as Lewis theory & \ref{eqn:geantq} \\ \hline
+	\end{tabular}
+\end{center}

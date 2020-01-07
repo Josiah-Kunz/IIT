@@ -1,0 +1,195 @@
+\par In this chapter, comparison of the new COSY routines will be benchmarked against both ICOOL and G4Beamline for pencil beams through. Moreover, both validation against past experiments and predictions of future experiments will be shown.
+
+\Section{Benchmark Against Other Codes}\label{sec:benchmark}
+
+This section shows the comparison of the new COSY routines with those of two other codes, ICOOL \cite{icool} and G4Beamline \cite{g4bl}. The comparisons are done over both the momentum range of cooling channels (100, 200, 300, and 400 MeV/$c$) and various absorber lengths (1, 10, and 100 mm). These simulations were performed using a pencil beam of the aforementioned momenta through liquid hydrogen.
+
+\newpage
+
+\iftrue % to save on time
+
+\begin{center}
+\tikzset{every picture/.style={scale=0.5,every picture/.style={}}}
+\noindent
+\frame{      \input{Validation/LH/X.100.1.tex}}\\
+\frame{    \input{Validation/LH/PX.100.1.tex}}\\
+\frame{\input{Validation/LH/strag.100.1.tex}}\\
+\frame{      \input{Validation/LH/X.100.10.tex}}\\
+\frame{    \input{Validation/LH/PX.100.10.tex}}\\
+\frame{\input{Validation/LH/strag.100.10.tex}}\\
+\frame{      \input{Validation/LH/X.100.100.tex}}\\
+\frame{    \input{Validation/LH/PX.100.100.tex}}\\
+\frame{\input{Validation/LH/strag.100.100.tex}}\\
+\frame{      \input{Validation/LH/X.200.1.tex}}\\
+\frame{    \input{Validation/LH/PX.200.1.tex}}\\
+\frame{\input{Validation/LH/strag.200.1.tex}}\\
+\frame{      \input{Validation/LH/X.200.10.tex}}\\
+\frame{    \input{Validation/LH/PX.200.10.tex}}\\
+\frame{\input{Validation/LH/strag.200.10.tex}}\\
+\frame{      \input{Validation/LH/X.200.100.tex}}\\
+\frame{    \input{Validation/LH/PX.200.100.tex}}\\
+\frame{\input{Validation/LH/strag.200.100.tex}}\\
+\frame{      \input{Validation/LH/X.300.1.tex}}\\
+\frame{    \input{Validation/LH/PX.300.1.tex}}\\
+\frame{\input{Validation/LH/strag.300.1.tex}}\\
+\frame{      \input{Validation/LH/X.300.10.tex}}\\
+\frame{    \input{Validation/LH/PX.300.10.tex}}\\
+\frame{\input{Validation/LH/strag.300.10.tex}}\\
+\frame{      \input{Validation/LH/X.300.100.tex}}\\
+\frame{    \input{Validation/LH/PX.300.100.tex}}\\
+\frame{\input{Validation/LH/strag.300.100.tex}}\\
+\frame{      \input{Validation/LH/X.400.1.tex}}\\
+\frame{    \input{Validation/LH/PX.400.1.tex}}\\
+\frame{\input{Validation/LH/strag.400.1.tex}}\\
+\frame{      \input{Validation/LH/X.400.10.tex}}\\
+\frame{    \input{Validation/LH/PX.400.10.tex}}\\
+\frame{\input{Validation/LH/strag.400.10.tex}}\\
+\frame{      \input{Validation/LH/X.400.100.tex}}\\
+\frame{    \input{Validation/LH/PX.400.100.tex}}\\
+\frame{\input{Validation/LH/strag.400.100.tex}}
+\end{center}
+
+\fi
+
+\Section{Validation}\label{sec:validation}
+
+The new COSY routines were also compared to \cite{muscat}, often referred to as MuScat. This experiment measured the scattering of a beam of collimated muons through seven materials. To emulate this, pencil beams with $P=172$ MeV/$c$ were created in COSY, G4Beamline, and ICOOL. The pencil beam consisted of 10,000 particles and was propagated through 109 mm of liquid hydrogen, 159 mm of liquid hydrogen, and 3.73 mm of beryllium. COSY took a single step through the absorbers while G4BL and ICOOL took their respective default step sizes. The results are shown below.
+
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=\textwidth]{Figures/172.109.muscat} 
+  \caption{MuScat results for 109 mm of liquid hydrogen compared against COSY (red), G4BL (green), and ICOOL (blue).}
+  \label{fig:172.109.muscat}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=\textwidth]{Figures/172.159.muscat} 
+  \caption{MuScat results for 159 mm of liquid hydrogen compared against COSY (red), G4BL (green), and ICOOL (blue).}
+  \label{fig:172.159.muscat}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=\textwidth]{Figures/172.3.73.muscat} 
+  \caption{MuScat results for 3.73 mm of beryllium compared against COSY (red), G4BL (green), and ICOOL (blue).}
+  \label{fig:172.3.73.muscat}
+\end{figure}
+
+In the liquid hydrogen cases, COSY appears to match both G4Beamline and ICOOL very well, as well as the MuScat data points. In the case of beryllium, COSY matches the MuScat points slightly better than G4Beamline and ICOOL, particularly for the two data points between 0.04 and 0.06 radians.
+
+\Section{The Muon Ionization Cooling Experiment}\label{sec:mice}
+
+This section introduces the Muon Ionization Cooling Experiment (MICE, \cite{mice}), a practical application for the new absorber routines in COSY. The results of the MICE simulations in both G4Beamline and COSY will be examined, showing good agreement for liquid hydrogen.
+
+\Subsection{Introduction to MICE}\label{ssc:miceIntro}
+
+The Muon Ionization Cooling Experiment (MICE \cite{mice}) is an experiment currently being developed at the Rutherford Appleton Laboratory in Oxfordshire, U.K. Its goal is to show a proof-of-principle demonstration of muon ionization cooling which should result in a high brilliance beam. While there are six steps, this work is demonstrated via Step IV. The cell of Step IV involves 12 magnetic coils positioned symmetrically among a liquid hydrogen absorber, shown in Figure \ref{fig:miceStepIV}.
+\begin{figure}[h!]
+  \centering
+    \includegraphics[width=\textwidth]{Figures/miceStepIV} 
+  \caption[MICE Step IV cell.]{MICE Step IV cell. Magnetic coils are shown in yellow and the absorber is shown in grey. The green and blue axes are the $y$ and $z$ axes, here drawn to scale as 50 cm each. Image rendered via G4Beamline \cite{g4bl}.}
+  \label{fig:miceStepIV}
+\end{figure}
+
+\Subsection{Results of the MICE Simulation}\label{ssc:miceResults}
+1,000,000 particles were simulated through the cell in Figure \ref{fig:miceStepIV}. The coil parameters may be found in Table \ref{tbl:MICE_coil_parameters}. The absorber was a 65 mm cylindrical block of liquid hydrogen centered at $z=0$. The decay process was disabled in all simulation codes. The beam started at -2.45105 m and ended at 2450 m. The Gaussian parameters for the initial distribution of particles can be found in Table \ref{tbl:MICE_initial_distribution_parameters}.
+
+\begin{table}
+\caption*{\textbf{MICE Step IV Coil Parameters}}
+\begin{tabularx}{\textwidth}{cccccccc}
+\hline \hline
+Name & $z$ Position & Length & Inner Radius & Outer Radius & Current Density  \vspace{-12pt}\\
+ & mm & mm & mm & mm & A/mm$^2$  \\
+\hline
+	End2 & $\mp$3200.28&110.642&258&325.783&$\pm$126 \vspace{-12pt}\\
+	Center&$\mp$2450.275&1314.3&258&280.125&$\pm$148 \vspace{-12pt}\\
+	End1 & $\mp$1700.29& 110.642& 258 & 318.905 & $\pm$133 \vspace{-12pt}\\
+	Match2 & $\mp$1300.29 & 199.492 & 258 & 288.925 & $\pm$132 \vspace{-12pt}\\
+	Match1 & $\mp$860.645 & 201.268 & 258 & 304.165 & $\pm133$ \vspace{-12pt}\\
+	Focus & $\mp$202.2 & 213.3 & 267.6 & 361.9 & $\pm$104 \\ 
+\hline
+\end{tabularx}
+\caption[MICE Step IV coil parameters.]{MICE Step IV coil parameters corresponding with Figure \ref{fig:miceStepIV}.}
+\label{tbl:MICE_coil_parameters}
+\end{table}
+
+%\newcolumntype{A}{ >{\centering\arraybackslash} m{2.5cm} } 
+\begin{table}
+\caption*{\textbf{MICE Step IV Initial Distribution Parameters}}
+\begin{center}
+\begin{tabularx}{0.7\textwidth}{p{1cm}ccc}
+\hline \hline
+&Parameter & Mean & Standard deviation \\
+\hline
+	&$x$ (mm) & 0 & 32\vspace{-12pt}\\
+	&$y$ (mm) & 0 & 32\vspace{-12pt} \\
+	&$z$ (mm) & 0 & 0\vspace{-12pt} \\
+	&$p_x$ (MeV/$c$) & 0 & 20\vspace{-12pt} \\
+	&$p_y$ (MeV/$c$) & 0 & 20\vspace{-12pt} \\
+	&$p_z$ (MeV/$c$) & 200 & 30\\
+\hline
+\end{tabularx}
+\end{center}
+\caption{MICE Step IV initial distribution Gaussian parameters.}
+\label{tbl:MICE_initial_distribution_parameters}
+\end{table}
+
+For COSY, it was found that a 5th order simulation was sufficient. Through the coil-only portion of the simulation, 32 steps were taken on each side of the absorber (or roughly a step size of 76 mm both upstream and downstream). The particles were pushed through the momentary tranfer map after each step and then the transfer map was cleared. It was noted that a single map was not sufficient even at the 21st order. This is likely due to the inefficiency of $z$ interpolation in a complicated magnetic field. 
+
+Additionally, compounding the map without propagating the beam and then clearing the map after each step also gave poor results. When one takes the composition of two $n^{th}$ order transfer maps, a transfer map of order $n\times n$ is the result. For example, the first step in the MICE simulation would yield a 5th order transfer map. Taking the second step would give a new transfer map of order $5\times 5 = 25$. However, since COSY is operating in a 5th order mode the new transfer map would not be 25th order, but rather it would be truncated to a 5th order map. For this reason, the particles were propagated through the momentary transfer map after each step in the simulation.
+
+When the beam entered the region of the absorber, COSY switched to a step size of 1 mm in order to simulate the superposition of the magnetic coils and the absorber.
+
+\begin{figure}[h!]
+  \centering
+    \includegraphics[width=\textwidth]{MICE data/MICE_1M_x} 
+  \caption{MICE Step IV $x$ position results.}
+  \label{fig:micex}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+    \includegraphics[width=\textwidth]{MICE data/MICE_1M_y} 
+  \caption{MICE Step IV $y$ position results.}
+  \label{fig:micey}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+    \includegraphics[width=\textwidth]{MICE data/MICE_1M_xangle} 
+  \caption{MICE Step IV $x$ angle results.}
+  \label{fig:micexangle}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+    \includegraphics[width=\textwidth]{MICE data/MICE_1M_yangle} 
+  \caption{MICE Step IV $y$ angle results.}
+  \label{fig:miceyangle}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+    \includegraphics[width=\textwidth]{MICE data/MICE_1M_energy} 
+  \caption{MICE Step IV final energy results.}
+  \label{fig:miceenergy}
+\end{figure}
+
+The runtimes of COSY and G4Beamline are listed in Table \ref{tbl:mice_times}. To reiterate, COSY was run at 5th order with 32 steps before the absorber, 65 steps inside the absorber, and 32 steps after the absorber. G4Beamline was left to its default step size. Further note that the initialization time for G4Beamline to create the field maps was 33 seconds. However, since G4Beamline only has to create the field map once the initialization time is not added to the run times in Table \ref{tbl:mice_times}.
+
+\begin{table}
+\caption*{\textbf{Run Times for the MICE Step IV Simulation}}
+\begin{center}
+\begin{tabularx}{0.8\textwidth}{cccccc}
+\hline \hline
+Number of particles: & $10^6$ & $10^5$ & $10^4$ & $10^3$ & $10^2$\\
+\hline
+G4Beamline: & 154 min 23 s & 9 min 1 s & 56 s & 6 s & 2 s\vspace{-12pt}\\
+COSY: & 25 min 58 s & 51 s & 10 s & 6 s & 6 s\\
+\hline
+\end{tabularx}
+\end{center}
+\caption[Run Times for the MICE Step IV Simulation.]{Run Times for the MICE Step IV Simulation. Note that the G4Beamline initialization time was not added to the run time values.}
+\label{tbl:mice_times}
+\end{table}

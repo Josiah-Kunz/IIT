@@ -1,0 +1,15 @@
+- Excellent agreement until 6 meters
+	- The corners (I assume) begin to disagree here
+- By 8 meters, it looks like the COSY corners fly off, leaving the G4BL corners
+- 10 meters shows the beginning of other large |r| disagreement, but otherwise looks good
+- These results are not significantly better than the 100 mm step size
+
+Simulation details
+---------------------
+Directory: /home/jkunz/Simulations/full_simulations/grid/
+File labels: cell.*
+Time: 
+	- COSY: 21 min 25 sec
+	- G4BL: 0 min 8 sec
+Order: 11
+Step size: 10 mm

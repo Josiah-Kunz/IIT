@@ -1,0 +1,460 @@
+//===================================================================================
+// 1. G4
+//===================================================================================
+//vars
+c1->Close();
+c2->Close();
+c3->Close();
+gROOT->Reset();
+TString mat="LH";
+double Pinit=200;
+double abslen=0.01;
+int lsave=1; //save=1 is true
+double abslenmm=int(abslen*1000);
+int abslenmmflag=0;
+if (abslenmm==0){
+ abslenmmflag=1;
+ abslenmm=int(abslen*10000);
+}
+double ebar = ebararr[int(Pinit)][int(abslenmm)];
+if (abslenmmflag==0){
+ TString nameP = ""; nameP +=Pinit;
+ TString nameL = ""; nameL +=abslenmm;
+}else{
+ TString nameP = ""; nameP +=Pinit;
+ TString nameL = "p"; nameL +=abslenmm;
+}
+//Old:
+//TString ifdata="B:/Users/kunzj_000/Desktop/XPX Tests/"+mat+"/icool/for004."+nameP+"."+nameL+".txt";
+TString ifdata="D:/Dropbox/Thesis/Thesis v10/Validation/"+mat+"/data/icool/for004."+nameP+"."+nameL+".txt";
+TString gfdata="D:/Dropbox/Thesis/Thesis v10/Validation/"+mat+"/data/g4/g4."+nameP+"."+nameL+".txt";
+TString cfdata="D:/Dropbox/Thesis/Thesis v10/Validation/"+mat+"/data/cosy/cosy."+nameP+"."+nameL+".txt";
+int inpart=50000;
+int gnpart=50000;
+int cnpart=50000;
+int incolumns=15;
+int gncolumns=23;
+int cncolumns=7;
+double garr[gncolumns][gnpart];
+double carr[cncolumns][cnpart];
+double gpxmax;
+int gbins=75;
+int ibins=gbins;
+int cbins=gbins;
+char line[200];
+int stragbins=gbins;
+double elossmin=0; double elossmax=5.5 ; double ipxmax=5; double xmax = 15E-4 ;
+if((abslen==0.100)*(Pinit==150)){
+ elossmin=199; elossmax=100; ipxmax=3; xmax = E-6;
+}
+if((abslen==0.100)*(Pinit==250)){
+ elossmin=2.25; elossmax=5.5; ipxmax=5; xmax = 15E-4;
+}
+if((abslen==0.010)*(Pinit==150)){
+double elossmin=0.5; double elossmax=1.5; double ipxmax=1.5; xmax = 6E-5 ;
+}
+if((abslen==0.010)*(Pinit==250)){
+double elossmin=0.18; double elossmax=0.7; double ipxmax=1.5; xmax = 6E-5 ;
+}
+if((abslen==0.001)*(Pinit==150)){
+double elossmin=0.01; double elossmax=0.08; double ipxmax=6; xmax = 1.5E-6 ;
+}
+if((abslen==0.050)*(Pinit==150)){
+double elossmin=1; double elossmax=4; double ipxmax=5; xmax = 15E-4 ;
+}
+//-------------------------------------------------------------------------------------
+if((abslen==0.001)*(Pinit==100)){
+double elossmin=99.2; double elossmax=100; double ipxmax=0.8; xmax = 4.5E-6 ;
+}
+if((abslen==0.001)*(Pinit==200)){
+double elossmin=199.75; double elossmax=199.985;  double ipxmax=0.7; xmax = 1.8E-6 ;
+}
+if((abslen==0.001)*(Pinit==300)){
+double elossmin=299.8; double elossmax=300; double ipxmax=0.7; xmax = 1.3E-6 ;
+}
+if((abslen==0.001)*(Pinit==400)){
+double elossmin=399.82; double elossmax=400; double ipxmax=0.6; xmax = 1E-6 ;
+}
+//-------------------------------------------------------------------------------------
+
+//-------------------------------------------------------------------------------------
+if((abslen==0.010)*(Pinit==100)){
+double elossmin=98.3; double elossmax=99.6; double ipxmax=4; xmax = 2.5E-4 ;
+}
+if((abslen==0.010)*(Pinit==200)){
+double elossmin=198; double elossmax=199.8;  double ipxmax=2; xmax = 8E-5 ;
+}
+if((abslen==0.010)*(Pinit==300)){
+double elossmin=299; double elossmax=299.85; double ipxmax=3; xmax = 5E-5 ;
+}
+if((abslen==0.010)*(Pinit==400)){
+double elossmin=398; double elossmax=399.99; double ipxmax=2; xmax = 4E-5 ;
+}
+//-------------------------------------------------------------------------------------
+
+//-------------------------------------------------------------------------------------
+if((abslen==0.100)*(Pinit==100)){
+double elossmin=90; double elossmax=94.5; double ipxmax=7; xmax = 5E-3 ;
+}
+if((abslen==0.100)*(Pinit==200)){
+double elossmin=193.8; double elossmax=197.4;  double ipxmax=7; xmax = 1.8E-3 ;
+}
+if((abslen==0.100)*(Pinit==300)){
+double elossmin=293; double elossmax=298; double ipxmax=7; xmax = 1.3E-3 ;
+}
+if((abslen==0.100)*(Pinit==400)){
+double elossmin=391; double elossmax=398; double ipxmax=7; xmax = 1E-3 ;
+}
+xmax=xmax*1E6 // Want in micrometers now
+//-------------------------------------------------------------------------------------
+
+double gpxmax=ipxmax;
+double cpxmax=ipxmax;
+//theory curve
+double mass=105.6583715;        //MeV
+double rho=0.071;               //g/cc
+double ipot=0.0000218;          //MeV
+double Z=1;
+double A=1.008;
+double radlen=8.66;              //m
+double masse=0.510998928;       //MeV
+double ei=sqrt(Pinit**2+mass**2);
+double gamma=ei/mass;
+double velocity=sqrt(1-1/gamma**2);
+double tmax=2*masse*velocity**2*gamma**2/(1+2*gamma*masse/mass+(masse/mass)**2);
+double xi = 1.081464328234595*abslen*((mass/Pinit)**2+1);
+double emax=2*masse*ei*(ei-mass)/(mass**2+2*ei*masse+masse**2);
+double ebar = xi*(log(2*masse*(velocity*gamma/ipot)**2*emax)-2*velocity**2)
+//double ebar=abslen*15.35375*rho*Z/A*1/velocity**2*(log(2*masse*velocity**2*gamma**2*tmax/ipot**2)-2*velocity**2);
+//manual ebar, formula doesnt work
+double betalan = xi;
+//double alphalan = ebar+betalan*(1.4227843350984671-(mass/ei)**2+log(betalan/emax));
+double euler = 0.5772156649015329
+//double alphalan = xi*(log(2*xi*masse*(velocity*gamma/ipot)**2)-velocity**2+1-euler)
+double alphalan = xi*(log(2*xi*masse*(velocity*gamma/ipot)**2)-velocity**2+1-euler)
+double kappa=xi/emax;
+double abslencorrection=1;
+if((abslen==0.0009)*(Pinit==150)){
+double elossmin=2*ipot-1E-5; double elossmax=1E-4; double ipxmax=0.005; xmax = 15E-4 ;
+}
+
+
+//===================================================================================
+// 1.1. Get input "garr".
+//===================================================================================
+ifstream in;
+in.open(gfdata, ios::in);
+in.getline(line,128);
+in.getline(line,128);
+in.getline(line,128);
+double a;
+int i=0;
+int j=0;
+int percent=0;
+int k=0;
+while (in.good()){
+in >>a;
+garr[k][j]=a;
+if(k<gncolumns){
+k=k+1;
+}
+if(k==gncolumns){
+k=0;
+j=j+1;
+}
+if(i==int(percent*0.05*gnpart*gncolumns)){
+if(percent==0) cout << "G4 Data input started!" << endl;
+if(percent*0.05*100!=100) cout << percent*0.05*100 << "% complete..." << endl;
+if(percent*0.05*100==100) cout << percent*0.05*100 << "% complete! Good job user!" << endl;
+percent=percent+1;
+}
+i=i+1;
+}
+
+//===================================================================================
+// 1.4. Get near cutoff "px0", Rutherfordian parameters "scale, pxpower, sigpx, cutoff".
+//===================================================================================
+TString ghistonamepx = "#font[12]{PX} histogram (#font[12]{PZ} = "+nameP+" MeV/#font[12]{c}, #font[12]{L} = "+nameL+" mm)";
+TString ghistonamex = "#font[12]{X} histogram (#font[12]{PZ} = "+nameP+" MeV/#font[12]{c}, #font[12]{L} = "+nameL+" mm)";
+
+
+TH1D ghgauruthpx("G4BL #lower[-0.17]{+}",ghistonamepx,gbins,0,gpxmax);
+for(i=0;i<gnpart;i++){
+ ghgauruthpx.Fill(TMath::Abs(garr[9][i]*1000));
+ ghgauruthpx.Fill(TMath::Abs(garr[10][i]*1000));
+}
+ghgauruthpx.Draw();
+
+TH1D *gx = new TH1D("G4BL #lower[-0.17]{+}",ghistonamex,gbins,0,xmax)
+for(i=0;i<gnpart;i++){
+ gx.Fill(TMath::Abs(garr[6][i]*1E6));
+ gx.Fill(TMath::Abs(garr[7][i]*1E6));
+}
+gx.Draw(); 
+
+
+//======================================================================================================
+// 1.5. Get PERMANENT 2D Landau parameters "alpha, beta".
+//======================================================================================================
+//histo fit
+TString ghistonamestrag = "Final momentum histogram (#font[12]{PZ} = "+nameP+" MeV/#font[12]{c}, #font[12]{L} = "+nameL+" mm)";
+
+TH1D *ghlandau = new TH1D("G4Beamline +",ghistonamestrag, stragbins,elossmin,elossmax);
+for (i=0;i<gnpart;i++){
+ garr[14][i]=1000*sqrt(garr[9][i]**2+garr[10][i]**2+garr[11][i]**2);
+ ghlandau.Fill(garr[14][i]);
+}
+ghlandau.Draw();
+
+//===================================================================================
+// 2. ICOOL
+//===================================================================================
+//vars
+double iarr[incolumns][inpart];
+char line[200]
+
+//===================================================================================
+// 2.1. Get input "arr".
+//===================================================================================
+ifstream in;
+in.open(ifdata, ios::in);
+double a;
+int i=0;
+int j=0;
+int percent=0;
+in.getline(line,128);
+in.getline(line,128);
+int k=0;
+while (in.good()){
+in >>a;
+iarr[k][j]=a;
+if(k<incolumns){
+k=k+1;
+}
+if(k==incolumns){
+k=0;
+j=j+1;
+}
+if(i==int(percent*0.05*inpart*incolumns)){
+if(percent==0) cout << "ICOOL Data input started!" << endl;
+if(percent*0.05*100!=100) cout << percent*0.05*100 << "% complete..." << endl;
+if(percent*0.05*100==100) cout << percent*0.05*100 << "% complete! Good job user!" << endl;
+percent=percent+1;
+}
+i=i+1;
+}
+
+//===================================================================================
+// 2.4. Get near cutoff "px0", Rutherfordian parameters "scale, pxpower, sigpx, cutoff".
+//===================================================================================
+TH1D ihgauruthpx("#lower[0.17]{ICOOL #lower[0.2]{#circ}}",ghistonamepx,ibins,0,ipxmax);
+for(i=0;i<inpart;i++){
+ ihgauruthpx.Fill(TMath::Abs(iarr[9][i]*1000));
+ ihgauruthpx.Fill(TMath::Abs(iarr[10][i]*1000));
+}
+ihgauruthpx.Draw();
+
+TH1D *ix = new TH1D("#lower[0.17]{ICOOL #lower[0.2]{#circ}}",ghistonamestrag,ibins,0,xmax)
+for(i=0;i<inpart;i++){
+ ix.Fill(TMath::Abs(iarr[6][i]*1E6));
+ ix.Fill(TMath::Abs(iarr[7][i]*1E6));
+}
+ix.Draw(); 
+
+//======================================================================================================
+// 2.5. Get PERMANENT 2D Landau parameters "alpha, beta".
+//======================================================================================================
+//histo fit
+TH1D *ihlandau = new TH1D("#lower[0.17]{ICOOL #lower[0.2]{#circ}}",ghistonamestrag,stragbins,elossmin,elossmax);
+for (i=0;i<inpart;i++){
+ iarr[14][i]=1000*sqrt(iarr[9][i]**2+iarr[10][i]**2+iarr[11][i]**2);
+ ihlandau.Fill(iarr[14][i]);
+}
+ihlandau.Draw();
+
+//======================================================================================================
+// 3.0 COSY
+//======================================================================================================
+//===================================================================================
+// 3.1. Get input "arr".
+//===================================================================================
+ifstream in;
+in.open(cfdata, ios::in);
+double a;
+int i=0;
+int j=0;
+int percent=0;
+int k=0;
+while (in.good()){
+in >>a;
+carr[k][j]=a;
+if(k<cncolumns){
+k=k+1;
+}
+if(k==cncolumns){
+k=0;
+j=j+1;
+}
+if(i==int(percent*0.05*cnpart*cncolumns)){
+if(percent==0) cout << "COSY Data input started!" << endl;
+if(percent*0.05*100!=100) cout << percent*0.05*100 << "% complete..." << endl;
+if(percent*0.05*100==100) cout << percent*0.05*100 << "% complete! Good job user!" << endl;
+percent=percent+1;
+}
+i=i+1;
+}
+//===================================================================================
+// 3.4. Get near cutoff "px0", Rutherfordian parameters "scale, pxpower, sigpx, cutoff".
+//===================================================================================
+TH1D chgauruthpx("#lower[0.15]{COSY #lower[0.2]{*}}",ghistonamepx,cbins,0,cpxmax);
+for(i=0;i<cnpart;i++){
+ chgauruthpx.Fill(TMath::Abs(carr[1][i]));
+ chgauruthpx.Fill(TMath::Abs(carr[3][i]));
+}
+chgauruthpx.Draw();
+
+TH1D *cx = new TH1D("#lower[0.15]{COSY #lower[0.2]{*}}",ghistonamestrag,cbins,0,xmax)
+for(i=0;i<cnpart;i++){
+ cx.Fill(TMath::Abs(carr[0][i]*1E6));
+ cx.Fill(TMath::Abs(carr[2][i]*1E6));
+}
+cx.Draw(); 
+
+//======================================================================================================
+// 3.5. Get PERMANENT 2D Landau parameters "alpha, beta".
+//======================================================================================================
+//histo fit
+TH1D *chlandau = new TH1D("#lower[0.15]{COSY #lower[0.2]{*}}",ghistonamestrag, stragbins,elossmin,elossmax);
+for (i=0;i<cnpart;i++){
+ chlandau->Fill(sqrt(carr[5][i]**2-mass**2));
+}
+chlandau.Draw();
+
+
+cout<<setprecision(8);
+//======================================================================================================
+// 4.1 Scattering histograms
+//======================================================================================================
+double pswidth=0.2;
+TCanvas *c1 = new TCanvas("c1","transparent pad",200,10,1500,1000);
+ihgauruthpx.GetXaxis().SetTitle("#font[12]{Px} (MeV/#font[12]{c})");
+ihgauruthpx->GetXaxis()->CenterTitle()
+ihgauruthpx.GetYaxis().SetTitle("Raw count");
+ihgauruthpx->GetYaxis()->CenterTitle()
+ihgauruthpx.SetMarkerStyle(4); ihgauruthpx.SetMarkerColor(kBlue);
+ihgauruthpx.Draw("P");
+ihgauruthpx.SetLineColor(kBlue);
+TPaveStats *ps1 = (TPaveStats*)ihgauruthpx.GetListOfFunctions().FindObject("stats");
+ps1.SetX1NDC(0.35); ps1.SetX2NDC(0.55);
+ps1.SetTextColor(kBlue);
+ps1->SetStatFormat("3.3f");
+chgauruthpx.SetLineColor(kRed);
+TPaveStats *ps2 = (TPaveStats*)chgauruthpx.GetListOfFunctions().FindObject("stats");
+ps2.SetX1NDC(0.55); ps2.SetX2NDC(0.75);
+ps2.SetTextColor(kRed);
+ps2->SetStatFormat("3.3f");
+chgauruthpx.SetMarkerStyle(3); chgauruthpx.SetMarkerColor(kRed);
+chgauruthpx.Draw("P ][sames");
+ghgauruthpx.SetLineColor(kGreen+2);
+TPaveStats *ps3 = (TPaveStats*)ghgauruthpx.GetListOfFunctions().FindObject("stats");
+ps3.SetX1NDC(0.75); ps3.SetX2NDC(0.95);
+ps3.SetTextColor(kGreen+2);
+ps3->SetStatFormat("3.3f");
+ghgauruthpx.SetMarkerStyle(2); ghgauruthpx.SetMarkerColor(kGreen+2);
+ghgauruthpx.Draw("P ][sames");
+TLegend *gauleg=new TLegend(0.6,0.575,0.9,0.775,"Key");
+gauleg->SetTextSize(0.04);
+gauleg->AddEntry(&ihgauruthpx,"ICOOL","P");
+gauleg->AddEntry(&chgauruthpx,"COSY","P");
+gauleg->AddEntry(&ghgauruthpx,"G4Beamline","P");
+//gauleg->Draw("][sames");
+c1->SetLogy();
+
+
+//======================================================================================================
+// 4.2 Straggling histograms
+//======================================================================================================
+TCanvas *c2 = new TCanvas("c2","transparent pad",200,10,1500,1000);
+ihlandau->GetXaxis()->SetTitle("Final Momentum (MeV/#font[12]{c})");
+ihlandau->GetXaxis()->CenterTitle()
+ihlandau.GetYaxis().SetTitle("Raw count");
+ihlandau->GetYaxis()->CenterTitle()
+TPaveStats *ps1 = (TPaveStats*)ihlandau.GetListOfFunctions().FindObject("stats");
+ps1.SetX1NDC(0.1); ps1.SetX2NDC(0.1+pswidth);
+ps1.SetTextColor(kBlue);
+ps1->SetStatFormat("3.3f");
+ihlandau.SetLineColor(kBlue);
+ihlandau.SetMarkerStyle(4); ihlandau.SetMarkerColor(kBlue);
+ihlandau.Draw("P");
+TPaveStats *ps2 = (TPaveStats*)chlandau.GetListOfFunctions().FindObject("stats");
+ps2.SetX1NDC(0.1+pswidth); ps2.SetX2NDC(0.1+2*pswidth);
+ps2.SetTextColor(kRed);
+ps2->SetStatFormat("3.3f");
+chlandau.SetLineColor(kRed);
+chlandau.SetMarkerStyle(3); chlandau.SetMarkerColor(kRed);
+chlandau.Draw("P ][sames");
+ghlandau.SetLineColor(kGreen+2);
+TPaveStats *ps3 = (TPaveStats*)ghlandau.GetListOfFunctions().FindObject("stats");
+ps3.SetX1NDC(0.1+2*pswidth); ps3.SetX2NDC(0.1+3*pswidth);
+if((abslenmm=100)*(Pinit=100)){
+ ps3.SetX1NDC(0.1); ps3.SetX2NDC(0.1+pswidth);
+ ps3.SetY1NDC(0.615); ps3.SetY2NDC(.775);
+}
+ps3.SetTextColor(kGreen+2);
+ps3->SetStatFormat("3.3f");
+ghlandau.SetMarkerStyle(2); ghlandau.SetMarkerColor(kGreen+2);
+ghlandau.Draw("P ][sames");
+TLegend *lanleg=new TLegend(0.6,0.575,0.9,0.775,"Key");
+lanleg->SetTextSize(0.04);
+lanleg->AddEntry(&ihgauruthpx,"ICOOL","P");
+lanleg->AddEntry(&chgauruthpx,"COSY","P");
+lanleg->AddEntry(&ghgauruthpx,"G4Beamline","P");
+//lanleg->Draw("][sames");
+c2->SetLogy();
+
+
+//======================================================================================================
+// 4.3 LatDis histograms
+//======================================================================================================
+
+
+TCanvas *c3 = new TCanvas("c3","transparent pad",200,10,1500,1000);
+ix->GetXaxis()->SetTitle("Lateral Displacement (#mum)");
+ix->GetXaxis()->CenterTitle()
+ix.GetYaxis().SetTitle("Raw count");
+ix->GetYaxis()->CenterTitle()
+ix->SetTitle(ghistonamex);
+TPaveStats *ps1 = (TPaveStats*)ix.GetListOfFunctions().FindObject("stats");
+ps1.SetX1NDC(0.35); ps1.SetX2NDC(0.55);
+ps1.SetTextColor(kBlue);
+ps1->SetStatFormat("3.3f");
+ix.SetLineColor(kBlue);
+ix.SetMarkerStyle(4); ix.SetMarkerColor(kBlue);
+ix.Draw("P");
+TPaveStats *ps2 = (TPaveStats*)cx.GetListOfFunctions().FindObject("stats");
+ps2.SetX1NDC(0.55); ps2.SetX2NDC(0.75);
+ps2.SetTextColor(kRed);
+ps2->SetStatFormat("3.3f");
+cx.SetLineColor(kRed);
+cx.SetMarkerStyle(3); cx.SetMarkerColor(kRed);
+cx.Draw("P ][sames");
+gx.SetLineColor(kGreen+2);
+TPaveStats *ps3 = (TPaveStats*)gx.GetListOfFunctions().FindObject("stats");
+ps3.SetX1NDC(0.75); ps3.SetX2NDC(0.95);
+ps3.SetTextColor(kGreen+2);
+ps3->SetStatFormat("3.3f");
+gx.SetMarkerStyle(2); gx.SetMarkerColor(kGreen+2);
+gx.Draw("P ][sames");
+//lanleg->Draw("][sames");
+c3->SetLogy();
+
+TString d="D:/Dropbox/Thesis/Thesis v10/Validation/"
+if(lsave==1){
+ TString c1name=d+mat+"/PX."+nameP+"."+nameL+".png";
+ TString c2name=d+mat+"/strag."+nameP+"."+nameL+".png";
+ TString c3name=d+mat+"/X."+nameP+"."+nameL+".png";
+ c1->SaveAs(c1name);
+ c2->SaveAs(c2name);
+ c3->SaveAs(c3name);
+}
+in.close()

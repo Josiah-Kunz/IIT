@@ -1,0 +1,155 @@
+\par In this chapter, comparison of the new COSY routines will be benchmarked against both ICOOL and G4Beamline for pencil beams through. Moreover, both validation against past experiments and predictions of future experiments will be shown.
+
+\Section{Benchmark Against Other Codes}\label{sec:benchmark}
+
+This section shows the comparison of the new COSY routines with those of two other codes, ICOOL \cite{icool} and G4Beamline \cite{g4bl}. The comparisons are done over both the momentum range of cooling channels (100, 200, 300, and 400 MeV/$c$) and various absorber lengths or stepsizes (1, 10, and 100 mm). These simulations were performed using a pencil beam of the aforementioned momenta through liquid hydrogen. Both lithium hydride and beryllium were also tested with similar results.
+
+\newpage
+
+\iftrue % to save on time
+
+\begin{center}
+\tikzset{every picture/.style={scale=0.5,every picture/.style={}}}
+\noindent
+\frame{      \input{Validation/LH/X.100.1.tex}}\\
+\frame{    \input{Validation/LH/PX.100.1.tex}}\\
+\frame{\input{Validation/LH/strag.100.1.tex}}\\
+\frame{      \input{Validation/LH/X.100.10.tex}}\\
+\frame{    \input{Validation/LH/PX.100.10.tex}}\\
+\frame{\input{Validation/LH/strag.100.10.tex}}\\
+\frame{      \input{Validation/LH/X.100.100.tex}}\\
+\frame{    \input{Validation/LH/PX.100.100.tex}}\\
+\frame{\input{Validation/LH/strag.100.100.tex}}\\
+\frame{      \input{Validation/LH/X.200.1.tex}}\\
+\frame{    \input{Validation/LH/PX.200.1.tex}}\\
+\frame{\input{Validation/LH/strag.200.1.tex}}\\
+\frame{      \input{Validation/LH/X.200.10.tex}}\\
+\frame{    \input{Validation/LH/PX.200.10.tex}}\\
+\frame{\input{Validation/LH/strag.200.10.tex}}\\
+\frame{      \input{Validation/LH/X.200.100.tex}}\\
+\frame{    \input{Validation/LH/PX.200.100.tex}}\\
+\frame{\input{Validation/LH/strag.200.100.tex}}\\
+\frame{      \input{Validation/LH/X.300.1.tex}}\\
+\frame{    \input{Validation/LH/PX.300.1.tex}}\\
+\frame{\input{Validation/LH/strag.300.1.tex}}\\
+\frame{      \input{Validation/LH/X.300.10.tex}}\\
+\frame{    \input{Validation/LH/PX.300.10.tex}}\\
+\frame{\input{Validation/LH/strag.300.10.tex}}\\
+\frame{      \input{Validation/LH/X.300.100.tex}}\\
+\frame{    \input{Validation/LH/PX.300.100.tex}}\\
+\frame{\input{Validation/LH/strag.300.100.tex}}\\
+\frame{      \input{Validation/LH/X.400.1.tex}}\\
+\frame{    \input{Validation/LH/PX.400.1.tex}}\\
+\frame{\input{Validation/LH/strag.400.1.tex}}\\
+\frame{      \input{Validation/LH/X.400.10.tex}}\\
+\frame{    \input{Validation/LH/PX.400.10.tex}}\\
+\frame{\input{Validation/LH/strag.400.10.tex}}\\
+\frame{      \input{Validation/LH/X.400.100.tex}}\\
+\frame{    \input{Validation/LH/PX.400.100.tex}}\\
+\frame{\input{Validation/LH/strag.400.100.tex}}
+\end{center}
+
+\fi
+
+\Section{Validation}\label{sec:validation}
+
+The new COSY routines were also compared to \cite{muscat}, often referred to as MuScat. This experiment measured the scattering of a beam of collimated muons through seven materials. To emulate this, pencil beams with $P=172$ MeV/$c$ were created in COSY, G4Beamline, and ICOOL. The pencil beam consisted of 10,000 particles and was propagated through 109 mm of liquid hydrogen, 159 mm of liquid hydrogen, and 3.73 mm of beryllium. COSY took a single step through the absorbers while G4BL and ICOOL took their respective default step sizes. The results are shown below.
+
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=\textwidth]{Figures/172.109.muscat} 
+  \caption{MuScat results for 109 mm of liquid hydrogen compared against COSY (red), G4BL (green), and ICOOL (blue).}
+  \label{fig:172.109.muscat}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=\textwidth]{Figures/172.159.muscat} 
+  \caption{MuScat results for 159 mm of liquid hydrogen compared against COSY (red), G4BL (green), and ICOOL (blue).}
+  \label{fig:172.159.muscat}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=\textwidth]{Figures/172.3.73.muscat} 
+  \caption{MuScat results for 3.73 mm of beryllium compared against COSY (red), G4BL (green), and ICOOL (blue).}
+  \label{fig:172.3.73.muscat}
+\end{figure}
+
+In the liquid hydrogen cases, COSY appears to match both G4Beamline and ICOOL very well, as well as the MuScat data points. In the case of beryllium, COSY matches the MuScat points slightly better than G4Beamline and ICOOL, particularly for the two data points between 0.04 and 0.06 radians.
+
+\Section{The Muon Ionization Cooling Experiment}\label{sec:mice}
+
+This section introduces the Muon Ionization Cooling Experiment (MICE, \cite{mice}), a practical application for the new absorber routines in COSY. Next, new non-absorber subroutines added to COSY specifically for MICE will be briefly discussed. Finally, the results of the MICE simulations in both G4Beamline and COSY will be examined.
+
+\Subsection{Introduction to MICE}\label{ssc:miceIntro}
+
+The Muon Ionization Cooling Experiment (MICE \cite{mice}) is an experiment currently being developed at the Rutherford Appleton Laboratory in Oxfordshire, U.K. Its goal is to show a proof-of-principle demonstration of muon ionization cooling which should result in a high brilliance beam. While there are six stages, this work is demonstrated via Step III. The cell of Step III involves four tilted coils positioned among a liquid hydrogen absorber and a radio frequency cavity, shown in Figure \ref{fig:miceStageIII}. Furthermore, an empty cell containing only the coils was positioned before and after the entire cell chain.
+
+\begin{figure}[h!]
+  \centering
+    \includegraphics[width=\textwidth]{Figures/miceStageIII} 
+  \caption{MICE Stage III cell. Left: rotated such that the y-axis points out of the page. Right: rotated such that the x-axis points into the page.}
+  \label{fig:miceStageIII}
+\end{figure}
+
+\Subsection{Non-absorber Routines in COSY for MICE}
+
+For this work, COSY was compared to G4Beamline for 1,000,000 particles through 50 cells. This was a challenge in COSY because COSY includes neither a tilted coil element nor an arbitrary way to superimpose maps on one another. Moreover, while COSY does have a method to read from and write to a file, these methods are particularly slow for 1,000,000 particles. 
+
+The tilted coil routine is intrinsically dependent on the straight coil routine in COSY, \verb|CMSTP|. The tilted coil routine, named \verb|CMSTPT|, uses the following algorithm:
+\begin{enumerate}
+\item{Drift to the center of the coil}
+\item{Tilt the reference axis using \verb|TA|}
+\item{Drift back to the start of the cell}
+\item{Run \verb|CMSTP|}
+\item{Drift back to the center of the coil}
+\item{Tilt the axis back into the lab frame}
+\item{Drift to the end of the cell}
+\end{enumerate}
+
+In order to superimpose coils of different tilt angles, the user must make an approximation. To acquire a map which represents a propagation of an amount \verb|STEP| through several superimposed tilted coils,
+\begin{enumerate}
+\item{Choose a step size \verb|STEP|}
+\item{Step through the first \verb|CMSTPT| by an amount \verb|STEP|}
+\item{Drift back by an amount \verb|STEP|}
+\item{Repeat steps 2 for all remaining coils and step 3 for all remaining coils except for the last one}
+\end{enumerate}
+
+Finally, the read and write routines needed to be opmtimized. Rather than using COSYScript, the new routines should use the underlying FORTRAN instead. 
+
+A routine called \verb|WRITE_ICOOL| was written in order to take a COSY vector (see, e.g., Figure \ref{fig:phaseSpaceVector}) and write an ICOOL-style for009 file. To do this, on the COSYScript level the vector was converted from $(X,A,Y,B,L,D)$ to $(X,PX,Y,PY,ToF,E)$. This vector was then passed on to the FORTRAN level, where a simple loop wrote the information to a file.
+
+Instead of reading a file, both COSY and G4Beamline were modified to generate a beam of particles. In COSY, this meant first initializing a 1D vector using \verb|IN1DVE| on the COSYScript level. In COSY, this means returning a vector \verb|V:=0&0&...&0|. However, looping as follows has been shown to be computationally expensive:
+\begin{verbatim}
+V:=0 ;
+LOOP I 0 SIZE ;
+     V:=V&0 ;
+ENDLOOP ;
+\end{verbatim}
+Instead, the routine should make use of the power of $2^n$ (i.e. \verb|V:=V&V|). However, since typically \verb|SIZE|$\neq 2^n$ for $n\in\mathbb{Z}$, this will greatly under- or over-shoot the value of \verb|SIZE|. In this case, the algorithm is split into pieces (see Figure \ref{fig:in1dveChunks}).
+
+\begin{figure}[h!]
+  \centering
+    \includegraphics[width=0.7\textwidth]{Figures/in1dveChunks} 
+  \caption{Diagram of obtaining a vector of rank \texttt{SIZE} via $2^n$ method. Typically $2^n$ is either much less than or much greater than the intended \texttt{SIZE}.}
+  \label{fig:in1dveChunks}
+\end{figure}
+
+The first task is to ensure that $n$ is the integer closest to \texttt{SIZE} while maintaining $2^n\leq$\texttt{SIZE}. This is done via
+\begin{align*}
+\texttt{SIZE}\geq 2^n \rightarrow n=\texttt{INT}\Big[\frac{\ln\texttt{SIZE}}{\ln 2}\Big],
+\end{align*}
+where \texttt{INT} is the COSYScript routine for floor (not the nearest integer, which in COSY is \texttt{NINT}). Now it is possible to fill the temporary vector \texttt{TV} up until $2^n$ via
+\begin{verbatim}
+TV:=0 ;
+LOOP I 1 N ;
+     TV:=TV&TV ;
+ENDLOOP ;
+V:=V&TV ;
+\end{verbatim}
+The remaining amount is now \texttt{SIZE}$-2^n$. This entire process is then repeated, with the new \texttt{SIZE} as the remaining \texttt{SIZE}$-2^n$. This is done until the length of \texttt{V} is equal to the original \texttt{SIZE}. This process may be generalized to fill a vector with some value other than zero if desired.
+
+\Subsection{Results of the MICE Simulation}\label{ssc:miceResults}
+
+enter data here!

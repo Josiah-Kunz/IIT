@@ -1,0 +1,349 @@
+
+%%
+%%  This file was updated in April 2009 by J. Poole to be in line with Word tempaltes
+%%
+%%  Use \documentclass[boxit]{jacow}
+%%  to draw a frame with the correct margins on the output.
+%%
+ \documentclass{jacow}
+%%  for US letter paper layout
+%%
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{bigints}
+\usepackage{url}
+\usepackage{tabularx}
+
+\usepackage{ifluatex}
+\ifluatex
+  \usepackage{pdftexcmds}
+  \makeatletter
+  \let\pdfstrcmp\pdf@strcmp
+  \let\pdffilemoddate\pdf@filemoddate
+  \makeatother
+\fi
+
+
+\usepackage{svg}
+%%
+%%   VARIABLE HEIGHT FOR THE TITLE BOX (default 35mm)
+%%
+
+\setlength{\titleblockheight}{27mm}
+
+\begin{document}
+\title{Hybrid Methods for Simulation of Muon Ionization Cooling Channels\thanks{Work supported by the U.S. Department of Energy}}
+
+\author{J. Kunz\thanks{Also at Anderson University, Anderson, IN, USA}, P. Snopok\thanks{psnopok@iit.edu}\thanks{Also at Fermilab, Batavia, IL, USA}, Illinois Institute of Technology, Chicago, IL, USA\\
+M. Berz, Michigan State University, East Lansing, MI, USA}
+
+\maketitle
+
+\begin{abstract}
+COSY Infinity is an arbitrary-order beam dynamics simulation and analysis code. It uses high-order transfer maps of combinations of particle optical elements of arbitrary field configurations. New features have been developed and implemented in COSY to follow charged particles through matter. To study in detail the properties of muons passing through a material, the transfer map approach alone is not sufficient. The interplay of beam optics and atomic processes must be studied by a hybrid transfer map--Monte Carlo approach in which transfer map methods describe the average behavior of the particles including energy loss, and Monte Carlo methods are used to provide small corrections to the predictions of the transfer map, accounting for the stochastic nature of scattering and straggling of particles. This way the vast majority of the dynamics is represented by fast application of the high-order transfer map of an entire element and accumulated stochastic effects. The gains in speed simplify the optimization of muon cooling channels which are usually very computationally demanding. Progress on the development of the required algorithms is reported.
+\end{abstract}
+
+\section{INTRODUCTION}
+%Muons are tertiary production particles (protons $\rightarrow$ pions $\rightarrow$ muons), and high-intensity collection requires a large initial phase space volume. The resultant spray of muons must be amassed, focused, and accelerated well within the muon lifetime (2.2~$\mu$s in the rest frame). The only technique fast enough to reduce the beam size within the muon lifetime is ionization cooling. When muons traverse a material, energy is lost in both the longitudinal and transverse directions due to ionization. The energy is then restored in the longitudinal direction only, leading to an overall reduction in the transverse beam size (cooling). To achieve cooling in the longitudinal direction, emittance exchange is used, usually involving wedge-shaped absorbers. For some applications such as a high-energy high-luminosity muon collider, cooling needs to be very aggressive: six-dimensional emittance reduction over six orders of magnitude is required to reach design goals.
+
+A prime example of why matter-dominated lattices are relevant comes from the prospect of a neutrino factory or a muon collider \cite{map}. As muon branching fractions are 100\% $\mu^-\rightarrow e^- \bar{\nu}_e \nu_\mu$ and $\mu^+\rightarrow e^+ \nu_e \bar{\nu}_\mu$, there are obvious advantages of a muon-sourced neutrino beam. Also, because muons are roughly 200 times heavier than electrons, synchrotron radiation is not an issue. As a result, a high-energy muon collider ($\sqrt{s}\approx 6$~TeV) could be built on a compact site. Such energy levels are experimentally unprecedented in the leptonic sector, since a circular electron accelerator is restricted by synchrotron radiation. At lower energy, a muon collider could serve as a Higgs Factory ($\sqrt{s} \approx 126$ GeV), with possible new physics via the observation of Higgs to lepton coupling. This is advantageous since the Higgs coupling to leptons scales as mass squared. 
+
+%\begin{figure}[h!] 
+%\centering
+%\includegraphics*[width=85mm]{Collider_Comparison_Map}
+%\caption{Comparison of various accelerators overlaid on a map of Chicago, IL. Photo courtesy of \cite{fermilab}}
+%\label{fig:collider_comparison}
+%\end{figure}
+
+However, muon-based facilities are not without their challenges. Synthetic muon creation comes from the collision of protons with a fixed target. The resultant spray of particles largely contains kaons (which decay primarily into pions and muons), pions (which decay primarily into muons), and rogue protons. High-intensity collection entails a large initial phase space volume. The resultant cloud of muons must be collected, focused, and accelerated well within the muon lifetime (2.2 $\mu$s at rest). The only technique that is fast enough to be relevant on that time scale is ionization cooling~\cite{Parkhomchuk}.
+
+
+
+% Begin emittance discussion
+
+%The main idea is that muons traverse a certain amount of material where they lose energy in both longitudinal and transverse directions due to ionization. The energy is then restored in the longitudinal direction only by passing through a set of RF cavities, leading to an overall reduction in the transverse beam size (cooling). Schematically, this can be seen in Figure~\ref{fig:cooling_vector}.
+%
+%\begin{figure}[htb] 
+%\centering
+%\includegraphics[width=\columnwidth]{Figures/cooling_vector}
+%\caption{Ionization cooling schematics. 1) Energy loss in material, both transverse and longitudinal momenta are reduced. 2) Increase in the transverse momentum due to multiple scattering.  3) Re-acceleration through the RF cavity resulting in the net reduction in the transverse momentum.}
+%\label{fig:cooling_vector}
+%\end{figure}
+%
+%The evolution of the normalized transverse emittance in the cooling channel can be 
+%described by the following equation~\cite{neuffer}:
+%\begin{equation}
+%\frac{d\epsilon_{n}}{dz} \approx -\frac{1}{\beta^{2}}
+%\langle\frac{dE_{\mu}}{dz}\rangle \frac{\epsilon_{n}}{E_{\mu}}+\frac{1}{\beta^{3}}\frac{\beta_{\perp}E_{s}^{2}}{2E_{\mu}mc^{2}X_{0}},
+%\label{eq:cooling}
+%\end{equation}
+%where $\epsilon_{n}$ is the normalized emittance, $z$ is the path length, $E_{\mu}$ is the muon beam energy, $\beta=v/c$ is the reduced velocity of the beam, $X_{0}$ is the radiation length of the absorber material, $\beta_{\perp}$ is the transverse betatron function, and $E_s$ is the characteristic scattering energy. Here, two competing effects can be seen: the first term is the cooling (reduction of phase space beam size) component from ionization energy loss and the second term is the heating (increase of phase space beam size) term from multiple scattering. This highlights the importance of the stochastic terms, as the only deterministic term is the expected (Bethe-Bloch) energy loss, $\langle\frac{dE_{\mu}}{dz}\rangle$. It can also be seen that in order to minimize unavoidable heating from multiple scattering, low-$Z$ materials with large radiation length $X_0$ are preferred, such as liquid hydrogen or lithium hydride; and $\beta_\perp$ has to be small.
+
+% End emittance discussion
+
+For a neutrino factory only a modest amount of cooling is required, predominantly in the transverse plane. However, neutrino factories could benefit from full six-dimensional cooling, where in addition to the transverse cooling emittance exchange is used to reduce longitudinal beam size in addition to transverse. Current muon collider designs assume a significant, $O(10^6)$, six-dimensional cooling. %An example of a cooling cell layout is shown in Fig.~\ref{fig:vcc}.
+
+%\begin{figure}[htb] 
+%\centering
+%\includegraphics[width=\columnwidth]{Figures/vcc}
+%\caption{Cell schematics of a rectilinear vacuum RF six-dimensional cooling channel. Yellow: tilted magnetic coils producing solenoidal focusing and bending (to generate dispersion necessary for emittance exchange) fields; purple: wedge absorbers for ionization cooling, red: RF cavities for re-acceleration.}
+%\label{fig:vcc}
+%\end{figure}
+
+Cooling channels required for a high-energy high-luminosity muon collider could be up to a thousand meters long. Designing, simulating, and optimizing performance of those channels involves using high-performance clusters and multi-objective genetic optimizers. Typically, the codes used for simulations belong to the class of particle-by-particle integrators, where each particle is guided through the length of the cooling channel independently. That takes its toll on genetic optimizers, especially with a large number of particles per run. Transfer map methods could solve this problem, since the nonlinear map of the system is calculated once, and then can be applied to any number of particles at a very low computational cost. On the other hand, the transfer map approach alone is not sufficient to study the passage of muons through a material. This study implements a hybrid transfer map--Monte Carlo approach in which transfer map methods describe the deterministic behavior of the particles, and Monte Carlo methods are used to provide corrections accounting for the stochastic nature of scattering and straggling of particles. %The advantage of the new approach is that the vast majority of the dynamics are represented by fast application of the high-order transfer map of an entire element and accumulated stochastic effects.
+
+\section{COSY INFINITY}
+
+COSY Infinity (COSY)~\cite{COSY} is a simulation tool used in the design, analysis, and optimization of particle accelerators, spectrographs, beam lines, electron microscopes, and other such devices, with its use in accelerator lattice design being of particular interest here. COSY uses the transfer map approach, in which the overall effect of the optics on a beam of particles is evaluated using differential algebra. Along with tracking of particles through a lattice, COSY includes many analysis and optimization tools. %, including computation of Twiss parameters, tunes and nonlinear tune shifts, high-order nonlinearities; analysis of properties of repetitive motion via chromaticities, normal form analysis, and symplectic tracking; analysis of single-pass systems resolutions, reconstructive aberration correction, and consideration of detector errors; built-in local and global optimizers; and analysis of spin dynamics.
+
+%COSY is particularly advantageous to use when considering the efficient use of computational time. This is due to the transfer map methods that COSY employs. Given an initial phase space vector $Z_0$ at $s_0$ that describes the relative position of a particle with respect to the reference particle, and assuming the future evolution of the system is uniquely determined by $Z_0$, we can define a function called the transfer map relating the initial conditions at $s_0$ to the conditions at $s$ via $Z(s)=\mathcal{M}(s_0,s)*Z(s_0)$. The transfer map formally summarizes the entire action of the system. The composition of two maps yields another map: $\mathcal{M}(s_0,s_1 )\cdot\mathcal{M}(s_1,s_2 )=\mathcal{M}(s_0,s_2)$, which means that transfer maps of systems can be built up from the transfer maps of the individual elements. Computationally this is advantageous because once calculated, it is much faster to apply a single transfer map to a distribution of particles than to track individual particles through multiple lattice elements.
+
+Currently supported elements in COSY include various magnetic and electric multipoles (with fringe effects), homogeneous and inhomogeneous bending elements, Wien filters, wigglers and undulators, cavities, cylindrical electromagnetic lenses, general particle optical elements, and \emph{deterministic} absorbers of intricate shapes described by polynomials of arbitrary order, with the last element being of particular interest for this study. This element only takes into account deterministic effects (producing the same final result every time for a given initial condition), not stochastic effects (intrinsically random effects such as multiple scattering and energy straggling).
+%The term \emph{deterministic} is deliberately emphasized, since the polynomial absorber acts like a drift with the average (Bethe-Bloch) energy loss. The advantage of this is that the user must only specify six material parameters in order for COSY to calculate this energy loss: the atomic number, atomic mass, density, ionization potential, and two correction parameters. However, this element only takes into account deterministic effects (producing the same final result every time for a given initial condition), not stochastic effects (intrinsically random effects such as multiple scattering and energy straggling).
+
+%In order to carefully simulate the effect of the absorbers on the beam, one needs to take into account both deterministic and stochastic effects in the ionization energy loss. The deterministic effects in the form of the Bethe-Bloch formula with various theoretical and experimental corrections fit well into the transfer map methods approach, but the stochastic effects cannot be evaluated by such methods. It is easy to see why this is so. As previously stated, a transfer map will relate initial coordinates to final coordinates. This is generally a one-to-one relation. In other words, a transfer map is based on the \textit{uniqueness} of the solutions of the equations of motion. However, stochastic effects such as scattering provide no uniqueness because, for example, Coulomb scattering is based on the probabilistic wave nature of the particle. Therefore, two particles with identical initial coordinates will likely yield two very different final coordinates. Since the initial coordinates cannot uniquely be related to the final coordinates, no exact map exists.
+
+To take into account stochastic effects, the transfer map paradigm needs to be augmented by implementing the corrections from stochastic effects directly into the fabric of COSY. %Some of the fundamental ideas of the process were presented in~\cite{errede} in application to quadrupole cooling channels, but the approximations used there were fairly basic. In this work, a more rigorous theoretical approach is presented along with the resulting validation. 
+
+\section{STOCHASTIC PROCESSES}
+The stochastic processes of interest are straggling (fluctuation about a mean energy loss) and multiple angular scattering. The general outline to simulate these two beam properties is discussed more thoroughly in \cite{icap15}. Straggling follows Landau theory and has the form \cite{landau}
+\begin{equation}
+f(\lambda) = \frac{1}{\xi} \cdot \frac{1}{2\pi i} \int_{c+i \infty} ^{c-i \infty} \text{exp}(x\text{ ln } x + \lambda x) dx,
+\label{eq:landau}
+\end{equation}
+where $\xi \propto Z\rho L/\beta^2 A$, and $\lambda \propto dE/\xi - \beta^2 - \text{ln } \xi$. Here $Z, A,$ and $\rho$ are the atomic charge, atomic mass, and density of the material; $L$ is the amount of material that the particle traverses; $\beta=v/c$; and $dE$ is the fluctuation about the mean energy. The algorithm based on Eq.~\eqref{eq:landau} has been implemented in COSY.
+
+The derivation of the scattering function $g(u)$ (where  $u = \cos\theta$) is done separately for small angles and large angles. For small angles, the shape is very nearly Gaussian in $\theta$ \cite{GS}. For large angles, the distribution follows the Mott scattering cross section and is Rutherford-like \cite{Mott}. The resulting peak and tail are continuous and smooth at some critical $u_0$, which yields the final form of $g(u)$:
+\begin{equation}
+  g(u) = \left\{
+  \begin{array}{lr}
+    \displaystyle{\exp\left(-\frac{1}{2}\frac{1-u}{1-u_\sigma}\right)} & |\text{ } u_0 < u\vspace*{5pt}\\
+%    \displaystyle{} \\
+    \displaystyle{\zeta\cdot\frac{1+\frac{1}{2}(\beta\gamma)^2(1+u-b)}{(1-u+b)^2}} & | \text{ } u \le u_0
+  \end{array}.
+\right.
+\label{eq:scattering}
+\end{equation}
+Here the parameters $\zeta$ and $b$ are chosen to ensure continuity and smoothness, $\gamma=1/\sqrt{1-\beta^2}$, $u_0$ is a fitted parameter chosen as $u_0=9u_\sigma-8$, $u_\sigma$ is the $\sigma$-like term for a Gaussian in $\theta$. It is another fitted parameter based off \cite{highland} and taking the form
+\begin{footnotesize}
+\[
+u_\sigma=\cos\left(\frac{13.6 \text{ MeV}}{\beta pc}\left(\frac{L}{L_0}\left(1+0.103\ln\frac{L}{L_0}\right)+0.0038\left(\ln\frac{L}{L_0}\right)^2\right)^\frac{1}{2}\right).
+\]
+\end{footnotesize}
+
+%The straggling and scattering algorithms based on Eqns.~\ref{eq:landau} and \ref{eq:scattering} were shown in \cite{icap15} to agree well with both ICOOL and G4Beamline.
+
+In \cite{icap15}, the hybrid method presented here was benchmarked against two other beamline simulation codes, ICOOL \cite{ICOOL} and G4Beamline \cite{G4BL}, and (in the case of angular scattering) against experimental data obtained by MuScat \cite{Muscat}.
+
+% Begin secondary stochastics discussion
+
+%\subsection{Transverse Position Corrections}
+%Since there occur multiple scatterings in a given medium, one must account for the transverse position correction. A good starting point for these considerations is in \cite{PDG}. If the scattered angle $\theta$ is known then the transverse displacement correction is generated from a Gaussian distribution with mean $\mu_T$ and standard deviation $\sigma_T$. These are chosen as 
+%\[
+%\mu_T = \frac{\theta \rho_c L}{\mu_w},
+%\]
+%\[
+%\sigma_T = \max\left(L \theta_\sigma \sqrt{\frac{1-\rho_c^2}{3}},\left|\frac{L P_T / P_Z}{\sigma_w}\right|\right),
+%\]
+%where $\rho_c = \sqrt{3}/2$ is the correlation coefficient; $\theta_\sigma$ corresponds to the aforementioned $u_\sigma$; $P_T$ and $P_Z$ are the particle's transverse and longitudinal momenta, and $\mu_w=1+\sqrt{3}/2$ and $\sigma_w=6$ are adjustable parameters. It should be further noted that $\mu_T$ must be given the proper sign, i.e. the same sign as the desired transverse momentum. Additionally, this fluctuation assumes an initially straight trajectory in the lab frame, and hence must be rotated accordingly and added to the mean (deterministic) transverse position deflection.
+%
+%The results of comparison between COSY, ICOOL, and G4Beamline for one particular material and muon momentum are shown in Fig.~\ref{fig:transverse}.
+%
+%\begin{figure}[htb]
+%\centering
+%\includegraphics[width=\columnwidth]{Figures/transverse.pdf}
+%\caption{Transverse position comparison between COSY (red), G4Beamline (green), and ICOOL (blue) for muons with the initial momentum of $P=172$ MeV/$c$ passing through 109 mm of liquid hydrogen.}
+%\label{fig:transverse}
+%\end{figure}
+%
+%Perhaps more important than the raw histogram is the transverse phase space, see Fig.~\ref{fig:transverse_phase_space}. This is because, for example, the raw histogram is insensitive to the $\sigma_T$ changes, which describe the transverse position spread given a particular scattering angle.
+%
+%\begin{figure}[htb]
+%\centering
+%\includegraphics[width=\columnwidth]{Figures/transverse_phase_space}
+%\caption{Transverse phase space comparison between COSY (red) and ICOOL (blue) for muons with the initial momentum of $P=172$ MeV/$c$ passing through 109 mm of liquid hydrogen.}
+%\label{fig:transverse_phase_space}
+%\end{figure}
+%
+%\subsection{Time-of-Flight Corrections}
+%When particles traverse matter, the deterministic `straight' path length differs from the `true' path length due to many multiple scatterings within the material. The cases of straggling, angular scattering, and transverse position correction are largely insensitive to this. However, as the time-of-flight for these purposes is on the order of 1 ns for a single absorber, the true pathlength correction must be taken into account. Reference~\cite{Bielajew} gives a good approximation to the true path length $t$ given the straight path length $L$ and the scattered angle $\theta$:
+%\[
+%t = \frac{2L}{1+\text{cos}\theta}.
+%\]
+%Similar to the transverse position, the time-of-flight corrections have important implications for the overall shape of the longitudinal phase space, see Fig.~\ref{fig:tof}.
+%
+%\begin{figure}[htb]
+%\centering
+%\includegraphics[width=\columnwidth]{Figures/tof}
+%\caption{Longitudinal phase space comparison between COSY (red) and ICOOL (blue) for muons with the initial momentum of $P=172$ MeV/$c$ passing through 109 mm of liquid hydrogen.}
+%\label{fig:tof}
+%\end{figure}
+
+% End secondary stochastics discussion
+
+\section{THE MUON IONIZATION COOLING EXPERIMENT}
+The Muon Ionization Cooling Experiment (MICE \cite{mice}) is an experiment currently being developed at the Rutherford Appleton Laboratory in Oxfordshire, U.K. Its goal is to show a proof-of-principle demonstration of muon ionization cooling. MICE Step IV configuration is explored in this work. The Step IV cell includes 12 magnetic coils positioned symmetrically around a flat absorber. Figure~\ref{fig:miceStepIV} shows a schematic of this lattice with 350 mm of liquid hydrogen as the absorber.
+\begin{figure}[htb]
+  \centering
+    \includegraphics[width=\columnwidth]{Figures/miceStepIV} 
+  \caption[MICE Step IV cell.]{MICE Step IV cell. Magnetic coils are shown in yellow and the absorber is shown in blue. The green and blue axes are the $y$ and $z$ axes, here drawn to scale as 500 mm each. The aperture (invisible for display purposes) is 300 mm. Image rendered via G4Beamline \cite{G4BL}.}
+  \label{fig:miceStepIV}
+\end{figure}
+
+$10^6$ muons were simulated through the cell shown in Figure~\ref{fig:miceStepIV}. The coil parameters may be found in Table~\ref{tbl:MICE_coil_parameters}. The absorber was a 350 mm cylindrical block of liquid hydrogen centered at $z=0$. The aperture was set to 300 mm. Note that other materials such as safety windows were not accounted for in this simulation. The decay process was disabled in all simulation codes. The beam started at $-$2.45~m and ended at 2.45~m. The initial distribution was Gaussian with the following parameters: $\sigma_x=\sigma_y=32$ mm, $\sigma_{p_x}=\sigma_{p_y}=20$ MeV$/c$, $\sigma_{p_z}=30$ MeV$/c$. %summarized in Table~\ref{tbl:MICE_initial_distribution_parameters}.
+
+\begin{table}
+\caption*{\textbf{MICE Step IV Coil Parameters}}
+\resizebox{\columnwidth}{!}{
+\begin{tabularx}{1.05\columnwidth}{cccccccc}
+\hline \hline
+Name & $z$ & Length & Inner & Outer & Current \\
+ & position & & radius & radius & density \\
+ & mm & mm & mm & mm & A/mm$^2$  \\
+\hline
+	End2 & $\mp$3200 &111 & 258 &326 &$\pm$126 \\
+	Center&$\mp$2450 &1314 & 258 &280 &$\pm$148 \\
+	End1 & $\mp$1700 & 111 & 258 & 319 & $\pm$133 \\
+	Match2 & $\mp$1300 & 199 & 258 & 289 & $\pm$132 \\
+	Match1 & $\mp$861 & 201 & 258 & 304 & $\pm133$ \\
+	Focus & $\mp$202 & 213 & 268 & 362 & $\pm$104 \\ 
+\hline
+\end{tabularx}
+}
+\caption[MICE Step IV coil parameters.]{MICE Step IV coil parameters.} %corresponding to Figure~\ref{fig:miceStepIV}.}
+\label{tbl:MICE_coil_parameters}
+\end{table}
+
+%\newcolumntype{A}{ >{\centering\arraybackslash} m{2.5cm} } 
+%\begin{table}
+%\caption*{\textbf{MICE Step IV Initial Distribution Parameters}}
+%\begin{center}
+%\begin{tabularx}{\columnwidth}{p{1cm}ccc}
+%\hline \hline
+%&Parameter & Mean & Standard deviation \\
+%\hline
+%	&$x$ (mm) & 0 & 32\\
+%	&$y$ (mm) & 0 & 32 \\
+%	&$z$ (mm) & 0 & 0\\
+%	&$p_x$ (MeV/$c$) & 0 & 20\\
+%	&$p_y$ (MeV/$c$) & 0 & 20\\
+%	&$p_z$ (MeV/$c$) & 200 & 30\\
+%\hline
+%\end{tabularx}
+%\end{center}
+%\caption{MICE Step IV initial distribution Gaussian parameters.}
+%\label{tbl:MICE_initial_distribution_parameters}
+%\end{table}
+
+In COSY, it was found that a 5th order simulation was sufficient. Through the coil-only portion of the simulation, 50 steps were taken on each side of the absorber (or roughly a step size of 46 mm both upstream and downstream). The particles were tracked through the momentary transfer map after each step and then the transfer map was set to unity. It was noted that for the coil-only section, a single transfer map was not sufficient even at the 9th order. This is due to the relatively large phase space volume of the beam and the complexity of the magnetic field. Through the absorber-coil region ($-$350/2 mm to 350/2 mm), it was found that a 1st order map with 5 steps was sufficient. This is due to the transverse phase space of the beam reaching a minimum and the magnetic field passing through the point of symmetry.
+
+%Compounding the map without propagating the beam also gave poor results. When one takes the composition of two $n^{th}$ order transfer maps, a transfer map of order $n\times n$ is the result. For example, the first step in MICE simulation would yield a 5th order transfer map. Taking the second step would give a new transfer map of order $5\times 5 = 25$. However, since COSY is operating in the 5th order mode, the new transfer map would not be 25th order, but rather it would be truncated to a 5th order map. For this reason, the particles were propagated through the momentary transfer map after each step in the simulation.
+
+%The magnetic field in G4Beamline was created using the \texttt{coil} and \texttt{solenoid} commands. The field was then exported to a file using the \texttt{printfield} command to a file.
+Precalculated field maps were used by both G4Beamline (which used the \texttt{fieldmap} command) and ICOOL (which used the \texttt{GRID} command operating in \texttt{G43D} mode).
+
+\begin{figure}[htb]
+  \centering
+    \includegraphics[width=\columnwidth]{Figures/MICE_LH} 
+  \caption{MICE Step IV $x$ position, $x$ angle, and final total energy results for 350 mm of liquid hydrogen.}
+  \label{fig:MICE_LH}
+\end{figure}
+
+The runtimes of ICOOL, G4Beamline, and COSY are listed in Table~\ref{tbl:mice_times}. %To reiterate, COSY was run at 5th order with 50 steps before the absorber, 5 steps at 1st order inside the absorber, and 50 steps at 5th order after the absorber. 
+Note that the initialization time for G4Beamline to create the field maps was 33 seconds. The time it took to create a text file for ICOOL input was 11 seconds. Since G4Beamline only has to create the field map once, the initialization time is added to neither ICOOL nor G4Beamline the run times in Table~\ref{tbl:mice_times}. COSY did not have any initialization time.
+
+\begin{table}
+\caption*{\textbf{Run Times (in seconds) for MICE Step IV Simulation}}
+\begin{center}
+\begin{tabularx}{\columnwidth}{ccccc}
+%\vspace{-40pt}\\ 
+\hline \hline \vspace*{-10pt} \\
+Number of particles: & $10^6$ & $10^5$ & $10^4$ & $10^3$\\
+\hline
+COSY: & 367 & 31 & 6 & 4\\
+G4BL (coils): & 3973 & 392 & 40 & 6\\
+G4BL (field map): & 662 & 75 & 15 & 9\\
+ICOOL (field map): & 1091 & 117 & 19 & 9\\
+\hline
+\end{tabularx}
+\end{center}
+\caption[Run times for MICE Step IV simulation.]{Run times for MICE Step IV simulation for liquid hydrogen. Note that the G4Beamline initialization time was not added to the run time values. G4BL (coils) represents the simulation in G4Beamline when the \texttt{coil} parameter was used. G4BL (field map) represents the simulation when G4Beamline (like ICOOL) read the field map from a file.}
+\label{tbl:mice_times}
+\end{table}
+
+As a second test, MICE configuration in Figure~\ref{fig:miceStepIV} was simulated using 65 mm of lithium hydride. Lithium hydride is an attractive material because, unlike liquid hydrogen, it does not require cryogenic conditions, but still maintains a low $Z$ value. It can be seen from Figure~\ref{fig:MICE_LiH} that 65 mm of lithium hydride has a similar effect on the beam as 350 mm of liquid hydrogen.
+
+\begin{figure}[htb]
+  \centering
+    \includegraphics[width=\columnwidth]{Figures/MICE_LiH} 
+  \caption{MICE Step IV $x$ position, $x$ angle, and final total energy results for 65 mm of lithium hydride.}
+  \label{fig:MICE_LiH}
+\end{figure}
+
+
+\section{SUMMARY}
+The addition of stochastic processes in COSY Infinity for the use of muon ionization cooling has been successful. %While the straggling data in Fig.~\ref{fig:straggling} agrees well with ICOOL, there is some discrepancy in the tail when compared to G4Beamline. This may be due to several factors which can be found in the physics reference manual of Geant4 \cite{GEANT4} on which G4Beamline is based. For example, the straggling model of Geant4 takes into account the cross sections for ionization and for excitation, whereas the Landau theory used in COSY only regards the ionization cross section. Moreover, Geant4 uses a synthetic width correction algorithm to the curve, which is not elaborated in detail in the manual.
+Using MICE as a case study, Figures~\ref{fig:MICE_LH} and \ref{fig:MICE_LiH} show agreement within 1\%. The hybrid method implemented into COSY works well for both liquid hydrogen and lithium hydride. Furthermore, Table~\ref{tbl:mice_times} shows that COSY uses roughly half the computational time as G4Beamline and a third of the computational time of ICOOL.
+
+%The angular scattering algorithms appear to be functioning properly, as seen in Fig.~\ref{fig:scattering}. This is likely because ICOOL uses the Fano model with a Rutherford limit and G4Beamline uses the Urb\'{a}n model, which also has a Rutherford tail. Then all of these codes agree that there should be some Gaussian-like behavior pieced together with a Rutherford tail.
+%Good agreement has been achieved between COSY, G4beamline, and ICOOL, as well as with data from MuScat \cite{Muscat} (i.e. 159 mm of liquid hydrogen, 3.73 mm of beryllium).
+
+\begin{thebibliography}{9}
+
+\bibitem{map}
+Muon Accelerator Program, \url{http://map.fnal.gov/}
+
+\bibitem{Parkhomchuk}
+V. Parkhomchuk and A. Skrinsky, 12th Int. Conf. on High Energy Accel. (1983), p. 485, see also AIP Conf. Proc 352 (1996), p. 7 
+
+\bibitem{neuffer}
+Neuffer,~D. (1983) Principles and Applications of Muon Cooling, \emph{Part. Acc. 14,} p. 75
+
+\bibitem{COSY}
+K. Makino, M. Berz, COSY INFINITY Version 9, \emph{Nuclear Instruments and Methods} \textbf{A558} (2005) 346-350, see also \url{http://www.cosyinfinity.org}
+
+%\bibitem{Berz}
+%M. Berz in "Modern Map Methods in Particle Beam Physics", (Academic Press, London).
+
+\bibitem{errede}
+D. Errede \emph{et al.} Stochastic processes in muon ionization cooling, \emph {NIM A,} 519 (2004) 466--471
+
+\bibitem{ICOOL} 
+R. C. Fernow \emph{et al.}, ICOOL Simulation Code,\url{http://www.cap.bnl.gov/ICOOL/}
+
+\bibitem{G4BL}
+T. Roberts, G4Beamline, \url{http://www.muonsinternal.com/muons3/G4Beamline}
+
+\bibitem{Muscat}
+D. Attwood \emph{et al.} (2006), The scattering of muons in low-Z materials, NIM B251, p. 41
+
+\bibitem{landau}
+L. Landau, On the Energy Loss of Fast Particles by Ionisation, J. Phys 8, p. 201
+
+\bibitem{GS}
+S. Goudsmit and J. L. Saunderson (1940), Multiple Scattering of Electrons, Phys. Rev. 57, p. 24
+
+\bibitem{Mott}
+D. Griffiths (2008) Introduction to Elementary Particles, 2nd Ed. 
+
+\bibitem{highland}
+V. Highland, Some Practical Remarks on Multiple Scattering, NIM 129, p. 497
+
+\bibitem{PDG}
+J. Beringer \emph{et al.} (PDG) (2013) PR D86, 010001 Ch. 31
+
+\bibitem{Bielajew}
+A. Bielajew and D.W.O. Rogers (1987) PRESTA: The Parameter Reduced Electron-Step Transport Algorithm for Electron Monte Carlo Transport, NIM B18 p. 165
+
+\bibitem{mice}
+U. Bravar \emph{et al.} (2011) MICE: The Muon Ionization Cooling Experiment, Proceedings of the DPF-2011 Conference
+
+\bibitem{GEANT4}
+Geant4 User Documentation, \url{http://geant4.cern.ch/support/userdocuments.shtml}
+
+\bibitem{VAVILOV}
+P. V. Vavilov (1957), Ionization Losses of High-Energy Heavy Particles, J. Exptl. Theoret. Phys. (U.S.S.R.) 5, p. 920
+
+\end{thebibliography}
+\ \\
+\end{document}

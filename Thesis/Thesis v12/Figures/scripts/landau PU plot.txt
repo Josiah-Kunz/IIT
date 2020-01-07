@@ -1,0 +1,6 @@
+// must run in DH194!
+gSystem->Load("libMathMore");
+TF1 *f = new TF1("f","(exp(x)-1-x*ROOT::Math::expint(x))/x",-1,3);
+f->GetXaxis()->SetTitle("pu");
+f->SetTitle("Antiderivative of (1-e^{pu})/u^{2}");
+f->Draw();

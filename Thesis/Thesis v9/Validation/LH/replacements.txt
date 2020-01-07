@@ -1,0 +1,18 @@
+insert
+
+\definecolor{blue}{rgb}{0,0,1};
+\definecolor{red}{rgb}{1,0,0};
+\definecolor{green}{rgb}{0,1,0};
+
+replace 	scale=1.04349 -> scale=0.6
+		scale=1.56234 -> scale=1
+		scale=1.05432 -> scale=0.7
+
+\draw (9,12.4103) node[scale=1.10854, rotate=0]{ICOOL};
+	\draw[color=blue](9,12.4103) node[scale=0.7, rotate=0]{ICOOL $\circ$};
+
+\draw (13,12.4103) node[scale=1.10854, rotate=0]{COSY};
+	\draw [color=red](13,12.4103) node[scale=0.7, rotate=0]{COSY $*$};
+
+\draw (17,12.4103) node[scale=1.10854, rotate=0]{G4};
+	\draw [color=green](17,12.4103) node[scale=0.7, rotate=0]{G4BL $+$};

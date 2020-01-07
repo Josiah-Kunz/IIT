@@ -1,0 +1,5 @@
+\contentsline {section}{\numberline {1}INTRODUCTION}{1}{section.1}
+\contentsline {section}{\numberline {2}COSY INFINITY}{2}{section.2}
+\contentsline {section}{\numberline {3}STOCHASTIC PROCESSES}{3}{section.3}
+\contentsline {section}{\numberline {4}THE MUON IONIZATION COOLING EXPERIMENT}{4}{section.4}
+\contentsline {section}{\numberline {5}SUMMARY}{8}{section.5}

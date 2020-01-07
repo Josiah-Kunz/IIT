@@ -1,0 +1,139 @@
+c1->Close();
+gROOT->Reset();
+TCanvas * c1 = new TCanvas("c1", "c1", 1500,1000);
+c1->SetBottomMargin(0.15);
+c1->SetLeftMargin(0.15);
+int n=18;
+
+double lmarr[n]={3.486094,28.299661,252.1524735,8.5947,68.86994091,648.7155914,14.754318,124.0040528,1194.361351,22.145675,193.2932986,1883.065135,30.848614,276.7180574,2713.973659,52.29803595,485.7430719,4799.043947};
+double lambar[n]={0.477700126,2.780285219,5.082870312,1.436132196,3.738717289,6.041302382,2.050983136,4.353568229,6.656153322,2.50838415,4.810969243,7.113554336,2.875085274,5.177670367,7.48025546,3.446329575,5.748914668,8.051499761};
+gr=new TGraph(n,lambar,lmarr);
+
+double lmarr100x100[1]={lmarr[0]}
+double lmarr100x10[1]= {lmarr[1]}
+double lmarr100x1[1]=  {lmarr[2]}
+double lmarr150x100[1]={lmarr[3]}
+double lmarr150x10[1]= {lmarr[4]}
+double lmarr150x1[1]=  {lmarr[5]}
+double lmarr200x100[1]={lmarr[6]}
+double lmarr200x10[1]= {lmarr[7]}
+double lmarr200x1[1]=  {lmarr[8]}
+double lmarr250x100[1]={lmarr[9]}
+double lmarr250x10[1]= {lmarr[10]}
+double lmarr250x1[1]=  {lmarr[11]}
+double lmarr300x100[1]={lmarr[12]}
+double lmarr300x10[1]= {lmarr[13]}
+double lmarr300x1[1]=  {lmarr[14]}
+double lmarr400x100[1]={lmarr[15]}
+double lmarr400x10[1]= {lmarr[16]}
+double lmarr400x1[1]=  {lmarr[17]}
+
+
+double lambar100x100[1]={lambar[0]}
+double lambar100x10[1]= {lambar[1]}
+double lambar100x1[1]=  {lambar[2]}
+double lambar150x100[1]={lambar[3]}
+double lambar150x10[1]= {lambar[4]}
+double lambar150x1[1]=  {lambar[5]}
+double lambar200x100[1]={lambar[6]}
+double lambar200x10[1]= {lambar[7]}
+double lambar200x1[1]=  {lambar[8]}
+double lambar250x100[1]={lambar[9]}
+double lambar250x10[1]= {lambar[10]}
+double lambar250x1[1]=  {lambar[11]}
+double lambar300x100[1]={lambar[12]}
+double lambar300x10[1]= {lambar[13]}
+double lambar300x1[1]=  {lambar[14]}
+double lambar400x100[1]={lambar[15]}
+double lambar400x10[1]= {lambar[16]}
+double lambar400x1[1]=  {lambar[17]}
+
+gr100x100 =new TGraph(1,lambar100x100,lmarr100x100); 
+gr100x10  =new TGraph(1,lambar100x10, lmarr100x10 );
+gr100x1   =new TGraph(1,lambar100x1,  lmarr100x1  );
+gr150x100 =new TGraph(1,lambar150x100,lmarr150x100); 
+gr150x10  =new TGraph(1,lambar150x10, lmarr150x10 );
+gr150x1   =new TGraph(1,lambar150x1,  lmarr150x1  );
+gr200x100 =new TGraph(1,lambar200x100,lmarr200x100); 
+gr200x10  =new TGraph(1,lambar200x10, lmarr200x10 );
+gr200x1   =new TGraph(1,lambar200x1,  lmarr200x1  );
+gr250x100 =new TGraph(1,lambar250x100,lmarr250x100); 
+gr250x10  =new TGraph(1,lambar250x10, lmarr250x10 );
+gr250x1   =new TGraph(1,lambar250x1,  lmarr250x1  );
+gr300x100 =new TGraph(1,lambar300x100,lmarr300x100); 
+gr300x10  =new TGraph(1,lambar300x10, lmarr300x10 );
+gr300x1   =new TGraph(1,lambar300x1,  lmarr300x1  );
+gr400x100 =new TGraph(1,lambar400x100,lmarr400x100); 
+gr400x10  =new TGraph(1,lambar400x10, lmarr400x10 );
+gr400x1   =new TGraph(1,lambar400x1,  lmarr400x1  );
+
+
+TF1 *f1 = new TF1("f1","[0]+[1]*x+([2]+[3]*x)*exp([4]+[5]*x)",-1,50); f1->SetTitle("Literature Function");
+f1->SetParameters(0.60715,1.1934,0.67794,0.052382,0.94753,0.74442); f1->SetLineColor(6);
+TF1 *f2 = new TF1("f2","[0]+[1]*x+([2]+[3]*x)*exp([4]+[5]*x)",0,100); f2->SetTitle("Fitted Function");
+f2.SetParameters(0.60715,1.1934,0.67794,0.052382,0.94753,0.74442);  f2->SetLineColor(1);
+gr->Draw("AP");
+f1->Draw("][sames");
+gr->SetTitle("Landau Cutoffs");
+gr->GetXaxis()->SetTitle("Desired Mean");
+gr->GetXaxis()->CenterTitle()
+gr->GetXaxis()->SetLabelSize(0.04)
+gr->GetXaxis()->SetTitleSize(0.06)
+gr->GetYaxis()->SetTitle("Required Cutoff");
+gr->GetYaxis()->CenterTitle()
+gr->GetYaxis()->SetLabelSize(0.04)
+gr->GetYaxis()->SetTitleSize(0.06)
+c1->SetLogy();
+
+int color1=2
+int color2=8
+int color3=4
+
+gr100x100->SetMarkerColor(color1); gr100x100->SetMarkerStyle(24); gr100x100->Draw("][sames P"); gr100x100->SetMarkerSize(3);
+gr100x10 ->SetMarkerColor(color2); gr100x10 ->SetMarkerStyle(24); gr100x10 ->Draw("][sames P"); gr100x10 ->SetMarkerSize(3);
+gr100x1  ->SetMarkerColor(color3); gr100x1  ->SetMarkerStyle(24); gr100x1  ->Draw("][sames P"); gr100x1  ->SetMarkerSize(3);
+gr150x100->SetMarkerColor(color1); gr150x100->SetMarkerStyle(25); gr150x100->Draw("][sames P"); gr150x100->SetMarkerSize(3);
+gr150x10 ->SetMarkerColor(color2); gr150x10 ->SetMarkerStyle(25); gr150x10 ->Draw("][sames P"); gr150x10 ->SetMarkerSize(3);
+gr150x1  ->SetMarkerColor(color3); gr150x1  ->SetMarkerStyle(25); gr150x1  ->Draw("][sames P"); gr150x1  ->SetMarkerSize(3);
+gr200x100->SetMarkerColor(color1); gr200x100->SetMarkerStyle(26); gr200x100->Draw("][sames P"); gr200x100->SetMarkerSize(3);
+gr200x10 ->SetMarkerColor(color2); gr200x10 ->SetMarkerStyle(26); gr200x10 ->Draw("][sames P"); gr200x10 ->SetMarkerSize(3);
+gr200x1  ->SetMarkerColor(color3); gr200x1  ->SetMarkerStyle(26); gr200x1  ->Draw("][sames P"); gr200x1  ->SetMarkerSize(3);
+gr250x100->SetMarkerColor(color1); gr250x100->SetMarkerStyle(27); gr250x100->Draw("][sames P"); gr250x100->SetMarkerSize(4.5)
+gr250x10 ->SetMarkerColor(color2); gr250x10 ->SetMarkerStyle(27); gr250x10 ->Draw("][sames P"); gr250x10 ->SetMarkerSize(4.5)
+gr250x1  ->SetMarkerColor(color3); gr250x1  ->SetMarkerStyle(27); gr250x1  ->Draw("][sames P"); gr250x1  ->SetMarkerSize(4.5)
+gr300x100->SetMarkerColor(color1); gr300x100->SetMarkerStyle(28); gr300x100->Draw("][sames P"); gr300x100->SetMarkerSize(4.5)
+gr300x10 ->SetMarkerColor(color2); gr300x10 ->SetMarkerStyle(28); gr300x10 ->Draw("][sames P"); gr300x10 ->SetMarkerSize(4.5)
+gr300x1  ->SetMarkerColor(color3); gr300x1  ->SetMarkerStyle(28); gr300x1  ->Draw("][sames P"); gr300x1  ->SetMarkerSize(4.5)
+gr400x100->SetMarkerColor(color1); gr400x100->SetMarkerStyle(30); gr400x100->Draw("][sames P"); gr400x100->SetMarkerSize(4.5)
+gr400x10 ->SetMarkerColor(color2); gr400x10 ->SetMarkerStyle(30); gr400x10 ->Draw("][sames P"); gr400x10 ->SetMarkerSize(4.5)
+gr400x1  ->SetMarkerColor(color3); gr400x1  ->SetMarkerStyle(30); gr400x1  ->Draw("][sames P"); gr400x1  ->SetMarkerSize(4.5)
+
+//set colors and shapes for legend
+TF1  *c2  = new TF1(  "c2","[0]",0,1);   c2->SetTitle("L = 100 mm");     c2->SetLineColor(color1);
+TF1  *c3  = new TF1(  "c3","[0]",0,1);   c3->SetTitle("L =  10 mm");     c3->SetLineColor(color2);
+TF1  *c4  = new TF1(  "c4","[0]",0,1);   c4->SetTitle("L =   1 mm");     c4->SetLineColor(color3);
+TH1D *s24 = new TH1D("s24","s24",1,0,1); s24->SetTitle("P = 100 MeV/c"); s24->SetMarkerStyle(24); s24->SetMarkerSize(3);
+TH1D *s25 = new TH1D("s25","s25",1,0,1); s25->SetTitle("P = 100 MeV/c"); s25->SetMarkerStyle(25); s25->SetMarkerSize(3);
+TH1D *s26 = new TH1D("s26","s26",1,0,1); s26->SetTitle("P = 100 MeV/c"); s26->SetMarkerStyle(26); s26->SetMarkerSize(3);
+TH1D *s27 = new TH1D("s27","s27",1,0,1); s27->SetTitle("P = 100 MeV/c"); s27->SetMarkerStyle(27); s27->SetMarkerSize(3);
+TH1D *s28 = new TH1D("s28","s28",1,0,1); s28->SetTitle("P = 100 MeV/c"); s28->SetMarkerStyle(28); s28->SetMarkerSize(3);
+TH1D *s30 = new TH1D("s30","s30",1,0,1); s30->SetTitle("P = 100 MeV/c"); s30->SetMarkerStyle(30); s30->SetMarkerSize(3);
+
+double x=0.15
+double y=0.45
+
+gr->Fit("f2");
+leg=new TLegend(x,y,x+0.25,y+0.45);
+leg->SetHeader("Key");
+leg->AddEntry(f1,"Geant3 Function","l");
+leg->AddEntry(f2,"Fitted Function","l");
+leg->AddEntry(c2,"L = 100 mm","l");
+leg->AddEntry(c3,"L =  10 mm","l");
+leg->AddEntry(c4,"L =   1 mm","l");
+leg->AddEntry(s24,"P = 100 MeV/c","P");
+leg->AddEntry(s25,"P = 150 MeV/c","P");
+leg->AddEntry(s26,"P = 200 MeV/c","P");
+leg->AddEntry(s27,"P = 250 MeV/c","P");
+leg->AddEntry(s28,"P = 300 MeV/c","P");
+leg->AddEntry(s30,"P = 400 MeV/c","P");
+leg->Draw();
